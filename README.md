@@ -1,6 +1,20 @@
-<p align="center">
-  <img src="assets/ziwu/hero.svg" alt="ZIWU Bench: your science, turned into an exam for frontier AI, in one command" width="100%">
-</p>
+# ZIWU Bench · 子午智能
+
+<!-- ZIWU introduction film -->
+
+## From one idea to an AI evaluation task.
+
+**Create and submit to ziwu-bench in one click.**
+
+Turn a research idea, a real-world problem, or a plain-language proposal into a reproducible task that tests what AI can actually do. [**ziwu-agent**](https://github.com/ZIWU-AI/ziwu-agent) helps build the task, prepare its environment and scoring criteria, validate it, and submit a pull request to [**ZIWU-AI/ziwu-bench**](https://github.com/ZIWU-AI/ziwu-bench).
+
+**Idea → Task → Validation → Pull request → Shared benchmark**
+
+## Measure intelligence. Together.
+
+Like the Prime Meridian, we aim to unite researchers and developers worldwide to precisely measure the boundaries of AGI.
+
+**子午** (*ziwu*) evokes the meridian: a shared reference for measuring and connecting the world. Our vision extends from evaluating AI agents to autonomous research labs and embodied intelligence—building a common foundation for understanding what intelligent systems can do, where they fall short, and what comes next.
 
 <p align="center">
   <a href="https://www.npmjs.com/package/@ziwu-ai/ziwu-agent"><img alt="npm" src="https://img.shields.io/npm/v/@ziwu-ai/ziwu-agent?style=for-the-badge&label=ziwu-agent&labelColor=0b1020&color=7c8cff"></a>
@@ -9,21 +23,7 @@
   <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-Apache_2.0-9aa6d6?style=for-the-badge&labelColor=0b1020"></a>
 </p>
 
-<h3 align="center">Write the science. We'll write the exam.</h3>
-
-<p align="center">
-  <b>ZIWU Bench</b> turns a plain-language research proposal into a complete,<br>
-  benchmark-ready <a href="https://terminal-bench-science.ai">Terminal-Bench-Science</a> task, then checks it, self-tests it,<br>
-  and hands you a pull request that frontier AI can be graded on.
-</p>
-
-<br>
-
-> *"Many researchers understand their science deeply, but have no idea how to translate it into something an AI agent can be evaluated on."*
->
-> That gap is why ZIWU Bench exists.
-
-<br>
+---
 
 ## ⚡ The 60-second version
 
