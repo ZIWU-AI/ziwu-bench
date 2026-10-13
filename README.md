@@ -1,6 +1,6 @@
 # ZIWU Bench · 子午智能
 
-<!-- ZIWU introduction film -->
+https://github.com/user-attachments/assets/873c3707-9208-48f3-bbfa-c9e1bdcc5ab6
 
 ## From one idea to an AI evaluation task.
 
