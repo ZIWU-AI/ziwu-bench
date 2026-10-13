@@ -1,0 +1,31 @@
+{
+  "tests": 21,
+  "passed": 21,
+  "type": "local synthetic protocol and adapter unit tests only",
+  "native_gpu_validation": false,
+  "harbor_end_to_end_validation": true,
+  "python": "3.12.14",
+  "source_sha256": {
+    "worker.py": "702eddaa6f001d57c50c7caf93425342f8daa2c334b902273403a47eb6b8feae",
+    "register.py": "96812991a93a87ce0a2d7719a7b759fe6e399415971122a7aca15c73d5ea1585",
+    "dispatch.py": "f7a51912f86cee05b8ee3530bda4a2dbceaa2c8e249f894cf4145d10d97ac24b",
+    "protocol.py": "2bd28a0b31e6fb24b580e94dd72067d126f568d7855babd64c73158469087906",
+    "build_smoke_task.py": "43246362c6d4b5d677db980710290fa70c086959b235b6733e7d5b9b7a71349a",
+    "check_native_task.py": "f5c95f64a1764c5277c625a63ad76eff013647b9960c0937236e32a0b077ddcf",
+    "ci_harbor.py": "093207b99ab621469b288c0f1182ff5b938d9e67e957e9561563c60e49e5d6b2",
+    "harbor_verify.py": "897295fe643709ccd32642cc191914f2ce1a7e89c913daba27c78743b47edff4",
+    "harbor_image_adapter.py": "69c7bffe8a359b38331f6554c58938e284b8d0a74b221b907f44db88d2bfdc2a"
+  },
+  "modal_sdk_inspected": "1.5.4 from production trigger, read-only",
+  "harbor_adapter_target": "0.21.0 installed SDK: real empty-artifact separate-verifier run completed with no exceptions",
+  "harbor_physics_replay": "8 episodes, 24000 native PhysX steps, physical no-op rejected, reward 0, no exception",
+  "harbor_cli_import_path_verified": "harbor_image_adapter:RoboIndustrialModalEnvironment",
+  "ci_validation": {
+    "yaml_workflows": 4,
+    "bash_blocks": 99,
+    "custom_static_valid_pass": true,
+    "custom_static_tampered_fail": true,
+    "repo_applied": true
+  },
+  "planner_venv_build": "synthetic adapter test passed; actual first task image build pending"
+}

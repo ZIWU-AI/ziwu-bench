@@ -1,0 +1,3 @@
+# Host Python >=3.12. Do not install into production anchor-trigger environment.
+harbor[modal]==0.21.0
+modal==1.5.4

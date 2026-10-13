@@ -1,0 +1,139 @@
+{
+  "description": "Actual Harbor agent artifact \u2192 fresh no-network Modal verifier \u2192 native PhysX valid-format no-op replay. This is an expected physical negative, not a model trial or oracle.",
+  "harbor": "0.21.0",
+  "modal_sdk": "1.5.4",
+  "image_id": "im-Nm8iLJCxhB14rzlvQjzhLD",
+  "modal_app": "roboindustrial-isaac",
+  "requested_gpu": "L40S",
+  "trial_id": "7c134578-ffc8-4998-9744-674dda14efcb",
+  "task_checksum": "325cd17589e07ee4aabb2ffc4128caeba31839cb8e0f1d03262e77f44217683d",
+  "started_at": "2026-10-04T01:07:59.543800Z",
+  "finished_at": "2026-10-04T01:10:54.950500Z",
+  "total_elapsed_sec": 175.4067,
+  "verifier_environment_mode": "separate",
+  "reward": 0.0,
+  "exception_info": null,
+  "candidate_sha256": "6ebab396ecdabc75557801a6b58540c8475ecb3599ce8d32311155393fce0220",
+  "task_spec_sha256": "51eb24788ccccaffbd72826bbc5460be36d16d624b6b09566b245f0c43533c5e",
+  "worker_status": "completed",
+  "worker_elapsed_sec": 118.065686174,
+  "worker_normal_exit_required_and_observed": true,
+  "engine": {
+    "engine": "isaac-physx",
+    "episodes": {
+      "b0": {
+        "last_sim_time": 6.004000285174698,
+        "steps": 3000
+      },
+      "b1": {
+        "last_sim_time": 6.004000285174698,
+        "steps": 3000
+      },
+      "b2": {
+        "last_sim_time": 6.004000285174698,
+        "steps": 3000
+      },
+      "b3": {
+        "last_sim_time": 6.004000285174698,
+        "steps": 3000
+      },
+      "b4": {
+        "last_sim_time": 6.004000285174698,
+        "steps": 3000
+      },
+      "b5": {
+        "last_sim_time": 6.004000285174698,
+        "steps": 3000
+      },
+      "b6": {
+        "last_sim_time": 6.004000285174698,
+        "steps": 3000
+      },
+      "b7": {
+        "last_sim_time": 6.004000285174698,
+        "steps": 3000
+      }
+    },
+    "physics_device": "cpu",
+    "version": "6.0.1.0"
+  },
+  "native_steps_total": 24000,
+  "episode_passed": [
+    {
+      "id": "b0",
+      "passed": false,
+      "failed_checks": [
+        "floor_clearance",
+        "height_windows",
+        "pitch_windows"
+      ]
+    },
+    {
+      "id": "b1",
+      "passed": false,
+      "failed_checks": [
+        "floor_clearance",
+        "height_windows",
+        "pitch_windows"
+      ]
+    },
+    {
+      "id": "b2",
+      "passed": false,
+      "failed_checks": [
+        "floor_clearance",
+        "height_windows",
+        "pitch_windows"
+      ]
+    },
+    {
+      "id": "b3",
+      "passed": false,
+      "failed_checks": [
+        "floor_clearance",
+        "height_windows",
+        "pitch_windows"
+      ]
+    },
+    {
+      "id": "b4",
+      "passed": false,
+      "failed_checks": [
+        "floor_clearance",
+        "height_windows",
+        "pitch_windows"
+      ]
+    },
+    {
+      "id": "b5",
+      "passed": false,
+      "failed_checks": [
+        "floor_clearance",
+        "height_windows",
+        "pitch_windows"
+      ]
+    },
+    {
+      "id": "b6",
+      "passed": false,
+      "failed_checks": [
+        "floor_clearance",
+        "height_windows",
+        "pitch_windows"
+      ]
+    },
+    {
+      "id": "b7",
+      "passed": false,
+      "failed_checks": [
+        "floor_clearance",
+        "height_windows",
+        "pitch_windows"
+      ]
+    }
+  ],
+  "native_physics_validated": true,
+  "gpu_dynamics_validated": false,
+  "task_difficulty_validated": false,
+  "connection_note": "Remote result completed at 01:10:54Z; outer SSH channel remained open. A separate connection recovered completed records and confirmed this Harbor sandbox was no longer active. SSH channel delay is not physics runtime."
+}

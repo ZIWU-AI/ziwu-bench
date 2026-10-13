@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="360" viewBox="0 0 1280 360" role="img" aria-labelledby="t d">
+  <title id="t">How ZIWU Bench works</title>
+  <desc id="d">Five stages: write a proposal, your own coding agent builds the task, static checks pass locally, an open model self-tests the task, and a pull request is ready for frontier models.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1020"/>
+      <stop offset="1" stop-color="#0f1c33"/>
+    </linearGradient>
+    <linearGradient id="line" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#7c8cff"/>
+      <stop offset="1" stop-color="#2ee6c9"/>
+    </linearGradient>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0L10 5L0 10z" fill="#9aa6d6"/>
+    </marker>
+  </defs>
+  <rect width="1280" height="360" rx="24" fill="url(#bg)"/>
+  <g font-family="Inter, 'SF Pro Display', 'Segoe UI', Helvetica, Arial, sans-serif">
+    <text x="56" y="62" font-size="13" font-weight="700" letter-spacing="2" fill="#7c8cff">THE PIPELINE</text>
+    <text x="56" y="94" font-size="24" font-weight="700" fill="#ffffff">One command. Five stages. Zero formatting work.</text>
+
+    <rect x="104" y="194" width="852" height="3" rx="1.5" fill="url(#line)" opacity="0.55"/>
+
+    <g transform="translate(56 132)">
+      <rect width="208" height="186" rx="16" fill="#ffffff" fill-opacity="0.05" stroke="#ffffff" stroke-opacity="0.12"/>
+      <circle cx="36" cy="64" r="20" fill="#7c8cff"/>
+      <text x="36" y="70" text-anchor="middle" font-size="16" font-weight="800" fill="#0b1020">1</text>
+      <text x="20" y="34" font-size="12" font-weight="700" letter-spacing="1.4" fill="#9aa6d6">YOU WRITE</text>
+      <text x="20" y="114" font-size="19" font-weight="700" fill="#ffffff">proposal.md</text>
+      <text x="20" y="142" font-size="13" fill="#9aa6d6">The science, in your</text>
+      <text x="20" y="160" font-size="13" fill="#9aa6d6">own words.</text>
+    </g>
+    <g transform="translate(272 132)">
+      <rect width="208" height="186" rx="16" fill="#ffffff" fill-opacity="0.05" stroke="#ffffff" stroke-opacity="0.12"/>
+      <circle cx="36" cy="64" r="20" fill="#8a97ff"/>
+      <text x="36" y="70" text-anchor="middle" font-size="16" font-weight="800" fill="#0b1020">2</text>
+      <text x="20" y="34" font-size="12" font-weight="700" letter-spacing="1.4" fill="#9aa6d6">YOUR AGENT BUILDS</text>
+      <text x="20" y="114" font-size="19" font-weight="700" fill="#ffffff">Official task</text>
+      <text x="20" y="142" font-size="13" fill="#9aa6d6">Data, instruction, oracle,</text>
+      <text x="20" y="160" font-size="13" fill="#9aa6d6">verifier, Dockerfile.</text>
+    </g>
+    <g transform="translate(488 132)">
+      <rect width="208" height="186" rx="16" fill="#ffffff" fill-opacity="0.05" stroke="#ffffff" stroke-opacity="0.12"/>
+      <circle cx="36" cy="64" r="20" fill="#5fb3f0"/>
+      <text x="36" y="70" text-anchor="middle" font-size="16" font-weight="800" fill="#0b1020">3</text>
+      <text x="20" y="34" font-size="12" font-weight="700" letter-spacing="1.4" fill="#9aa6d6">AUTOMATIC</text>
+      <text x="20" y="114" font-size="19" font-weight="700" fill="#ffffff">Static checks</text>
+      <text x="20" y="142" font-size="13" fill="#9aa6d6">Every official check,</text>
+      <text x="20" y="160" font-size="13" fill="#9aa6d6">passed before you submit.</text>
+    </g>
+    <g transform="translate(704 132)">
+      <rect width="208" height="186" rx="16" fill="#ffffff" fill-opacity="0.05" stroke="#ffffff" stroke-opacity="0.12"/>
+      <circle cx="36" cy="64" r="20" fill="#3fd0d6"/>
+      <text x="36" y="70" text-anchor="middle" font-size="16" font-weight="800" fill="#0b1020">4</text>
+      <text x="20" y="34" font-size="12" font-weight="700" letter-spacing="1.4" fill="#9aa6d6">IN THE BACKGROUND</text>
+      <text x="20" y="114" font-size="19" font-weight="700" fill="#ffffff">Self-test</text>
+      <text x="20" y="142" font-size="13" fill="#9aa6d6">Docker · oracle · nop, then</text>
+      <text x="20" y="160" font-size="13" fill="#9aa6d6">a top open-model trial.</text>
+    </g>
+    <g transform="translate(920 132)">
+      <rect width="304" height="186" rx="16" fill="#2ee6c9" fill-opacity="0.09" stroke="#2ee6c9" stroke-opacity="0.55"/>
+      <circle cx="36" cy="64" r="20" fill="#2ee6c9"/>
+      <text x="36" y="70" text-anchor="middle" font-size="16" font-weight="800" fill="#0b1020">5</text>
+      <text x="20" y="34" font-size="12" font-weight="700" letter-spacing="1.4" fill="#7ff0dc">READY</text>
+      <text x="20" y="114" font-size="19" font-weight="700" fill="#ffffff">PR, exam-ready</text>
+      <text x="20" y="142" font-size="13" fill="#bfeee6">Submit upstream and let GPT</text>
+      <text x="20" y="160" font-size="13" fill="#bfeee6">and Claude sit your exam.</text>
+    </g>
+  </g>
+</svg>

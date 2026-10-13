@@ -1,0 +1,21 @@
+{
+  "description": "Actual isolated Harbor adapter transport and malformed-candidate test; no native physics was invoked.",
+  "host_python": "3.12.14",
+  "harbor": "0.21.0",
+  "modal_sdk": "1.5.4",
+  "image_id": "im-Nm8iLJCxhB14rzlvQjzhLD",
+  "modal_app": "roboindustrial-isaac",
+  "requested_gpu": "L40S",
+  "trial_id": "9614ea65-6476-4bc9-bc8a-6e5b48472cbf",
+  "task_checksum": "c6e1474245cb12b2b56adf5e232f7f80ba65e4608a55ae74d9bf0a67545604f5",
+  "started_at": "2026-10-04T01:02:31.092275Z",
+  "finished_at": "2026-10-04T01:03:34.662265Z",
+  "verifier_environment_mode": "separate",
+  "reward": 0.0,
+  "exception_info": null,
+  "candidate_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+  "worker_status": "invalid_submission",
+  "worker_error": "Expected forces mapping b0..b7 to 600 force pairs",
+  "native_physics_validated": false,
+  "task_difficulty_validated": false
+}

@@ -1,0 +1,275 @@
+{
+  "registry_version": 1,
+  "cases": [
+    {
+      "case_id": "robot-payload-identification",
+      "scientific_contract_version": "v2",
+      "variants": {
+        "mujoco": {
+          "slug": "robot-payload-identification",
+          "status": "implemented",
+          "source_dir": "../../tasks/engineering-sciences/mechanical-engineering/robot-payload-identification",
+          "verification_status": "see task authoring/validation.json; not an Isaac result",
+          "pull_request": "https://github.com/RoboIndustrial-Benchmark/terminal-bench-science/pull/31"
+        },
+        "isaac": {
+          "slug": "payload-identification-isaac",
+          "version": "v2-isaac-staging",
+          "status": "planned",
+          "engine": "isaac-physx",
+          "bundle_dir": null,
+          "entrypoint": null,
+          "files": {},
+          "case_ids": [],
+          "requires_gpu_physics": true,
+          "verification_status": "not implemented or run by this infrastructure",
+          "pull_request": null,
+          "plan": "Native USD/PhysX implementation, independent full-case oracle/nop/alternative/physical-negative replay, then model trials; pending until evidence recorded."
+        }
+      }
+    },
+    {
+      "case_id": "friction-tray-transfer",
+      "scientific_contract_version": "v2",
+      "variants": {
+        "mujoco": {
+          "slug": "friction-tray-transfer",
+          "status": "implemented",
+          "source_dir": "../../tasks/engineering-sciences/mechanical-engineering/friction-tray-transfer",
+          "verification_status": "see task authoring/validation.json; not an Isaac result",
+          "pull_request": "https://github.com/RoboIndustrial-Benchmark/terminal-bench-science/pull/32"
+        },
+        "isaac": {
+          "slug": "tray-transfer-isaac",
+          "version": "v2-isaac-staging",
+          "status": "planned",
+          "engine": "isaac-physx",
+          "bundle_dir": null,
+          "entrypoint": null,
+          "files": {},
+          "case_ids": [],
+          "requires_gpu_physics": true,
+          "verification_status": "not implemented or run by this infrastructure",
+          "pull_request": null,
+          "plan": "Native USD/PhysX implementation, independent full-case oracle/nop/alternative/physical-negative replay, then model trials; pending until evidence recorded."
+        }
+      }
+    },
+    {
+      "case_id": "suspended-load-antisway",
+      "scientific_contract_version": "v2",
+      "variants": {
+        "mujoco": {
+          "slug": "suspended-load-antisway",
+          "status": "implemented",
+          "source_dir": "../../tasks/engineering-sciences/mechanical-engineering/suspended-load-antisway",
+          "verification_status": "see task authoring/validation.json; not an Isaac result",
+          "pull_request": "https://github.com/RoboIndustrial-Benchmark/terminal-bench-science/pull/33"
+        },
+        "isaac": {
+          "slug": "load-antisway-isaac",
+          "version": "v2-isaac-staging",
+          "status": "planned",
+          "engine": "isaac-physx",
+          "bundle_dir": null,
+          "entrypoint": null,
+          "files": {},
+          "case_ids": [],
+          "requires_gpu_physics": true,
+          "verification_status": "not implemented or run by this infrastructure",
+          "pull_request": null,
+          "plan": "Native USD/PhysX implementation, independent full-case oracle/nop/alternative/physical-negative replay, then model trials; pending until evidence recorded."
+        }
+      }
+    },
+    {
+      "case_id": "gravity-shuttle-docking",
+      "scientific_contract_version": "v2",
+      "variants": {
+        "mujoco": {
+          "slug": "gravity-shuttle-docking",
+          "status": "implemented",
+          "source_dir": "../../tasks/engineering-sciences/mechanical-engineering/gravity-shuttle-docking",
+          "verification_status": "see task authoring/validation.json; not an Isaac result",
+          "pull_request": "https://github.com/RoboIndustrial-Benchmark/terminal-bench-science/pull/34"
+        },
+        "isaac": {
+          "slug": "shuttle-docking-isaac",
+          "version": "v2-isaac-staging",
+          "status": "planned",
+          "engine": "isaac-physx",
+          "bundle_dir": null,
+          "entrypoint": null,
+          "files": {},
+          "case_ids": [],
+          "requires_gpu_physics": true,
+          "verification_status": "not implemented or run by this infrastructure",
+          "pull_request": null,
+          "plan": "Native USD/PhysX implementation, independent full-case oracle/nop/alternative/physical-negative replay, then model trials; pending until evidence recorded."
+        }
+      }
+    },
+    {
+      "case_id": "fixture-dowel-seating",
+      "scientific_contract_version": "v2",
+      "variants": {
+        "mujoco": {
+          "slug": "fixture-dowel-seating",
+          "status": "implemented",
+          "source_dir": "../../tasks/engineering-sciences/mechanical-engineering/fixture-dowel-seating",
+          "verification_status": "see task authoring/validation.json; not an Isaac result",
+          "pull_request": "https://github.com/RoboIndustrial-Benchmark/terminal-bench-science/pull/35"
+        },
+        "isaac": {
+          "slug": "dowel-seating-isaac",
+          "version": "v2-isaac-staging",
+          "status": "planned",
+          "engine": "isaac-physx",
+          "bundle_dir": null,
+          "entrypoint": null,
+          "files": {},
+          "case_ids": [],
+          "requires_gpu_physics": true,
+          "verification_status": "not implemented or run by this infrastructure",
+          "pull_request": null,
+          "plan": "Native USD/PhysX implementation, independent full-case oracle/nop/alternative/physical-negative replay, then model trials; pending until evidence recorded."
+        }
+      }
+    },
+    {
+      "case_id": "keyed-coupler-assembly",
+      "scientific_contract_version": "v2",
+      "variants": {
+        "mujoco": {
+          "slug": "keyed-coupler-assembly",
+          "status": "implemented",
+          "source_dir": "../../tasks/engineering-sciences/mechanical-engineering/keyed-coupler-assembly",
+          "verification_status": "see task authoring/validation.json; not an Isaac result",
+          "pull_request": "https://github.com/RoboIndustrial-Benchmark/terminal-bench-science/pull/36"
+        },
+        "isaac": {
+          "slug": "coupler-assembly-isaac",
+          "version": "v2-isaac-staging",
+          "status": "planned",
+          "engine": "isaac-physx",
+          "bundle_dir": null,
+          "entrypoint": null,
+          "files": {},
+          "case_ids": [],
+          "requires_gpu_physics": true,
+          "verification_status": "not implemented or run by this infrastructure",
+          "pull_request": null,
+          "plan": "Native USD/PhysX implementation, independent full-case oracle/nop/alternative/physical-negative replay, then model trials; pending until evidence recorded."
+        }
+      }
+    },
+    {
+      "case_id": "spring-clamp-locking",
+      "scientific_contract_version": "v2",
+      "variants": {
+        "mujoco": {
+          "slug": "spring-clamp-locking",
+          "status": "implemented",
+          "source_dir": "../../tasks/engineering-sciences/mechanical-engineering/spring-clamp-locking",
+          "verification_status": "see task authoring/validation.json; not an Isaac result",
+          "pull_request": "https://github.com/RoboIndustrial-Benchmark/terminal-bench-science/pull/37"
+        },
+        "isaac": {
+          "slug": "clamp-locking-isaac",
+          "version": "v2-isaac-staging",
+          "status": "planned",
+          "engine": "isaac-physx",
+          "bundle_dir": null,
+          "entrypoint": null,
+          "files": {},
+          "case_ids": [],
+          "requires_gpu_physics": true,
+          "verification_status": "not implemented or run by this infrastructure",
+          "pull_request": null,
+          "plan": "Native USD/PhysX implementation, independent full-case oracle/nop/alternative/physical-negative replay, then model trials; pending until evidence recorded."
+        }
+      }
+    },
+    {
+      "case_id": "dual-load-balance",
+      "scientific_contract_version": "v2",
+      "variants": {
+        "mujoco": {
+          "slug": "dual-load-balance",
+          "status": "implemented",
+          "source_dir": "../../tasks/engineering-sciences/mechanical-engineering/dual-load-balance",
+          "verification_status": "see task authoring/validation.json; not an Isaac result",
+          "pull_request": "https://github.com/RoboIndustrial-Benchmark/terminal-bench-science/pull/38"
+        },
+        "isaac": {
+          "slug": "load-balance-isaac",
+          "version": "v2-isaac-staging",
+          "status": "planned",
+          "engine": "isaac-physx",
+          "bundle_dir": null,
+          "entrypoint": null,
+          "files": {},
+          "case_ids": [],
+          "requires_gpu_physics": true,
+          "verification_status": "not implemented or run by this infrastructure",
+          "pull_request": null,
+          "plan": "Native USD/PhysX implementation, independent full-case oracle/nop/alternative/physical-negative replay, then model trials; pending until evidence recorded."
+        }
+      }
+    },
+    {
+      "case_id": "planar-obstacle-pushing",
+      "scientific_contract_version": "v3",
+      "variants": {
+        "mujoco": {
+          "slug": "planar-obstacle-pushing",
+          "status": "implemented",
+          "source_dir": "../../tasks/engineering-sciences/mechanical-engineering/planar-obstacle-pushing",
+          "verification_status": "see task authoring/validation.json; not an Isaac result",
+          "pull_request": "https://github.com/RoboIndustrial-Benchmark/terminal-bench-science/pull/39"
+        },
+        "isaac": {
+          "slug": "obstacle-pushing-isaac",
+          "version": "v3-isaac-staging",
+          "status": "planned",
+          "engine": "isaac-physx",
+          "bundle_dir": null,
+          "entrypoint": null,
+          "files": {},
+          "case_ids": [],
+          "requires_gpu_physics": true,
+          "verification_status": "not implemented or run by this infrastructure",
+          "pull_request": null,
+          "plan": "Native USD/PhysX implementation, independent full-case oracle/nop/alternative/physical-negative replay, then model trials; pending until evidence recorded."
+        }
+      }
+    },
+    {
+      "case_id": "friction-pinch-lift",
+      "scientific_contract_version": "v2",
+      "variants": {
+        "mujoco": {
+          "slug": "friction-pinch-lift",
+          "status": "implemented",
+          "source_dir": "../../tasks/engineering-sciences/mechanical-engineering/friction-pinch-lift",
+          "verification_status": "see task authoring/validation.json; not an Isaac result",
+          "pull_request": "https://github.com/RoboIndustrial-Benchmark/terminal-bench-science/pull/40"
+        },
+        "isaac": {
+          "slug": "pinch-lift-isaac",
+          "version": "v2-isaac-staging",
+          "status": "planned",
+          "engine": "isaac-physx",
+          "bundle_dir": null,
+          "entrypoint": null,
+          "files": {},
+          "case_ids": [],
+          "requires_gpu_physics": true,
+          "verification_status": "not implemented or run by this infrastructure",
+          "pull_request": null,
+          "plan": "Native USD/PhysX implementation, independent full-case oracle/nop/alternative/physical-negative replay, then model trials; pending until evidence recorded."
+        }
+      }
+    }
+  ]
+}

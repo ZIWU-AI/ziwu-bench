@@ -1,0 +1,11 @@
+{
+  "app_name": "roboindustrial-isaac",
+  "image_id": "im-Nm8iLJCxhB14rzlvQjzhLD",
+  "gpu": "L40S",
+  "cpu": 8,
+  "memory_mb": [32768,65536],
+  "sandbox_timeout_sec": 2400,
+  "worker_timeout_sec": 1800,
+  "python": "/workspace/miniconda3/envs/RoboDojo/bin/python",
+  "block_network": true
+}
