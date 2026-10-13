@@ -149,6 +149,5 @@ ZIWU Bench stands on [Terminal-Bench-Science](https://github.com/harbor-framewor
 <br>
 
 <p align="center">
-  <b>Built by <a href="https://ziwu.dev">ZIWU · 子午智能</a></b><br>
-  <sub>Questions or collaborations: <a href="mailto:1750655781@qq.com">1750655781@qq.com</a></sub>
+  <b>Built by <a href="https://ziwu.dev">ZIWU · 子午智能</a></b>
 </p>
