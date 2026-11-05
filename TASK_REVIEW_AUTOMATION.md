@@ -17,6 +17,11 @@ Each harness must first pass a fresh tool-use preflight; interface failures and
 timeouts are reported separately from benchmark scores. See
 [protocol, versions, invocation, and evidence](tools/harness-comparison/README.md).
 
+Setting `harness_provider=deepseek` selects a separate Codex + `deepseek-flash`
+trial on DeepSeek's official Responses endpoint, using `DEEPSEEK_API_KEY`.
+Its provider-specific report is kept separate from the four-harness Kimi matrix;
+the default remains `harness_provider=kimi`.
+
 ## Setup
 
 When adopting this template in a new repo, create the labels the review automations depend on. The [task overview](#task-overview) workflow applies `new task`, [checks-passed](#static-checks) applies `waiting on reviewer`, and [review label automation](#review-label-automation) moves PRs through `waiting on author`, `domain review ✅`, `technical review ✅`, and `final review ✅`. If the labels don't exist, those workflow steps silently no-op.

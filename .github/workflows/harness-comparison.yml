@@ -2,20 +2,25 @@ name: Same-model harness comparison
 
 on:
   workflow_call:
+    inputs:
+      provider:
+        description: "kimi compares four harnesses; deepseek tests official Flash through Codex"
+        type: string
+        default: kimi
 
 permissions:
   contents: read
 
 jobs:
   compare:
-    name: Kimi k3.1-pro / ${{ matrix.harness }}
+    name: ${{ inputs.provider == 'deepseek' && 'DeepSeek Flash' || 'Kimi k3.1-pro' }} / ${{ matrix.harness }}
     runs-on: ubuntu-latest
     timeout-minutes: 330
     strategy:
       fail-fast: false
       max-parallel: 2
       matrix:
-        harness: [claude-code, codex, kimi-code, deepseek-harness]
+        harness: ${{ fromJSON(inputs.provider == 'deepseek' && '["codex"]' || '["claude-code","codex","kimi-code","deepseek-harness"]') }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
@@ -31,13 +36,15 @@ jobs:
           .comparison-venv/bin/python -m unittest discover -s tools/harness-comparison -p 'test_*.py' -v
       - name: Run fresh preflight and benchmark trial
         env:
-          KIMI_CODE_API_KEY: ${{ secrets.KIMI_CODE_API_KEY }}
+          KIMI_CODE_API_KEY: ${{ inputs.provider == 'kimi' && secrets.KIMI_CODE_API_KEY || '' }}
+          DEEPSEEK_API_KEY: ${{ inputs.provider == 'deepseek' && secrets.DEEPSEEK_API_KEY || '' }}
           COMPARISON_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           COMPARISON_TASK_REF: ${{ github.sha }}
           HARNESS: ${{ matrix.harness }}
+          PROVIDER: ${{ inputs.provider }}
         run: |
           export PATH="$PWD/.comparison-venv/bin:$PATH"
-          python tools/harness-comparison/run.py run --harness "$HARNESS" --output "comparison-output/$HARNESS"
+          python tools/harness-comparison/run.py run --provider "$PROVIDER" --harness "$HARNESS" --output "comparison-output/$HARNESS"
       - name: Make collected results readable
         if: always()
         run: |
@@ -50,7 +57,7 @@ jobs:
         id: scrub
         if: always()
         env:
-          KIMI_CODE_API_KEY: ${{ secrets.KIMI_CODE_API_KEY }}
+          ACTIVE_API_KEY: ${{ (inputs.provider == 'deepseek' && secrets.DEEPSEEK_API_KEY) || (inputs.provider == 'kimi' && secrets.KIMI_CODE_API_KEY) || '' }}
         run: |
           python - <<'PY'
           import importlib.util, os
@@ -58,13 +65,13 @@ jobs:
           spec = importlib.util.spec_from_file_location('comparison', 'tools/harness-comparison/run.py')
           mod = importlib.util.module_from_spec(spec)
           spec.loader.exec_module(mod)
-          mod.scrub_tree(Path('comparison-output'), os.environ.get('KIMI_CODE_API_KEY', ''))
+          mod.scrub_tree(Path('comparison-output'), os.environ.get('ACTIVE_API_KEY', ''))
           PY
       - name: Upload scrubbed comparison evidence
         if: ${{ always() && !cancelled() && steps.scrub.outcome == 'success' }}
         uses: actions/upload-artifact@v4
         with:
-          name: harness-comparison-${{ matrix.harness }}
+          name: harness-comparison-${{ inputs.provider }}-${{ matrix.harness }}
           path: comparison-output/${{ matrix.harness }}/
           if-no-files-found: warn
           include-hidden-files: true
@@ -79,15 +86,17 @@ jobs:
           persist-credentials: false
       - uses: actions/download-artifact@v4
         with:
-          pattern: harness-comparison-*
+          pattern: harness-comparison-${{ inputs.provider }}-*
           path: collected-comparison
-      - name: Keep every requested harness in the result table
+      - name: Keep every requested harness in the provider's result table
         if: always()
+        env:
+          PROVIDER: ${{ inputs.provider }}
         run: |
           mkdir -p collected-comparison
-          python3 tools/harness-comparison/run.py report --input collected-comparison --output comparison-report > "$GITHUB_STEP_SUMMARY"
+          python3 tools/harness-comparison/run.py report --provider "$PROVIDER" --input collected-comparison --output comparison-report > "$GITHUB_STEP_SUMMARY"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: harness-comparison-report
+          name: harness-comparison-report-${{ inputs.provider }}
           path: comparison-report/

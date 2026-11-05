@@ -42,6 +42,43 @@ weights. Each result retains its route provenance and configuration differences.
 
 ## Run and inspect
 
+### Separate DeepSeek official API trial
+
+The optional `deepseek` profile runs **Codex 0.155.1 + deepseek-flash** through
+DeepSeek's native Responses API at `https://api.deepseek.com/`. This is a
+separate provider/model experiment, not a fifth row in the fixed-Kimi harness
+comparison. It uses the same task, fresh preflight, one attempt, and 90-minute
+agent budget. The official model catalog supplies DeepSeek-specific tool and
+reasoning metadata inside each isolated container.
+
+On 2026-11-05, an authenticated request to the official `/models` endpoint
+returned HTTP 200 and listed `deepseek-flash` as DeepSeek-V4.1-Flash, with
+1,048,576 context tokens and `low`, `high`, `max` effort levels. This profile
+requests `high`, keeps the official 1M context configuration, and disables
+Codex web search. The context differs from the Kimi profile's 262,144 tokens;
+these trials should not be presented as differing only in their model weights.
+The provider's unversioned model alias may resolve differently in future runs.
+
+The user-supplied credential is kept in the repository Actions Secret
+`DEEPSEEK_API_KEY`, injected into Codex only at runtime. No local Codex/desktop
+configuration is changed. Dispatch this profile with:
+
+```sh
+gh workflow run run-trials.yml --repo ZIWU-AI/ziwu-bench \
+  --ref codex/friction-pinch-lift-20261105 \
+  -f pr_number=4 -f harness_comparison=true -f harness_provider=deepseek
+```
+
+Local invocation adds `--provider deepseek --harness codex`; aggregation also
+requires `--provider deepseek`. The report rejects mixed-provider input.
+Artifacts include the provider in their names, and the existing Kimi run keeps
+its original commit and settings.
+
+See [DeepSeek's Codex integration](https://api-docs.deepseek.com/zh-cn/quick_start/agent_integrations/codex/)
+and [native Responses API](https://api-docs.deepseek.com/zh-cn/guides/responses_api/).
+
+### Fixed-Kimi comparison
+
 The reusable Actions implementation is
 [harness-comparison.yml](../../.github/workflows/harness-comparison.yml). It uses
 `workflow_call`; invoke it through the repository's dispatch workflow rather

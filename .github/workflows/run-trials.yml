@@ -21,6 +21,12 @@ on:
         required: false
         type: boolean
         default: false
+      harness_provider:
+        description: "Comparison/API trial profile (only used with harness_comparison=true)"
+        required: false
+        type: choice
+        options: [kimi, deepseek]
+        default: kimi
       pr_number:
         description: "PR number to run trials against"
         required: true
@@ -35,6 +41,8 @@ jobs:
   harness-comparison:
     if: github.event_name == 'workflow_dispatch' && inputs.harness_comparison == true
     uses: ./.github/workflows/harness-comparison.yml
+    with:
+      provider: ${{ inputs.harness_provider || 'kimi' }}
     secrets: inherit
 
   check-trigger:

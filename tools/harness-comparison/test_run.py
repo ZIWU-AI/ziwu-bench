@@ -53,6 +53,20 @@ class ReportingTests(unittest.TestCase):
             self.assertEqual(sum(row["status"] == "job_missing" for row in rows), 3)
             self.assertTrue(all(row["reward"] is None for row in rows if row["status"] == "job_missing"))
 
+    def test_deepseek_report_is_separate_and_rejects_mixed_providers(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            row = {"harness": "codex", "provider": "deepseek-official",
+                   "model": "deepseek-flash", "status": "not_passed", "reward": 0}
+            run.write_json(root / "inputs/codex/summary.json", row)
+            run.report(root / "inputs", root / "report", "deepseek")
+            result = json.loads((root / "report/comparison.json").read_text())
+            self.assertEqual(result["model"], "deepseek-flash")
+            self.assertEqual(len(result["results"]), 1)
+            self.assertIn("DeepSeek official API", (root / "report/comparison.md").read_text())
+            with self.assertRaisesRegex(ValueError, "mix providers"):
+                run.report(root / "inputs", root / "wrong-report", "kimi")
+
     def test_scrubber_covers_plaintext_and_removes_symlinks(self):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)

@@ -13,6 +13,12 @@ HARNESSES = ("claude-code", "codex", "kimi-code", "deepseek-harness")
 TASK = "tasks/engineering-sciences/mechanical-engineering/friction-pinch-lift"
 TASK_TREE = "98401f4e698ef0b84e92baab287c10bc257d1e97"
 HARBOR_VERSION = "0.23.0"
+PROFILES = {
+    "kimi": {"model": "k3.1-pro", "provider": "kimi-code-official",
+             "secret_env": "KIMI_CODE_API_KEY", "harnesses": HARNESSES},
+    "deepseek": {"model": "deepseek-flash", "provider": "deepseek-official",
+                 "secret_env": "DEEPSEEK_API_KEY", "harnesses": ("codex",)},
+}
 
 
 def now():
@@ -130,7 +136,7 @@ def collect(job_dir):
                       ("n_input_tokens", "n_cache_tokens", "n_output_tokens")},
             "cost_usd": None,
             "cli_reported_cost_usd": agent.get("cost_usd"),
-            "cost_status": "unknown: CLI estimates are not verified Kimi billing",
+            "cost_status": "unknown: CLI estimates are not verified provider billing",
             "physical_metrics": metrics,
             "result_path": str(path.relative_to(job_dir.parent.parent))}
 
@@ -175,18 +181,20 @@ def execute(config, private_dir, output, stage, env):
 
 def run_one(args):
     from importlib.metadata import version
-    from routes import build_route
+    profile = PROFILES[args.provider]
+    if args.harness not in profile["harnesses"]:
+        raise ValueError("This provider profile does not support the requested harness")
     output = args.output.resolve()
     output.mkdir(parents=True, exist_ok=True)
-    summary = {"schema_version": 1, "harness": args.harness, "model": "k3.1-pro",
-               "provider": "kimi-code-official", "status": "preparing", "reward": None,
+    summary = {"schema_version": 1, "harness": args.harness, "model": profile["model"],
+               "provider": profile["provider"], "status": "preparing", "reward": None,
                "started_at": now(), "requested_trial_count": 1, "trial_count": 0, "hints": False,
                "run_url": os.environ.get("COMPARISON_RUN_URL"),
                "workflow_sha": os.environ.get("GITHUB_SHA"),
                "source_ref": os.environ.get("COMPARISON_TASK_REF", git("rev-parse", "HEAD")),
                "agent_timeout_sec": 5400, "harbor_version": version("harbor")}
     write_json(output / "summary.json", summary)
-    secret = os.environ.get("KIMI_CODE_API_KEY", "")
+    secret = os.environ.get(profile["secret_env"], "")
     exit_code = 1
     try:
         if summary["harbor_version"] != HARBOR_VERSION:
@@ -194,10 +202,15 @@ def run_one(args):
         summary["task_tree"] = check_task(args.task)
         if not secret:
             summary["status"] = "credential_missing"
-            raise ValueError("KIMI_CODE_API_KEY is not configured")
+            raise ValueError(f"{profile['secret_env']} is not configured")
         with tempfile.TemporaryDirectory(prefix="ziwu-harness-private-") as private:
             private_dir = Path(private)
-            route = build_route(args.harness, private_dir)
+            if args.provider == "deepseek":
+                from deepseek_codex import build_route
+                route = build_route(private_dir)
+            else:
+                from routes import build_route
+                route = build_route(args.harness, private_dir)
             summary["route"] = route["provenance"]
             env = os.environ.copy()
             env["PYTHONPATH"] = str(Path(__file__).resolve().parent)
@@ -208,15 +221,18 @@ def run_one(args):
             cfg = job_config(route, preflight, output / "preflight", "check", secret, 300)
             summary["status"] = "preflight_running"
             write_json(output / "summary.json", summary)
+            print(f"{profile['provider']} / {args.harness}: starting fresh tool-use preflight", flush=True)
             code = execute(cfg, private_dir, output, "preflight", env)
             summary["preflight"] = collect(output / "preflight/check")
             summary["preflight"]["harbor_exit_code"] = code
+            print(f"Preflight status: {summary['preflight']['status']}", flush=True)
             if code or summary["preflight"]["status"] != "passed":
                 summary["status"] = "preflight_failed"
                 return 1
             summary["status"] = "trial_running"
             summary["trial_count"] = 1
             write_json(output / "summary.json", summary)
+            print(f"Starting {profile['model']} benchmark trial (5400-second agent limit)", flush=True)
             cfg = job_config(route, Path(args.task), output / "trial", "comparison", secret, 5400)
             code = execute(cfg, private_dir, output, "trial", env)
             summary.update(collect(output / "trial/comparison"))
@@ -237,21 +253,30 @@ def run_one(args):
     return exit_code
 
 
-def report(source, output):
+def report(source, output, provider="kimi"):
+    profile = PROFILES[provider]
+    harnesses = profile["harnesses"]
     rows = {}
     for path in source.rglob("summary.json"):
         data = json.loads(path.read_text())
         if data.get("harness") in HARNESSES:
+            if data.get("provider", "kimi-code-official") != profile["provider"]:
+                raise ValueError("Do not mix providers in a same-model report")
+            if data["harness"] not in harnesses:
+                raise ValueError("Unexpected harness for this provider profile")
             if data["harness"] in rows:
                 raise ValueError("Duplicate harness result; do not silently choose a trial")
             rows[data["harness"]] = data
-    for name in HARNESSES:
-        rows.setdefault(name, {"harness": name, "status": "job_missing", "reward": None})
-    write_json(output / "comparison.json", {"schema_version": 1, "results": list(rows.values())})
-    text = ["# Same-model harness comparison", "", "Model: Kimi k3.1-pro. One exploratory trial per harness; 90-minute agent limit.",
+    for name in harnesses:
+        rows.setdefault(name, {"harness": name, "provider": profile["provider"],
+                              "model": profile["model"], "status": "job_missing", "reward": None})
+    write_json(output / "comparison.json", {"schema_version": 1, "provider": profile["provider"],
+                                             "model": profile["model"], "results": list(rows.values())})
+    title = "Same-model harness comparison" if provider == "kimi" else "DeepSeek official API / Codex trial"
+    text = [f"# {title}", "", f"Model: {profile['model']}. One exploratory trial per harness; 90-minute agent limit.",
             "This measures the configured harness + adapter, not a statistically established ranking.", "",
             "| Harness | Status | Reward | Physical episodes passed |", "|---|---|---:|---:|"]
-    for name in HARNESSES:
+    for name in harnesses:
         row = rows[name]
         metrics = row.get("physical_metrics") or {}
         passed, total = metrics.get("passed"), metrics.get("episodes")
@@ -270,15 +295,17 @@ def main():
     commands = parser.add_subparsers(dest="command", required=True)
     run = commands.add_parser("run")
     run.add_argument("--harness", choices=HARNESSES, required=True)
+    run.add_argument("--provider", choices=PROFILES, default="kimi")
     run.add_argument("--task", default=TASK)
     run.add_argument("--output", type=Path, required=True)
     aggregate = commands.add_parser("report")
     aggregate.add_argument("--input", type=Path, required=True)
     aggregate.add_argument("--output", type=Path, required=True)
+    aggregate.add_argument("--provider", choices=PROFILES, default="kimi")
     args = parser.parse_args()
     if args.command == "run":
         return run_one(args)
-    path = report(args.input, args.output)
+    path = report(args.input, args.output, args.provider)
     print(path.read_text())
     return 0
 
