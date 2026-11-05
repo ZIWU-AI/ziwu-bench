@@ -79,6 +79,7 @@ model_provider = "${name}"
 name = "${name}"
 base_url = "${base}/v1"
 env_key = "OPENAI_API_KEY"
+wire_api = "responses"
 supports_websockets = false
 EOF
   add_flag "--ak" "config=${path}"
