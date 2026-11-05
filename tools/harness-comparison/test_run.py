@@ -62,10 +62,42 @@ class ReportingTests(unittest.TestCase):
             run.report(root / "inputs", root / "report", "deepseek")
             result = json.loads((root / "report/comparison.json").read_text())
             self.assertEqual(result["model"], "deepseek-flash")
-            self.assertEqual(len(result["results"]), 1)
+            self.assertEqual(len(result["results"]), 4)
             self.assertIn("DeepSeek official API", (root / "report/comparison.md").read_text())
             with self.assertRaisesRegex(ValueError, "mix providers"):
                 run.report(root / "inputs", root / "wrong-report", "kimi")
+
+    def test_external_codex_evidence_requires_matching_run_task_and_budget(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            run_id = "42033852755"
+            row = {"harness": "codex", "provider": "deepseek-official",
+                   "model": "deepseek-flash", "status": "not_passed", "reward": 0,
+                   "run_url": f"https://github.com/ZIWU-AI/ziwu-bench/actions/runs/{run_id}",
+                   "task_tree": run.TASK_TREE, "agent_timeout_sec": 5400,
+                   "harbor_version": run.HARBOR_VERSION}
+            path = root / "inputs/reused-codex/summary.json"
+            run.write_json(path, row)
+            run.report(root / "inputs", root / "report", "deepseek", run_id)
+            rows = json.loads((root / "report/comparison.json").read_text())["results"]
+            self.assertEqual(next(r for r in rows if r["harness"] == "codex")["reward"], 0)
+            row["agent_timeout_sec"] = 28800
+            run.write_json(path, row)
+            with self.assertRaisesRegex(ValueError, "does not match"):
+                run.report(root / "inputs", root / "report", "deepseek", run_id)
+
+    def test_missing_external_artifact_stays_unknown_and_mixed_models_are_rejected(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            run.report(root / "inputs", root / "report", "deepseek", "42033852755")
+            rows = json.loads((root / "report/comparison.json").read_text())["results"]
+            codex = next(r for r in rows if r["harness"] == "codex")
+            self.assertEqual(codex["status"], "external_result_unavailable")
+            self.assertIsNone(codex["reward"])
+            run.write_json(root / "inputs/other/summary.json", {
+                "harness": "kimi-code", "provider": "deepseek-official", "model": "k3.1-pro"})
+            with self.assertRaisesRegex(ValueError, "mix models"):
+                run.report(root / "inputs", root / "report", "deepseek")
 
     def test_scrubber_covers_plaintext_and_removes_symlinks(self):
         with tempfile.TemporaryDirectory() as td:

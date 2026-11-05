@@ -12,7 +12,7 @@ from harbor.models.agent.context import AgentContext
 from harbor.models.trial.config import AgentConfig
 
 from dsh_agent import (
-    DSH_VERSION, USER_AGENT, DeepSeekHarness, DshIntegrationError,
+    DSH_VERSION, ROUTES, USER_AGENT, DeepSeekHarness, DshIntegrationError,
     DshOptions, build_profile, summarize_events,
 )
 
@@ -80,14 +80,48 @@ class ProfileTests(unittest.TestCase):
         self.assertEqual(route["models"][0]["id"], "k3.1-pro")
         self.assertEqual(route["models"][0]["contextWindow"], 262144)
         self.assertEqual(route["reasoning"], "high")
+        self.assertEqual(rows["agent-default-model"]["config"], {
+            "provider": "kimi-benchmark", "model": "k3.1-pro", "reasoningEffort": "high"})
         for key in ("session-log-deepseek", "session-telemetry-otel", "otel",
                     "credentials", "deepseek-account", "llm-deepseek"):
             self.assertTrue(rows[key]["disabled"])
         self.assertEqual(rows["session-persistence-jsonl"]["config"]["compression"], "none")
 
-    def test_no_unpinned_version_or_different_endpoint(self):
-        for options in ({"version": "latest"}, {"base_url": "https://example.com"}):
-            with self.assertRaises(ValueError):
+    def test_deepseek_uses_native_transport_with_fixed_effort_and_catalog(self):
+        options = DshOptions(provider="deepseek", base_url="https://api.deepseek.com/anthropic")
+        rows = {row["id"]: row for row in build_profile(options, "/logs/agent")}
+        self.assertEqual(rows["agent-default-model"]["config"], {
+            "provider": "deepseek-official", "model": "deepseek-flash", "reasoningEffort": "high"})
+        transport = rows["llm-deepseek"]
+        self.assertFalse(transport["disabled"])
+        config = transport["config"]
+        self.assertEqual(config["apiKeyEnv"], "DEEPSEEK_API_KEY")
+        self.assertEqual(config["baseURL"], "https://api.deepseek.com/anthropic")
+        self.assertEqual(config["thinking"], "enabled")
+        self.assertEqual(config["reasoningEffort"], "high")
+        self.assertEqual(config["defaultContextWindow"], 1048576)
+        self.assertEqual(config["maxTokens"], 32768)
+        self.assertEqual(config["models"], [{
+            "id": "deepseek-flash", "contextWindow": 1048576,
+            "maxTokens": 32768, "inputModalities": ["text"],
+            "systemPromptUpdate": "in-history", "toolUpdate": "addition-only"}])
+        self.assertEqual(config["retryPolicy"]["maxRetries"], 0)
+        for unsupported in ("protocol", "api", "headers", "apiKey"):
+            self.assertNotIn(unsupported, config)
+        for key in ("llm-pi-ai", "llm-deepseek-account", "credentials",
+                    "deepseek-account", "session-log-deepseek", "session-telemetry-otel",
+                    "otel", "plugin-package-inventory-deepseek", "session-title-llm",
+                    "web-search-deepseek", "settings"):
+            self.assertTrue(rows[key]["disabled"])
+        self.assertNotIn("KIMI_API_KEY", json.dumps(rows))
+
+    def test_no_unpinned_version_endpoint_or_cross_provider_route(self):
+        for options in ({"version": "latest"}, {"base_url": "https://example.com"},
+                        {"provider": "other"}, {"model_api": "openai-completions"},
+                        {"provider": "deepseek"},
+                        {"provider": "kimi", "base_url": "https://api.deepseek.com/anthropic"},
+                        {"provider": "deepseek", "base_url": "https://api.kimi.com/coding"}):
+            with self.subTest(options=options), self.assertRaises(ValueError):
                 DshOptions(**options)
 
     def test_harbor_factory_import_path_contract(self):
@@ -101,28 +135,55 @@ class ProfileTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 DeepSeekHarness(logs_dir=Path(tmp), model_name="other")
 
+    def test_harbor_factory_deepseek_route_and_model_mismatch(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            kwargs = {"version": DSH_VERSION, "provider": "deepseek",
+                      "base_url": "https://api.deepseek.com/anthropic",
+                      "model_api": "anthropic-messages"}
+            agent = AgentFactory.create_agent_from_config(
+                AgentConfig(import_path="dsh_agent:DeepSeekHarness", model_name="deepseek-flash",
+                            kwargs=kwargs), logs_dir=Path(tmp))
+            self.assertEqual(agent.options.route.credential_env, "DEEPSEEK_API_KEY")
+            self.assertFalse(agent.capabilities.atif)
+            with self.assertRaises(ValueError):
+                DeepSeekHarness(logs_dir=Path(tmp), model_name="k3.1-pro", **kwargs)
+            with self.assertRaises(ValueError):
+                DeepSeekHarness(logs_dir=Path(tmp), model_name="deepseek-flash")
+
 
 class RunTests(unittest.IsolatedAsyncioTestCase):
     async def test_missing_key_never_executes_model(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            agent = DeepSeekHarness(logs_dir=Path(tmp), model_name="k3.1-pro",
-                                    extra_env={"KIMI_API_KEY": ""})
-            environment = SimpleNamespace(exec=AsyncMock())
-            with self.assertRaises(DshIntegrationError):
-                await agent.run("task", environment, AgentContext())
-            environment.exec.assert_not_awaited()
+        for provider, route in ROUTES.items():
+            with self.subTest(provider=provider), tempfile.TemporaryDirectory() as tmp:
+                other_key = "KIMI_API_KEY" if provider == "deepseek" else "DEEPSEEK_API_KEY"
+                agent = DeepSeekHarness(
+                    logs_dir=Path(tmp), model_name=route.model, provider=provider,
+                    base_url=route.base_url,
+                    extra_env={route.credential_env: "", other_key: "wrong-provider-key"})
+                environment = SimpleNamespace(exec=AsyncMock())
+                with self.assertRaisesRegex(DshIntegrationError, route.credential_env):
+                    await agent.run("task", environment, AgentContext())
+                environment.exec.assert_not_awaited()
 
     async def test_success_captures_exit_and_unknown_usage(self):
-        await self.check_run(0, events(), expected_error=False)
+        for provider in ROUTES:
+            with self.subTest(provider=provider):
+                await self.check_run(0, events(), expected_error=False, provider=provider)
 
     async def test_provider_rejection_keeps_failure_separate_from_score(self):
-        await self.check_run(1, events(reason={"kind": "error", "code": "AUTHENTICATION"}),
-                             expected_error=True)
+        for provider in ROUTES:
+            with self.subTest(provider=provider):
+                await self.check_run(1, events(reason={"kind": "error", "code": "AUTHENTICATION"}),
+                                     expected_error=True, provider=provider)
 
-    async def check_run(self, code, rows, expected_error):
+    async def check_run(self, code, rows, expected_error, provider):
         with tempfile.TemporaryDirectory() as tmp:
-            agent = DeepSeekHarness(logs_dir=Path(tmp), model_name="k3.1-pro",
-                                    extra_env={"KIMI_API_KEY": "test-not-a-real-key"})
+            route = ROUTES[provider]
+            other_key = "KIMI_API_KEY" if provider == "deepseek" else "DEEPSEEK_API_KEY"
+            agent = DeepSeekHarness(logs_dir=Path(tmp), model_name=route.model,
+                                    provider=provider, base_url=route.base_url,
+                                    extra_env={route.credential_env: "test-not-a-real-key",
+                                               other_key: "wrong-provider-key"})
             async def download(_source, target):
                 Path(target).write_text("\n".join(map(json.dumps, rows)))
             environment = SimpleNamespace(
@@ -142,9 +203,16 @@ class RunTests(unittest.IsolatedAsyncioTestCase):
             self.assertIn("--approval-policy never", call["command"])
             self.assertEqual(call["env"]["DSH_TELEMETRY_DISABLED"], "1")
             self.assertEqual(call["env"]["DSH_HOME"], "/logs/agent/dsh-home")
+            self.assertEqual(call["env"][route.credential_env], "test-not-a-real-key")
+            self.assertNotIn(other_key, call["env"])
             for call_upload in upload.call_args_list:
                 self.assertNotIn("test-not-a-real-key", call_upload.args[2])
+                self.assertNotIn("wrong-provider-key", call_upload.args[2])
             self.assertEqual(context.metadata["dsh"]["process_exit_code"], code)
+            self.assertEqual(context.metadata["dsh"]["provider"], provider)
+            self.assertEqual(context.metadata["dsh"]["model"], route.model)
+            self.assertEqual(context.metadata["dsh"]["base_url"], route.base_url)
+            self.assertEqual(context.metadata["dsh"]["context_window"], route.context_window)
             self.assertIsNone(context.n_input_tokens)
             self.assertIsNone(context.cost_usd)
             self.assertTrue((Path(tmp) / "dsh-status.json").exists())

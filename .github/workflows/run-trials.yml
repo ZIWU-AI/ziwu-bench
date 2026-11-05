@@ -17,7 +17,7 @@ on:
   workflow_dispatch:
     inputs:
       harness_comparison:
-        description: "Run the pinned four-harness comparison on Kimi k3.1-pro"
+        description: "Run the pinned harness comparison for the selected provider"
         required: false
         type: boolean
         default: false
@@ -27,6 +27,17 @@ on:
         type: choice
         options: [kimi, deepseek]
         default: kimi
+      harness_subset:
+        description: "Run all harnesses, Codex only, or the other three"
+        required: false
+        type: choice
+        options: [all, codex, remaining]
+        default: all
+      existing_codex_run_id:
+        description: "Optional existing Codex run to include in the report; use with remaining"
+        required: false
+        type: string
+        default: ""
       pr_number:
         description: "PR number to run trials against"
         required: true
@@ -40,9 +51,14 @@ on:
 jobs:
   harness-comparison:
     if: github.event_name == 'workflow_dispatch' && inputs.harness_comparison == true
+    permissions:
+      contents: read
+      actions: read
     uses: ./.github/workflows/harness-comparison.yml
     with:
       provider: ${{ inputs.harness_provider || 'kimi' }}
+      harnesses: ${{ inputs.harness_subset == 'remaining' && '["claude-code","kimi-code","deepseek-harness"]' || inputs.harness_subset == 'codex' && '["codex"]' || '["claude-code","codex","kimi-code","deepseek-harness"]' }}
+      existing_codex_run_id: ${{ inputs.existing_codex_run_id || '' }}
     secrets: inherit
 
   check-trigger:

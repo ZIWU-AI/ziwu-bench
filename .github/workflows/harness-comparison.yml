@@ -4,9 +4,17 @@ on:
   workflow_call:
     inputs:
       provider:
-        description: "kimi compares four harnesses; deepseek tests official Flash through Codex"
+        description: "Fixed model provider: kimi or deepseek"
         type: string
         default: kimi
+      harnesses:
+        description: "JSON list of harnesses to execute"
+        type: string
+        default: '["claude-code","codex","kimi-code","deepseek-harness"]'
+      existing_codex_run_id:
+        description: "Optional earlier Codex run whose evidence should be reused"
+        type: string
+        default: ""
 
 permissions:
   contents: read
@@ -20,7 +28,7 @@ jobs:
       fail-fast: false
       max-parallel: 2
       matrix:
-        harness: ${{ fromJSON(inputs.provider == 'deepseek' && '["codex"]' || '["claude-code","codex","kimi-code","deepseek-harness"]') }}
+        harness: ${{ fromJSON(inputs.harnesses) }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
@@ -80,6 +88,9 @@ jobs:
     if: always()
     needs: compare
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
@@ -88,13 +99,23 @@ jobs:
         with:
           pattern: harness-comparison-${{ inputs.provider }}-*
           path: collected-comparison
+      - name: Collect the existing Codex run without running it again
+        if: ${{ always() && inputs.existing_codex_run_id != '' }}
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          name: harness-comparison-${{ inputs.provider }}-codex
+          path: collected-comparison/reused-codex
+          run-id: ${{ inputs.existing_codex_run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Keep every requested harness in the provider's result table
         if: always()
         env:
           PROVIDER: ${{ inputs.provider }}
+          EXISTING_CODEX_RUN_ID: ${{ inputs.existing_codex_run_id }}
         run: |
           mkdir -p collected-comparison
-          python3 tools/harness-comparison/run.py report --provider "$PROVIDER" --input collected-comparison --output comparison-report > "$GITHUB_STEP_SUMMARY"
+          python3 tools/harness-comparison/run.py report --provider "$PROVIDER" --external-codex-run "$EXISTING_CODEX_RUN_ID" --input collected-comparison --output comparison-report > "$GITHUB_STEP_SUMMARY"
       - uses: actions/upload-artifact@v4
         if: always()
         with:

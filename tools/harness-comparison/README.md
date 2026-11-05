@@ -1,7 +1,8 @@
 # Same-model harness comparison
 
-Run `friction-pinch-lift` once with each of four coding harnesses, all configured
-for Kimi Code's official `k3.1-pro` route. Each harness first completes a fresh,
+Run `friction-pinch-lift` once with each of four coding harnesses. Two separate
+profiles fix the model to official Kimi `k3.1-pro` or DeepSeek `deepseek-flash`.
+Each harness first completes a fresh,
 five-minute tool-use preflight. Only a successful preflight starts its benchmark
 trial, which has a 90-minute agent limit. This is an exploratory comparison of
 the configured harnesses and adapters, not an established ranking.
@@ -16,7 +17,9 @@ No hints or oracle solution are supplied to the agents.
 ## Versions and routes
 
 Harbor is pinned to **0.23.0**. `routes.py` owns the client versions and provider
-configuration; `dsh_agent.py` implements the additional dsh adapter.
+configuration for Kimi; `deepseek_routes.py` supplies the DeepSeek routes.
+`dsh_agent.py` implements the additional dsh adapter. The following table is
+the Kimi profile:
 
 | Harness | Client version | Wire protocol | API base |
 |---|---|---|---|
@@ -31,7 +34,7 @@ is used. Protocol support alone does not establish that a provider will admit
 every client. A rejected dsh client is reported as a failed integration, and
 does not trigger a change of identity, endpoint, or model.
 
-All routes request a 262,144-token context and `high` reasoning. These are
+All Kimi routes request a 262,144-token context and `high` reasoning. These are
 configuration values, not measured equal reasoning budgets. Each native client
 and protocol controls how those settings are sent, how history is compacted,
 and how tools and prompts are represented. Codex explicitly compacts at 220,000
@@ -42,14 +45,25 @@ weights. Each result retains its route provenance and configuration differences.
 
 ## Run and inspect
 
-### Separate DeepSeek official API trial
+### Separate DeepSeek official API comparison
 
-The optional `deepseek` profile runs **Codex 0.155.1 + deepseek-flash** through
-DeepSeek's native Responses API at `https://api.deepseek.com/`. This is a
-separate provider/model experiment, not a fifth row in the fixed-Kimi harness
-comparison. It uses the same task, fresh preflight, one attempt, and 90-minute
-agent budget. The official model catalog supplies DeepSeek-specific tool and
-reasoning metadata inside each isolated container.
+The `deepseek` profile runs the same four pinned harness versions against
+**deepseek-flash**. It is a separate four-row report from the Kimi comparison,
+with the same task, fresh preflight, one attempt, and 90-minute agent budget.
+
+| Harness | Native provider / protocol | API base |
+|---|---|---|
+| Claude Code | Anthropic Messages | `https://api.deepseek.com/anthropic` |
+| Codex | Responses with the official Flash model catalog | `https://api.deepseek.com/` |
+| Kimi Code | OpenAI-compatible Chat Completions | `https://api.deepseek.com` |
+| DeepSeek Harness | Native `llm-deepseek` / Anthropic Messages | `https://api.deepseek.com/anthropic` |
+
+Claude uses the documented `deepseek-flash[1m]` selector to enable the 1M
+context; its API model is DeepSeek Flash. Codex receives the official model
+catalog inside its container. Kimi Code uses its native generic OpenAI provider
+and a small, secret-free `[thinking]` configuration to request high effort; its
+Kimi-specific effort environment variable is not used for DeepSeek. dsh uses its
+native DeepSeek provider with explicit model metadata. No CLI identity is changed.
 
 On 2026-11-05, an authenticated request to the official `/models` endpoint
 returned HTTP 200 and listed `deepseek-flash` as DeepSeek-V4.1-Flash, with
@@ -60,7 +74,7 @@ these trials should not be presented as differing only in their model weights.
 The provider's unversioned model alias may resolve differently in future runs.
 
 The user-supplied credential is kept in the repository Actions Secret
-`DEEPSEEK_API_KEY`, injected into Codex only at runtime. No local Codex/desktop
+`DEEPSEEK_API_KEY`, injected into each selected client only at runtime. No local Codex/desktop
 configuration is changed. Dispatch this profile with:
 
 ```sh
@@ -69,7 +83,22 @@ gh workflow run run-trials.yml --repo ZIWU-AI/ziwu-bench \
   -f pr_number=4 -f harness_comparison=true -f harness_provider=deepseek
 ```
 
-Local invocation adds `--provider deepseek --harness codex`; aggregation also
+To add the other three harnesses while reusing the already-started Codex run:
+
+```sh
+gh workflow run run-trials.yml --repo ZIWU-AI/ziwu-bench \
+  --ref codex/friction-pinch-lift-20261105 \
+  -f pr_number=4 -f harness_comparison=true -f harness_provider=deepseek \
+  -f harness_subset=remaining -f existing_codex_run_id=42033852755
+```
+
+`harness_subset` defaults to `all`; `codex` selects only Codex and `remaining`
+selects Claude Code, Kimi Code, and dsh. The report can download the earlier
+Codex artifact and verifies its run URL, task tree, evaluator, model, and budget.
+If that artifact is not yet available, it retains an explicit unknown row and
+source link instead of rerunning Codex or inventing a score.
+
+Local invocation adds `--provider deepseek --harness <name>`; aggregation also
 requires `--provider deepseek`. The report rejects mixed-provider input.
 Artifacts include the provider in their names, and the existing Kimi run keeps
 its original commit and settings.
@@ -99,7 +128,7 @@ Comparison mode uses the selected workflow commit and the fixed task tree above;
 `pr_number` is retained for the shared entry point, not used to select a different
 task. The reusable workflow does not run normal `/run` jobs, post review comments,
 or upload to Harbor Hub. Only dispatch a branch whose workflow changes have been
-reviewed, because it receives the repository's Kimi credential.
+reviewed, because it receives the repository's selected provider credential.
 
 For a local run, use a disposable Docker-capable environment with Harbor 0.23.0
 on `PATH`. Set the existing `KIMI_CODE_API_KEY` in the launch environment, then
@@ -138,6 +167,7 @@ job can succeed even when its reward is zero.
 | `budget_exhausted` | Agent reached the 90-minute runtime limit | Unknown |
 | `invalid_result` | No valid binary reward was produced | Unknown |
 | `credential_missing` / `job_missing` | No authorized credential or no collected job result | Unknown |
+| `external_result_unavailable` | Earlier Codex artifact was unavailable when the report ran | Unknown |
 
 Consult `exception_info` and the corresponding logs to distinguish provider
 refusal, setup failure, and other execution errors. A successful CI job is not
@@ -151,7 +181,7 @@ initial dsh adapter also leaves token usage, cache usage, and cost unknown; it
 does not infer them from text length or use another model's prices. Do not rank
 the clients by cost or tokens when that evidence is missing.
 CLI cost estimates are retained separately as `cli_reported_cost_usd`; the
-comparison's `cost_usd` remains unknown without verified Kimi billing.
+comparison's `cost_usd` remains unknown without verified provider billing.
 
 ## dsh adapter boundary
 
@@ -169,14 +199,18 @@ the following kwargs:
 }
 ```
 
-The required model is `k3.1-pro`, and the required credential environment name
-is `KIMI_API_KEY`. The runner maps the existing `KIMI_CODE_API_KEY` to it.
-No official DeepSeek credential is required.
+The default `provider="kimi"` requires model `k3.1-pro` and credential variable
+`KIMI_API_KEY`. The runner maps the existing `KIMI_CODE_API_KEY` to it.
+For `provider="deepseek"`, use model `deepseek-flash`, base URL
+`https://api.deepseek.com/anthropic`, and `DEEPSEEK_API_KEY`. The adapter rejects
+crossed model/provider/endpoint combinations. It uses the native `llm-deepseek`
+plugin with a 1M single-model catalog, enabled thinking, high effort, and the
+same 32768-token requested output cap; the pi-ai route is disabled in this mode.
 
 Each trial has a fresh `DSH_HOME` at `/logs/agent/dsh-home`. Its `headless` profile
 uses only a credential reference (`apiKeyEnv`), disables both session-log upload
-and OpenTelemetry, disables DeepSeek account/model routes, and disables
-title-only model calls. dsh keeps its native attribution:
+and OpenTelemetry, disables account login and unselected model routes, and
+disables title-only model calls. dsh keeps its native attribution:
 `deepseek-harness/0.2.2-rc.1 (+https://github.com/deepseek-ai/deepseek-harness)`.
 Full tool permissions apply inside the Harbor task container; the adapter does
 not mount host paths or the separate verifier's solution/test files.

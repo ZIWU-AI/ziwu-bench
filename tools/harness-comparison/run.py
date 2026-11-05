@@ -17,7 +17,7 @@ PROFILES = {
     "kimi": {"model": "k3.1-pro", "provider": "kimi-code-official",
              "secret_env": "KIMI_CODE_API_KEY", "harnesses": HARNESSES},
     "deepseek": {"model": "deepseek-flash", "provider": "deepseek-official",
-                 "secret_env": "DEEPSEEK_API_KEY", "harnesses": ("codex",)},
+                 "secret_env": "DEEPSEEK_API_KEY", "harnesses": HARNESSES},
 }
 
 
@@ -206,8 +206,8 @@ def run_one(args):
         with tempfile.TemporaryDirectory(prefix="ziwu-harness-private-") as private:
             private_dir = Path(private)
             if args.provider == "deepseek":
-                from deepseek_codex import build_route
-                route = build_route(private_dir)
+                from deepseek_routes import build_route
+                route = build_route(args.harness, private_dir)
             else:
                 from routes import build_route
                 route = build_route(args.harness, private_dir)
@@ -253,15 +253,27 @@ def run_one(args):
     return exit_code
 
 
-def report(source, output, provider="kimi"):
+def report(source, output, provider="kimi", external_codex_run=""):
     profile = PROFILES[provider]
     harnesses = profile["harnesses"]
+    if external_codex_run and not external_codex_run.isdecimal():
+        raise ValueError("External Codex run ID must be numeric")
+    external_url = f"https://github.com/ZIWU-AI/ziwu-bench/actions/runs/{external_codex_run}" if external_codex_run else None
     rows = {}
     for path in source.rglob("summary.json"):
         data = json.loads(path.read_text())
         if data.get("harness") in HARNESSES:
             if data.get("provider", "kimi-code-official") != profile["provider"]:
                 raise ValueError("Do not mix providers in a same-model report")
+            if data.get("model", profile["model"]) != profile["model"]:
+                raise ValueError("Do not mix models in a same-model report")
+            if "reused-codex" in path.relative_to(source).parts:
+                if (not external_url or data.get("run_url") != external_url
+                        or data.get("harness") != "codex"
+                        or data.get("task_tree") != TASK_TREE
+                        or data.get("agent_timeout_sec") != 5400
+                        or data.get("harbor_version") != HARBOR_VERSION):
+                    raise ValueError("Reused Codex evidence does not match the requested run/task/budget")
             if data["harness"] not in harnesses:
                 raise ValueError("Unexpected harness for this provider profile")
             if data["harness"] in rows:
@@ -270,9 +282,11 @@ def report(source, output, provider="kimi"):
     for name in harnesses:
         rows.setdefault(name, {"harness": name, "provider": profile["provider"],
                               "model": profile["model"], "status": "job_missing", "reward": None})
+    if external_url and rows["codex"]["status"] == "job_missing":
+        rows["codex"].update(status="external_result_unavailable", run_url=external_url)
     write_json(output / "comparison.json", {"schema_version": 1, "provider": profile["provider"],
                                              "model": profile["model"], "results": list(rows.values())})
-    title = "Same-model harness comparison" if provider == "kimi" else "DeepSeek official API / Codex trial"
+    title = "Same-model harness comparison" if provider == "kimi" else "DeepSeek official API / harness comparison"
     text = [f"# {title}", "", f"Model: {profile['model']}. One exploratory trial per harness; 90-minute agent limit.",
             "This measures the configured harness + adapter, not a statistically established ranking.", "",
             "| Harness | Status | Reward | Physical episodes passed |", "|---|---|---:|---:|"]
@@ -285,6 +299,8 @@ def report(source, output, provider="kimi"):
         text.append(f"| {name} | {row['status']} | {reward if reward is not None else '—'} | {physical} |")
     text += ["", "Missing usage is unknown, not zero. Execution errors and exhausted budgets are not scored as model failures.",
              "See comparison.json and each job's scrubbed artifacts for versions, configuration differences and verification evidence.", ""]
+    if external_url:
+        text += [f"Codex evidence source: {external_url}. If its artifact was not yet available, its score remains unknown.", ""]
     output.mkdir(parents=True, exist_ok=True)
     (output / "comparison.md").write_text("\n".join(text))
     return output / "comparison.md"
@@ -302,10 +318,11 @@ def main():
     aggregate.add_argument("--input", type=Path, required=True)
     aggregate.add_argument("--output", type=Path, required=True)
     aggregate.add_argument("--provider", choices=PROFILES, default="kimi")
+    aggregate.add_argument("--external-codex-run", default="")
     args = parser.parse_args()
     if args.command == "run":
         return run_one(args)
-    path = report(args.input, args.output, args.provider)
+    path = report(args.input, args.output, args.provider, args.external_codex_run)
     print(path.read_text())
     return 0
 

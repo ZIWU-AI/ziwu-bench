@@ -17,10 +17,13 @@ Each harness must first pass a fresh tool-use preflight; interface failures and
 timeouts are reported separately from benchmark scores. See
 [protocol, versions, invocation, and evidence](tools/harness-comparison/README.md).
 
-Setting `harness_provider=deepseek` selects a separate Codex + `deepseek-flash`
-trial on DeepSeek's official Responses endpoint, using `DEEPSEEK_API_KEY`.
+Setting `harness_provider=deepseek` selects a separate four-harness comparison
+on the official `deepseek-flash` model, using `DEEPSEEK_API_KEY`.
 Its provider-specific report is kept separate from the four-harness Kimi matrix;
 the default remains `harness_provider=kimi`.
+`harness_subset=remaining` runs Claude Code, Kimi Code, and DeepSeek Harness;
+`existing_codex_run_id` lets the report reuse a matching earlier Codex artifact
+without launching it again. Missing external evidence is reported as unknown.
 
 ## Setup
 
