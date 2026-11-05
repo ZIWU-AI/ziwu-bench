@@ -174,7 +174,7 @@ harbor_run:
       # RoboIndustrial fork: routed through our CLIProxyAPI (Claude subscription
       # OAuth in the pool); the fork has no ANTHROPIC_API_KEY.
       llm_provider: ppapi
-      run: true
+      run: false
       cheat: true
       kwargs:
         # xhigh (between high and max) is Claude Code's own default and the
@@ -190,124 +190,20 @@ harbor_run:
         # max_tokens repeatedly and crash the trial with
         # NonZeroAgentExitCodeError.
         CLAUDE_CODE_MAX_OUTPUT_TOKENS: "128000"
-    # Codex via ppapi. ppapi does NOT serve the OpenAI /v1/responses websocket
-    # codex prefers (it used to 404, which is why codex ran on Portkey with
-    # PORTKEY_API_KEY_SNORKEL). Until 2026-08-14 codex fell back to HTTPS after
-    # the failed dial; then the upgrade started returning HTTP 400 `websocket:
-    # bad handshake` and codex began failing the turn instead, killing every
-    # trial at 2-5s. Fixed in run-trials.yml / run-cheat-trials.yml, which write
-    # a codex config.toml selecting a `ppapi` model provider with
-    # supports_websockets = false (the built-in `openai` provider hardcodes it
-    # true and cannot be overridden) and pass it as `--ak config=<path>`. If
-    # ppapi ever serves the websocket, that block can be dropped.
-    # If trials fail with a 404/handshake error on /v1/responses, revert to:
-    #   llm_provider: portkey
-    #   portkey_key: PORTKEY_API_KEY_SNORKEL
-    # Model stays the BARE slug: codex talks the OpenAI surface directly (no
-    # litellm in the path), so no `openai/` prefix — that prefix is only for the
-    # terminus-2 judges below. The ppapi branch exports OPENAI_API_KEY and
-    # OPENAI_BASE_URL (host + /v1) from PPAPI_API_KEY/PPAPI_BASE_URL.
+    # Native Kimi Code Responses API, using the existing OpenAI-compatible
+    # gateway adapter with a per-agent endpoint and credential.
     - agent: codex
-      model: gpt-6-astra
-      # 2026-08-22: on mercor, so no OpenAI-model traffic is left on ppapi.
-      # ppapi is dry -- balance $0.121772 against the $0.275130 hold a codex
-      # turn needs -- and it is not degraded but dead: both codex trials of the
-      # 10:18 /run on PR 799 died in ~12s at $0.00 with
-      # `403 预扣费额度失败` from app-us.ppapi.ai/v1/responses, and a single-trial
-      # probe at 11:40 did the same. 54ede57b moved the judges here for the same
-      # reason; this finishes the move.
-      #
-      # UNPROVEN SURFACE -- treat the first run as the test. codex speaks only
-      # the Responses API and mercor's own metadata disagrees with itself about
-      # serving it: /v1/models advertises supported_endpoint_types ["openai"]
-      # per model, while /api/pricing lists an `openai-response` endpoint at
-      # /v1/responses. The `surfaces:` list above therefore still omits
-      # `responses`. What makes this worth trying anyway is that the downside is
-      # already realised: on ppapi the pass rate is 0 by gateway error, so a
-      # mercor 404 leaves us no worse off and costs $0. The mercor branch in
-      # run-trials.yml / run-cheat-trials.yml writes the same config.toml shape
-      # the ppapi one does (supports_websockets = false, forcing HTTPS), so this
-      # is a one-line flip either way.
-      #
-      # Failure signature: trials dying at ~2-5s on a 404 or a `websocket: bad
-      # handshake`. If that happens, the fallback is `portkey` +
-      # portkey_key: PORTKEY_API_KEY_SNORKEL -- which codex ran on before ppapi
-      # served this surface, though that key was last seen returning 412.
-      # Add `responses` to mercor's `surfaces:` once a trial confirms it works.
-      # 2026-08-22, superseding the mercor line above: `direct`. This is the
-      # cleanest path for codex of the four gateways, not just a policy choice --
-      # the direct branch sets no OPENAI_BASE_URL, so codex talks its native
-      # Responses API to api.openai.com and none of the config.toml
-      # supports_websockets machinery below is needed. It also sidesteps the open
-      # question about whether mercor serves /v1/responses at all, which never
-      # got a clean test: both single-agent probes on PR 799 died earlier in the
-      # harness on `Model name is required` (fixed in 8d1cbbfa) and the run after
-      # that fix was cancelled before it reported.
-      #
-      # 2026-08-22, superseding the `direct` line above: back on ppapi now that
-      # it is funded again -- the same restore b1a460c0 made on 08-16, and the
-      # third time this account has drained and been topped up. ppapi serves
-      # /v1/responses (verified 2026-08-05), and codex last ran on it cleanly at
-      # 03:45Z today on PR 1011: two trials, 24m and 26m, $5.29 and $5.42. The
-      # drain came ~50 minutes later, so it was the balance that failed here,
-      # not the surface.
-      #
-      # Failure signature specific to an empty balance: trials die in ~12s at
-      # $0.00 with `403 预扣费额度失败` from app-us.ppapi.ai/v1/responses. That
-      # scores every trial 0 while measuring nothing, so read a sudden all-zero
-      # /run as a funding check before reading it as a task result.
-      # Fallbacks, in order: `direct` (OPENAI_API_KEY does now exist, set 12:01Z
-      # today, but the sol/terra slugs have only ever been served through
-      # routers, so api.openai.com may 404 the name outright), then `mercor`,
-      # then `portkey` + portkey_key: PORTKEY_API_KEY_SNORKEL.
-      #
-      # 2026-08-31: DISABLED (run/cheat both false) — maintainer decision not to
-      # use codex for now; only the judges (analyze/review/proposal_review)
-      # moved to mercor. Gateway restored to ppapi (its last-known-working
-      # surface for the Responses API) so re-enabling is a two-boolean flip, not
-      # a gateway test — mercor's Responses surface remains unproven.
-      #
-      # 2026-09-20: RE-ENABLED on gpt-6-astra (was gpt-5.6-sol), still over
-      # ppapi — the two-boolean flip the 08-31 note describes, plus a model
-      # bump. Gateway is unchanged, so nothing about the Responses-surface
-      # story above changes; what is new here is the slug.
-      #
-      # TREAT THE FIRST /run AS THE TEST. Two things are unverified:
-      #   - The slug. `gpt-6-astra` has never run in this repo, and the ppapi
-      #     catalogue is not pinned anywhere here. A slug ppapi does not serve
-      #     comes back as a 404 at ~2-5s, $0.00, which scores every trial 0
-      #     while measuring nothing — read an instant all-zero /run as a slug
-      #     or funding problem before reading it as a task result. (The other
-      #     ~12s/$0.00 signature, `403 预扣费额度失败`, is an empty ppapi
-      #     balance; see the funding note above.)
-      #   - The codex version pin below (0.146.1, from 2026-08). It predates
-      #     this model, so if the CLI validates model names client-side the pin
-      #     may reject `gpt-6-astra` outright. If it does, the fix is to bump
-      #     the pin, not to change the slug.
-      # Fallbacks, in order: revert the slug to `gpt-5.6-sol` (last known to run
-      # clean on ppapi — two trials, 24m/26m, $5.29/$5.42 on PR 1011), then
-      # `mercor` (Responses surface unproven), then `portkey` +
-      # portkey_key: PORTKEY_API_KEY_SNORKEL.
+      model: k3.1-pro
+      api_key_secret: KIMI_CODE_API_KEY
+      base_url: https://api.kimi.com/coding/v1
       llm_provider: ppapi
-      # Upstream paused this 2026-10-05 because its ppapi account ran dry. In this
-      # fork `ppapi` is our own CLIProxyAPI pool, which is funded, so it stays on.
       run: true
-      cheat: true
+      # Per-agent routing is wired for Docker /run only.
+      cheat: false
       kwargs:
-        # xhigh is the tier above high; gpt-5.6-sol supported it. UNVERIFIED for
-        # gpt-6-astra — if the gateway rejects the effort level, drop to `high`.
-        reasoning_effort: xhigh
-        # PINNED — harbor installs `@openai/codex@latest` unpinned, and 0.147.0
-        # (published 2026-08-07T01:47Z) sends a tool definition with an empty
-        # description, which the API rejects before the agent does any work:
-        #   Invalid 'input[0].tools[0].description': empty string.
-        # Every codex trial after that release died at ~13s with
-        # NonZeroAgentExitCodeError (14/14 across 5 PRs); 0.146.1 runs fine.
-        # `version` is a constructor kwarg on harbor's installed-agent base, so
-        # this becomes `--ak version=...` -> `npm install -g @openai/codex@0.146.1`.
-        # Drop the pin once a release fixes the empty tool description.
-        # RoboIndustrial fork: 0.155.1 verified with gpt-6-astra on our server
-        # (2026-09-22); 0.146.1 predates the model.
+        # Both K3.1 Pro and K3 require thinking enabled for the intended model.
+        reasoning_effort: high
+        # Retain the benchmark's established agent version for this comparison.
         version: 0.155.1
 
 # harbor analyze: job summary, per-trial summaries, reward-hacking checks.

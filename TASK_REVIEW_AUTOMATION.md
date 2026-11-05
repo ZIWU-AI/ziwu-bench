@@ -731,11 +731,15 @@ e.g. `/review agent=terminus-2 model=openai/gpt-5.6-terra`. The comment footer s
 - **`trials=N`** — Number of trials per agent (max 10)
 - **`agents=list`** — Comma-separated `agent:model` pairs. The `:model` half is optional — `agents=codex` runs that agent alone on the model (and gateway) `llm-config.yml` assigns it, which is the cheap way to re-test one arm
 - **`analyze=true|false`** — Run `harbor analyze` on completed trials (default: `true`)
+- **`hub_upload=true|false`** — Override Harbor Hub uploads for `/run`; `false` keeps this run's evidence in Actions only. Hinted runs still force uploads off.
 - **`analyze_model=model-name`** — Model used for analysis (default: `sonnet`)
 - **`env=backend`** — Environment backend for trials (see [Environment backend](#environment-backend))
 - **`hints`** / **`hints=1,3`** — Attach the task's own hints to the instruction (see [Hinted runs](#hinted-runs)). Bare `hints` attaches all of them; a list attaches exactly those
 
+For Docker `/run` trials using the `ppapi` transport, an agent entry in `.github/llm-config.yml` may set `api_key_secret` and `base_url` together to select an Actions secret and its matching endpoint. The Codex agent uses `KIMI_CODE_API_KEY` with Kimi Code's native Responses API at `https://api.kimi.com/coding/v1`. Use `agents=codex:k3.1-pro,codex:k3` to compare both models; thinking stays enabled at `high`. These are the official API model IDs. The secret value is never stored in the config. Omitted fields retain the existing `PPAPI_API_KEY` / `PPAPI_BASE_URL` behavior. These fields do not change `/cheat`, review, or non-Docker routing. See [Kimi model configuration](https://www.kimi.com/code/docs/kimi-code/models.html).
+
 **`/cheat` overrides:**
+
 - **`agents=list`** — Comma-separated `agent:model` pairs. The `:model` half is optional — `agents=codex` runs that agent alone on the model (and gateway) `llm-config.yml` assigns it, which is the cheap way to re-test one arm
 - **`analyze=true|false`** — Run `harbor analyze` on completed trials (default: `true`)
 - **`analyze_model=model-name`** — Model used for analysis (default: `sonnet`)
