@@ -6,6 +6,17 @@ PRs that add or modify tasks go through controlled checks and manual review from
 
 See [REVIEWING.md](REVIEWING.md) for the human reviewer guide and the [Task Dashboard](https://stevendillmann.github.io/tb-science-task-dashboard/) for a live view of every open PR's review stage, DRI, and ball-in-court.
 
+## Same-model harness comparison
+
+The opt-in `harness_comparison=true` input on `run-trials.yml` calls
+`harness-comparison.yml` at the selected branch commit. It runs Claude Code,
+Codex, Kimi Code, and DeepSeek Harness against the unchanged friction-pinch-lift
+task with Kimi k3.1-pro, one attempt each and a 90-minute agent budget. It uses
+the repository's `KIMI_CODE_API_KEY` secret. Normal `/run` behavior is unchanged.
+Each harness must first pass a fresh tool-use preflight; interface failures and
+timeouts are reported separately from benchmark scores. See
+[protocol, versions, invocation, and evidence](tools/harness-comparison/README.md).
+
 ## Setup
 
 When adopting this template in a new repo, create the labels the review automations depend on. The [task overview](#task-overview) workflow applies `new task`, [checks-passed](#static-checks) applies `waiting on reviewer`, and [review label automation](#review-label-automation) moves PRs through `waiting on author`, `domain review ✅`, `technical review ✅`, and `final review ✅`. If the labels don't exist, those workflow steps silently no-op.

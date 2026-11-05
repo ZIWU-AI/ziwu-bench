@@ -16,6 +16,11 @@ on:
         default: ""
   workflow_dispatch:
     inputs:
+      harness_comparison:
+        description: "Run the pinned four-harness comparison on Kimi k3.1-pro"
+        required: false
+        type: boolean
+        default: false
       pr_number:
         description: "PR number to run trials against"
         required: true
@@ -27,7 +32,13 @@ on:
         default: ""
 
 jobs:
+  harness-comparison:
+    if: github.event_name == 'workflow_dispatch' && inputs.harness_comparison == true
+    uses: ./.github/workflows/harness-comparison.yml
+    secrets: inherit
+
   check-trigger:
+    if: inputs.harness_comparison != true
     runs-on: ubuntu-latest
     outputs:
       should_run: ${{ steps.check.outputs.should_run }}

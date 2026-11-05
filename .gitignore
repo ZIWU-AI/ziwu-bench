@@ -190,6 +190,10 @@ TASK_PROPOSAL_RUBRIC-results/
 
 # Harbor
 jobs/
+.comparison-venv/
+comparison-output/
+collected-comparison/
+comparison-report/
 
 # /review-task skill artifacts (downloaded in worktrees)
 .review/
