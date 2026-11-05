@@ -738,6 +738,8 @@ e.g. `/review agent=terminus-2 model=openai/gpt-5.6-terra`. The comment footer s
 
 For Docker `/run` trials using the `ppapi` transport, an agent entry in `.github/llm-config.yml` may set `api_key_secret` and `base_url` together to select an Actions secret and its matching endpoint. The Codex agent uses `KIMI_CODE_API_KEY` with Kimi Code's native Responses API at `https://api.kimi.com/coding/v1`. Use `agents=codex:k3.1-pro,codex:k3` to compare both models; thinking stays enabled at `high`. These are the official API model IDs. The secret value is never stored in the config. Omitted fields retain the existing `PPAPI_API_KEY` / `PPAPI_BASE_URL` behavior. These fields do not change `/cheat`, review, or non-Docker routing. See [Kimi model configuration](https://www.kimi.com/code/docs/kimi-code/models.html).
 
+Kimi runs first make one small request using the actual pinned Codex CLI to verify model access. No client identity is spoofed. A failed preflight stops the task trial. K3 contexts are capped at 262144 tokens with compaction at 220000, within the documented Plus-tier limit; larger membership windows are not assumed.
+
 **`/cheat` overrides:**
 
 - **`agents=list`** — Comma-separated `agent:model` pairs. The `:model` half is optional — `agents=codex` runs that agent alone on the model (and gateway) `llm-config.yml` assigns it, which is the cheap way to re-test one arm

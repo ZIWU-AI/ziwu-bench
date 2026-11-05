@@ -674,6 +674,38 @@ jobs:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           openai_api_key: ${{ secrets.OPENAI_API_KEY }}
 
+      - name: Verify Kimi Code model access
+        if: matrix.agent_config.api_key_secret == 'KIMI_CODE_API_KEY'
+        timeout-minutes: 5
+        env:
+          PREFLIGHT_MODEL: ${{ matrix.agent_config.model }}
+          PREFLIGHT_CODEX_VERSION: ${{ matrix.agent_config.kwargs.version }}
+          GATEWAY_FLAGS_B64: ${{ steps.gateway.outputs.extra_flags_b64 }}
+        run: |
+          set -euo pipefail
+          export CODEX_HOME="$RUNNER_TEMP/kimi-preflight-home"
+          mkdir -p "$CODEX_HOME" "$RUNNER_TEMP/kimi-preflight-work"
+          python3 - <<'PY'
+          import base64, json, os, shutil
+          flags = json.loads(base64.b64decode(os.environ["GATEWAY_FLAGS_B64"]))
+          path = next(value.removeprefix("config=") for value in flags if value.startswith("config="))
+          shutil.copyfile(path, os.path.join(os.environ["CODEX_HOME"], "config.toml"))
+          PY
+          cd "$RUNNER_TEMP/kimi-preflight-work"
+          npx --yes "@openai/codex@$PREFLIGHT_CODEX_VERSION" exec \
+            --skip-git-repo-check --json --model "$PREFLIGHT_MODEL" \
+            -c model_reasoning_effort=high \
+            "Reply with OK only. Do not use tools or read or write files." \
+            > "$RUNNER_TEMP/kimi-preflight.jsonl"
+          python3 - <<'PY'
+          import json, os, pathlib
+          events = [json.loads(line) for line in pathlib.Path(os.environ["RUNNER_TEMP"], "kimi-preflight.jsonl").read_text().splitlines() if line.startswith("{")]
+          completed = [e for e in events if e.get("type") == "turn.completed"]
+          if not completed:
+              raise SystemExit("Kimi Code model preflight did not complete")
+          print(json.dumps({"model": os.environ["PREFLIGHT_MODEL"], "preflight": "passed", "usage": completed[-1].get("usage")}, ensure_ascii=False))
+          PY
+
       - name: Run agent trial
         id: trial
         timeout-minutes: 360
