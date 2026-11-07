@@ -882,3 +882,7 @@ Note: Similarity check reference repos are configured by editing `REFERENCE_REPO
 `/authorship` on a task PR (maintainers only) runs [`.github/scripts/check_ai_authorship.py`](.github/scripts/check_ai_authorship.py): the `instruction.md` prose (HTML comments and fenced code stripped; at least 250 characters) is sent to [Pangram](https://www.pangram.com) for a document-level classification. Only the instruction is scanned. The sticky comment reports the verdict — **Human**, **Mixed**, or **AI** — and the fraction of text in each class. It never reports window text or per-sentence highlights.
 
 Reviewer-run by design: an automatic score on every push becomes something contributors optimise against; a spot check triggered when the prose reads off is a signal that informs the reviewer's own judgment. Advisory — it gates nothing. An API or credential error is reported as such and is not evidence of AI use. Requires the `PANGRAM_API_KEY` repository secret (Pangram Developers plan, pay-as-you-go credits).
+
+## GPU Task Validation and official export
+
+`gpu-task-validation.yml` is an explicit dispatch/reusable workflow for protected-service MuJoCo reference and Nop validation. It requires `MODAL_TOKEN_ID` and `MODAL_TOKEN_SECRET`, uses 1–3 sequential trials, and uploads allowlisted reports for 30 days. `gpu-tools-tests.yml` runs offline without secrets on relevant PR/push changes. `upstream-task-bundle.yml` exports only a selected new task against official main; it performs no remote writes. See the [complete runbook](tools/mujoco-modal/README.md).

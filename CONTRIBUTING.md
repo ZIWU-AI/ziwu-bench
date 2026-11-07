@@ -928,3 +928,7 @@ Have questions, feedback or need help? Here's how to reach us:
 - **Project Lead:** Steven Dillmann (DM `@stevendi11` on [Discord](https://discord.com/invite/2Pe5uWGcV3) or email [stevendi@stanford.edu](mailto:stevendi@stanford.edu))
 - **Weekly Meeting & Office Hours:** see [Weekly Meetings and Office Hours](#weekly-meetings-and-office-hours) — open to all contributors
 - **Task Dashboard:** [stevendillmann.github.io/tb-science-task-dashboard](https://stevendillmann.github.io/tb-science-task-dashboard/) — live view of open proposals, PRs, review status, and domain coverage
+
+## Optional GPU validation and upstream export
+
+The [Modal runbook](tools/mujoco-modal/README.md) documents the manual `GPU Task Validation` workflow, supported task contract and `Export Official Task PR` bundle. Keep task fixes on their task PR; export only task files against official main, and satisfy proposal/authorship/model-trial gates before submission.

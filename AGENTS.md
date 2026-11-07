@@ -265,3 +265,7 @@ Before merging, check if these need updating:
 5. **AGENTS.md** — repo structure, test-tasks, internal workflows
 
 If the PR adds/removes/renames a CI check, workflow, rubric, or guide, update all docs that reference it.
+
+## GPU adapter and submission exporter
+
+`tools/mujoco-modal/` and `gpu-task-validation.yml` provide explicitly invoked, bounded Modal reference/Nop runs for the protected pen-service contract. Task files are data on the host; never import PR Python alongside host credentials. Preserve pinned source SHAs, fresh data-only verification, report allowlists and cleanup. Do not turn PR/push events into paid GPU triggers. `upstream-task-bundle.yml` exports task-only patches against official main without pushing or opening PRs. See [the runbook](tools/mujoco-modal/README.md).
