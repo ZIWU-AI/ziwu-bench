@@ -1,7 +1,7 @@
 # Isaac reference validation on Modal
 
 Run the restored Isaac Sim 6.0.1 bimanual pen-holder example through the manual
-`GPU Task Validation` workflow. The reference controller sends 713 recorded
+`GPU Task Validation` workflow. The default reference controller sends 713 recorded
 joint targets through the public service. A protected root recorder collects
 fresh states and camera video, then a separate, no-network Isaac GPU container
 replays those controls and assigns the reward. `nop` starts the service without
@@ -78,3 +78,9 @@ Task authoring checks require the hash-verified runtime extracted locally so
 the Linux uid-dropping tests and publication byte-integrity assertions. The
 CPU suite covers process exits, sealed recording and replay validation.
 These checks do not substitute for the GPU replay result.
+
+Other preserved references can be selected with `--reference v13-round01-layout0`
+or `--reference v13-smoke-layout0` locally, and the workflow’s `oracle_reference`
+input. Each is a distinct fresh calibration run, with its selector recorded; no
+historical score overrides current results. An unexpected reference reward
+still permits the Nop control to finish, then fails the overall baseline check.

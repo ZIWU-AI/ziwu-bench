@@ -43,6 +43,11 @@ on:
         description: "Reference and/or negative control"
         options: [all, oracle, nop]
         default: all
+      oracle_reference:
+        description: "Historical Isaac reference (each requires fresh acceptance)"
+        type: choice
+        options: [v12-layout0, v13-round01-layout0, v13-smoke-layout0]
+        default: v12-layout0
       trials:
         description: "Independent repeats (1–3)"
         type: number
@@ -58,6 +63,7 @@ on:
       gpu: {type: string, default: L40S}
       mode: {type: string, default: all}
       trials: {type: number, default: 1}
+      oracle_reference: {type: string, default: v12-layout0}
     secrets:
       MODAL_TOKEN_ID: {required: true}
       MODAL_TOKEN_SECRET: {required: true}
@@ -128,12 +134,13 @@ jobs:
           SOURCE_SHA: ${{ needs.resolve.outputs.sha }}
           GPU: ${{ inputs.gpu }}
           MODE: ${{ inputs.mode }}
+          ORACLE_REFERENCE: ${{ inputs.oracle_reference }}
           BACKEND: ${{ inputs.backend || 'mujoco' }}
         run: |
           test -n "$MODAL_TOKEN_ID" && test -n "$MODAL_TOKEN_SECRET"
           case "$BACKEND" in
             mujoco) runner=tools/mujoco-modal/run.py; extra=() ;;
-            isaac) runner=tools/isaac-reference-modal/run.py; extra=() ;;
+            isaac) runner=tools/isaac-reference-modal/run.py; extra=(--reference "$ORACLE_REFERENCE") ;;
             *) echo 'Unsupported simulator'; exit 1 ;;
           esac
           python "$runner" --task-root candidate --task-path "$TASK_PATH" \

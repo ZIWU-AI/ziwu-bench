@@ -35,6 +35,7 @@ def main():
     parser.add_argument("--extensions", type=Path, help="Deprecated; Isaac 6 ships its extensions")
     parser.add_argument("--gpu", choices=["L40S", "A10"], default="L40S")
     parser.add_argument("--mode", choices=["all", "oracle", "nop"], default="all")
+    parser.add_argument("--reference", choices=["v12-layout0", "v13-round01-layout0", "v13-smoke-layout0"], default="v12-layout0")
     args = parser.parse_args()
     args.source_sha = subprocess.check_output(["git", "rev-parse", "--verify", args.source_sha + "^{commit}"], cwd=args.task_root, text=True).strip()
     task = safe_task(args.task_root, args.task_path)
@@ -64,7 +65,7 @@ def main():
         "infra_commit": "da218ea01206441256e7e9da6e76ef41e12cef65",
         "engine": "Isaac Sim 6.0.1.0.0", "physics": "PhysX CPU", "rendering": "NVIDIA RTX GPU",
         "base_image_id": BASE_IMAGE, "gpu": args.gpu, "cpus": 8, "memory_mib": 65536,
-        "modal_version": modal.__version__, "model_calls": 0, "files": files,
+        "modal_version": modal.__version__, "model_calls": 0, "reference": args.reference, "files": files,
     })
     app = modal.App.lookup("ziwu-isaac-reference", create_if_missing=True)
     records = []
@@ -114,7 +115,7 @@ def main():
                 "! runuser -u agent -- test -r /opt/robodojo/task/RoboDojo/tasks/fill_pen_holder.py")
             command(sb, out, "start-service", PYTHON, "-I", "/opt/pen-runtime/environment/start_service.py", timeout=660)
             if mode == "oracle":
-                command(sb, out, "policy", "runuser", "-u", "agent", "--", "bash", "/solution/solve.sh", timeout=3600)
+                command(sb, out, "policy", "runuser", "-u", "agent", "--", "env", "RI_ORACLE_REFERENCE=" + args.reference, "bash", "/solution/solve.sh", timeout=3600)
             command(sb, out, "collect", PYTHON, "-I", "/opt/pen-runtime/environment/collect_recording.py", timeout=7300)
             command(sb, out, "pack", "tar", "-czf", "/tmp/recording.tar.gz", "-C", "/var/lib/pen-transfer/recording", ".")
             download(sb, "/tmp/recording.tar.gz", out / "recording.tar.gz")
@@ -141,10 +142,9 @@ def main():
                 metrics = json.loads((out / "metrics.json").read_text())
             result = {"reward": reward, "mode": mode, "metrics": metrics, "model_calls": 0}
             write(out / "result.json", result)
-            if reward != (1 if mode == "oracle" else 0):
-                raise RuntimeError("Reference/control reward differs from expectation: " + str(reward))
             outcomes[mode] = reward
-            record.update(status="complete", reward=reward)
+            expected = 1 if mode == "oracle" else 0
+            record.update(status="complete" if reward == expected else "unexpected_reward", reward=reward)
         except BaseException as exc:
             record.update(status="failed", error=str(exc))
             try: diagnostics(sb, out)
@@ -155,6 +155,8 @@ def main():
     summary = {"passed": True, "engine": "Isaac Sim 6.0.1.0.0", "outcomes": outcomes, "model_calls": 0}
     write(args.output / "summary.json", summary)
     print(json.dumps(summary), flush=True)
+    if not summary["passed"]:
+        raise SystemExit(1)
 
 
 if __name__ == "__main__":
