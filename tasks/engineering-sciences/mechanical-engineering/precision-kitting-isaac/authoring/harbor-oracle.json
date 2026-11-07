@@ -1,0 +1,25 @@
+{
+  "job_name": "precision-kitting-isaac-oracle",
+  "jobs_dir": "jobs",
+  "n_attempts": 1,
+  "n_concurrent_trials": 1,
+  "environment": {
+    "import_path": "harbor_image_adapter:RoboIndustrialModalEnvironment",
+    "delete": true,
+    "kwargs": {
+      "modal_image_id": "im-Nm8iLJCxhB14rzlvQjzhLD",
+      "app_name": "roboindustrial-isaac",
+      "sandbox_timeout_secs": 10800
+    }
+  },
+  "agents": [
+    {
+      "name": "oracle"
+    }
+  ],
+  "tasks": [
+    {
+      "path": "tasks/engineering-sciences/mechanical-engineering/precision-kitting-isaac"
+    }
+  ]
+}
