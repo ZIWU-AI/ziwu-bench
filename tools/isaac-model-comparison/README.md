@@ -15,7 +15,8 @@ none of the friction-pinch-lift results are transferred to Isaac.
 | sol | gpt-6-sol | Codex |
 | opus | claude-opus-5-5 | Claude Code |
 
-Each combination gets one exploratory trial, high reasoning, and a 5400-second
+Each native environment uses one L40S, 8 CPU cores and 64 GiB, matching PR #2195’s
+Isaac 6 provisioning. Each combination gets one exploratory trial, high reasoning, and a 5400-second
 agent budget. Native clients/prompts, protocol, context windows and compaction
 policies differ; this does not equalize inference compute or establish a model
 ranking. Native versions: Harbor 0.23.0, Codex 0.155.1, Claude Code 2.1.318,

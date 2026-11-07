@@ -23,7 +23,7 @@ bundle contract. MuJoCo remains the default backend.
 Required repository secrets: `MODAL_TOKEN_ID`, `MODAL_TOKEN_SECRET`. Execution
 is explicitly requested, never triggered by PR/push events. NVIDIA runtime and
 extension installation accepts the component terms, as does the task Dockerfile.
-Every container receives one selected GPU, 4 CPU cores and 16 GiB with a
+Every container receives one selected GPU, 8 CPU cores and 64 GiB with a
 three-hour lifetime; the reference phase is capped at one hour, collection and
 verification at about two hours each. The workflow ceiling is 350 minutes.
 Only one repeat runs at a time; there are no automatic paid retries.

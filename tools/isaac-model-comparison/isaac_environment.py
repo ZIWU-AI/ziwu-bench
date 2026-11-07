@@ -56,7 +56,7 @@ class IsaacEnvironment(ModalEnvironment):
         # One allocation, no paid replacement loop. Fresh source-only Dockerfile
         # image: never reuse the Oracle image that contains /solution.
         sb = await modal.Sandbox.create.aio(*(entrypoint or ["sleep", "infinity"]),
-            app=self._app, image=self._image, gpu="L40S", cpu=(4, 4), memory=(16384, 16384),
+            app=self._app, image=self._image, gpu="L40S", cpu=(8, 8), memory=(65536, 65536),
             timeout=18000 if self._isaac_role == "agent" else 10800,
             block_network=block_network, **options)
         self._sandbox_termination_requested = False

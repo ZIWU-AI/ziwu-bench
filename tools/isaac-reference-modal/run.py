@@ -76,7 +76,7 @@ def main():
         print("Allocating " + role, flush=True)
         with modal.enable_output():
             sb = modal.Sandbox.create("sleep", "infinity", app=app, image=image, gpu=args.gpu,
-                cpu=(4, 4), memory=(16384, 16384), timeout=10800, block_network=True)
+                cpu=(8, 8), memory=(65536, 65536), timeout=10800, block_network=True)
         record = {"role": role, "sandbox_id": sb.object_id, "image_id": image.object_id,
                   "started": time.time(), "gpu_requested": args.gpu, "network": "blocked"}
         records.append(record); save()
