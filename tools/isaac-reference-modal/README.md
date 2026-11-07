@@ -1,3 +1,36 @@
+# Active cohort: Isaac 6.0.1 / Modal A10
+
+On 2026-11-07 the user requested Isaac 6.0.1 after the actual Isaac 5.1 / A10
+attempt failed during native startup. The 5.1 attempt and its result comment
+remain historical; they are not counted as a model task failure.
+
+The current task uses PR #2195's pinned Isaac 6 base image
+`im-VbjOSj3gdypwNyoZQA58DH`, cleaned of inherited task code and solutions.
+GPU placement remains A10 / OCI eu-west. Hard limits are 4 CPU / 16 GiB,
+as explicitly requested by the user; no automatic resource increase is enabled. The observed 610.57.04
+driver is retained; changing the Isaac engine does not change NVIDIA's driver.
+The original task scoring and independent sealed-data replay are preserved.
+Earlier L40S / Isaac 6 diagnostics do not establish acceptance on A10.
+
+The selected model attempt is Kimi k3.1-pro / Codex 0.155.1, high reasoning,
+one 5400-second agent budget. The current native runner emits `ISAAC_PROGRESS`
+every 30 seconds using only phase and lifecycle fields, never model transcripts
+or credentials. Final sanitized results update the per-run PR comment.
+
+```sh
+gh workflow run gpu-task-validation.yml -R ZIWU-AI/ziwu-bench \
+  --ref codex/isaac-modal-gpu-example -f backend=isaac-model \
+  -f model_profile=kimi -f harness=codex -f model_stage=all-current-driver \
+  -f gpu=A10 -f pr_number=0
+```
+
+Native image build, startup, model execution, collection and independent
+verification are distinct phases. Startup errors have no task score. Raw
+histories and recordings remain private. No model/harness substitution or
+automatic paid trial retry is enabled.
+
+## Historical Isaac 5.1 configuration (superseded)
+
 # Isaac 5.1 / Modal A10 reference validation
 
 The active configuration follows [PR #2195](https://github.com/harbor-framework/terminal-bench-science/pull/2195)

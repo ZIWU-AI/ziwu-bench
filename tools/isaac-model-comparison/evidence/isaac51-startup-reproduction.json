@@ -1,0 +1,12 @@
+{
+  "sandbox_id": "sb-WD0ncdflLs2au5c7LgKjqd",
+  "image_id": "im-R0UnoERhjgZXsShtJTYpwk",
+  "model_calls": 0,
+  "hardware": "NVIDIA A10, 610.57.04",
+  "startup_exit_code": 1,
+  "cleanup_confirmed": true,
+  "kind": "operator_host_reproduction_not_model_trial",
+  "startup_log_sha256": "d592966509a72c6127b7210b47bc75f74d32a4adeef0844f685907206435b2c6",
+  "rtx_scenedb_crash": true,
+  "source_run": "42341185573"
+}

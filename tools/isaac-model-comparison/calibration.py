@@ -27,8 +27,8 @@ def calibration(root, sha, task, evidence, runtime=None):
 
 def runtime_spec(host_root):
     return {"gpu": "A10", "cpus": 4, "memory_mib": 16384,
-            "isaac_version": "5.1.0.0", "modal_version": "1.5.5",
-            "cloud": "oci", "region": "eu-west", "required_driver": "580.95.05",
+            "isaac_version": "6.0.1.0", "modal_version": "1.5.5",
+            "cloud": "oci", "region": "eu-west", "required_driver": "610.57.04",
             "a10_runtime_sha256": hashlib.sha256((Path(host_root) / "tools/isaac-reference-modal/a10_runtime.py").read_bytes()).hexdigest(),
             "image_builder_sha256": hashlib.sha256(
                 (Path(host_root) / "tools/isaac-reference-modal/image.py").read_bytes()).hexdigest()}

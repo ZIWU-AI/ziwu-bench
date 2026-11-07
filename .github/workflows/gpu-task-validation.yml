@@ -24,7 +24,7 @@ on:
         options: [all, codex, claude-code, kimi-code, deepseek-harness]
         default: all
       model_stage:
-        description: "preflight; all requires driver 580; all-current-driver tests allocated driver"
+        description: "preflight; all requires driver 610; all-current-driver tests allocated driver"
         type: choice
         options: [preflight, all, all-current-driver]
         default: preflight
@@ -141,9 +141,8 @@ jobs:
           case "$BACKEND" in
             mujoco) runner=tools/mujoco-modal/run.py; extra=() ;;
             isaac)
-              python tools/isaac-reference-modal/prepare_extensions.py --output work/extensions --accept-nvidia-license
               runner=tools/isaac-reference-modal/run.py
-              extra=(--reference "$ORACLE_REFERENCE" --extensions work/extensions) ;;
+              extra=(--reference "$ORACLE_REFERENCE") ;;
             *) echo 'Unsupported simulator'; exit 1 ;;
           esac
           python "$runner" --task-root candidate --task-path "$TASK_PATH" \
@@ -193,9 +192,6 @@ jobs:
       - uses: actions/setup-python@v5
         with: {python-version: "3.12"}
       - run: python -m pip install -r tools/isaac-model-comparison/requirements-host.txt
-      - name: Prepare pinned Isaac 5.1 extensions
-        if: inputs.model_stage == 'all' || inputs.model_stage == 'all-current-driver'
-        run: python tools/isaac-reference-modal/prepare_extensions.py --output work/extensions --accept-nvidia-license
       - name: One real harness preflight and optional native trial
         env:
           MODAL_TOKEN_ID: ${{ secrets.MODAL_TOKEN_ID }}
@@ -220,7 +216,7 @@ jobs:
           fi
           python tools/isaac-model-comparison/run.py --profile "$MODEL_PROFILE" --harness "$HARNESS" \
             --task-root candidate --source-sha "$SOURCE_SHA" --stage "$MODEL_STAGE" \
-            --output comparison-output/run --extensions work/extensions --driver-policy "$driver_policy"
+            --output comparison-output/run --driver-policy "$driver_policy"
       - name: Stop remaining native containers
         if: always()
         timeout-minutes: 3

@@ -29,9 +29,13 @@ def minutes(row):
 def render(rows, run_id):
     if not re.fullmatch(r'[0-9]+', str(run_id)): raise ValueError('Invalid run ID')
     url = f'https://github.com/{REPO}/actions/runs/{run_id}'
+    engines = sorted({str(row.get('isaac_version', 'unknown')) for row in rows})
+    resources = sorted({f"{row.get('cpus', '—')} CPU / {row.get('memory_mib', '—')} MiB" for row in rows})
+    engine_label = ', '.join(engines)
+    if not re.fullmatch(r'[0-9a-z., ]+', engine_label): raise ValueError('Invalid engine label')
     lines = [f'<!-- ziwu-isaac-agent-trial:{run_id} -->', '## 🧪 Agent Trial Results', '',
         '**physicalrsi-bimanual-control**  ', f'`{TASK}`', '',
-        '**Isaac Sim 5.1.0.0 · Modal A10 · OCI eu-west · 4 CPU / 16 GiB**', '',
+        f'**Isaac Sim {engine_label} · Modal A10 · OCI eu-west · {", ".join(resources)}**', '',
         '| Model (Agent) | Trial 1 | Average | Hub Link |', '|---|---|---|---|']
     scored=[]; costs=[]; times=[]
     for row in rows:
@@ -62,7 +66,7 @@ def render(rows, run_id):
     lines += ['', f'✅ **Pass rate across scored trials:** {rate}  ', f'💰 **Average verified cost:** {cost}  ',
         f'⏱️ **Average agent runtime:** {runtime}', '', '**Job Analysis:** Not run; no judge verdict is claimed.', '',
         f'**Evidence:** [CI run and sanitized artifacts]({url}). Infrastructure/API failures and tool preflights are unscored. '
-        'CLI cost estimates are not verified billing. Current-driver mode does not inherit historical 580.95.05 acceptance.', '',
+        'CLI cost estimates are not verified billing. Each engine/driver cohort is separate; historical acceptance is not transferred.', '',
         '<details>', '<summary>Download published results</summary>', '', '```sh',
         f'gh run download {run_id} --repo {REPO} --name isaac-comparison-{run_id} --dir isaac-results',
         '```', '', 'Sanitized results only; raw transcripts, keys and camera recordings are excluded.', '</details>', '']

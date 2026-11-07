@@ -1,4 +1,4 @@
-"""Trusted Harbor adapter for the reviewed protected Isaac 5.1.0 service.
+"""Trusted Harbor adapter for the reviewed protected Isaac 6.0.1 service.
 
 No policy or scoring patches. Agent runs as uid agent; root starts and collects
 its simulator. The independent GPU verifier receives data, not agent secrets.
@@ -32,8 +32,8 @@ class IsaacEnvironment(ModalEnvironment):
         super().__init__(*args, **kwargs)
         self._isaac_role = "agent" if (self.environment_dir / "sim-service").is_dir() else "verifier"
         manifest = json.loads((self.environment_dir / "bundle/manifest.json").read_text())
-        if manifest["isaac_version"] != "5.1.0.0":
-            raise ValueError("This adapter requires the Isaac 5.1.0 bundle")
+        if manifest["isaac_version"] != "6.0.1.0":
+            raise ValueError("This adapter requires the Isaac 6.0.1 bundle")
         if self._compose_mode or self._vm_runtime_enabled:
             raise ValueError("Only direct Modal containers are supported")
         if self._isaac_role == "verifier" and not self._network_disabled:
@@ -65,7 +65,7 @@ class IsaacEnvironment(ModalEnvironment):
         self._sandbox_termination_requested = False
         self._native_receipt.update(sandbox_id=sb.object_id, image_id=self._image.object_id,
             started_at=time.time(), status="allocated", network=self.network_policy.network_mode.value,
-            base_image_id=BASE_IMAGE, cpus=4, memory_mib=16384, isaac_version="5.1.0.0")
+            base_image_id=BASE_IMAGE, cpus=4, memory_mib=16384, isaac_version="6.0.1.0")
         self._save_native()
         try:
             proc = await sb.exec.aio("nvidia-smi", "--query-gpu=name,driver_version", "--format=csv,noheader", timeout=30)
@@ -107,6 +107,8 @@ class IsaacEnvironment(ModalEnvironment):
             proc = await sb.exec.aio("sh", "-c",
                 "tail -100 /var/lib/pen-render/startup.log /logs/verifier/native.log 2>/dev/null", timeout=20)
             data = await proc.stdout.read.aio()
+            if "librtx.scenedb.plugin.so" in data and "[Fatal]" in data:
+                self._native_receipt["failure_signature"] = "rtx_scenedb_native_crash"
             out = self.trial_paths.trial_dir / "private-native"
             out.mkdir(parents=True, exist_ok=True)
             (out / (self._isaac_role + ".log")).write_text(data[-16384:])

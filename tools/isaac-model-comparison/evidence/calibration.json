@@ -1,21 +1,20 @@
 {
-  "status": "hardware_blocked",
-  "evaluation_tree_sha256": "c98796ce6f5b2c8959179a72c29f583277f6fff8912535e698bac8ae65a6c75e",
+  "status": "isaac6_a10_unvalidated",
+  "evaluation_tree_sha256": "b46b6ee192e83186bbe5d6081837e2a15a1f2d62e6ac1749980c347a82eade74",
   "runtime": {
     "gpu": "A10",
     "cpus": 4,
     "memory_mib": 16384,
-    "isaac_version": "5.1.0.0",
+    "isaac_version": "6.0.1.0",
     "modal_version": "1.5.5",
     "cloud": "oci",
     "region": "eu-west",
-    "required_driver": "580.95.05",
-    "a10_runtime_sha256": "ff76f8c8dcabb9d976be3dcafed42f6236f8cd3ddbe79118a4f776e6970c97b3",
-    "image_builder_sha256": "6ee9ee4b3f5c136d3ee3f7a2c7b5612a784c30dd08c83e42b82181bfc1df4abe"
+    "required_driver": "610.57.04",
+    "a10_runtime_sha256": "312674a68309684a5e30210b40aa392eb8ddc61ac806e04182e2997fbb63ea69",
+    "image_builder_sha256": "342b8a22b867e30f3008629ffbefe072b23b3e05024c2e65e799309237f15176"
   },
-  "historical_task_source": "fed3c441ab5c112e998b27e26eb17f2693d96f99",
-  "infra_source": "da218ea01206441256e7e9da6e76ef41e12cef65",
   "fresh_oracle": null,
   "fresh_nop": null,
-  "reason": "Observed Modal A10 driver 610.57.04 differs from the original 580.95.05 contract. No model score."
+  "historical_acceptance_transferred": false,
+  "note": "User-requested Isaac 6.0.1 migration after Isaac 5.1 RTX startup failure; A10, hard 4 CPU / 16 GiB. No automatic resource increase."
 }

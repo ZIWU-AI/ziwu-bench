@@ -6,6 +6,7 @@ import os
 from pathlib import Path
 import subprocess
 import sys
+import time
 from datetime import datetime, timezone
 
 def now():
@@ -125,8 +126,23 @@ def execute(config, private_dir, output, stage, env):
     config_path.chmod(0o600)
     # Never echo the private JobConfig or complete inherited environment.
     with (output / f"{stage}-harbor.log").open("w") as log:
-        result = subprocess.run(["harbor", "run", "-c", str(config_path)],
-                                env=env, stdout=log, stderr=subprocess.STDOUT)
+        result = subprocess.Popen(["harbor", "run", "-c", str(config_path)],
+                                  env=env, stdout=log, stderr=subprocess.STDOUT)
+        began = time.monotonic()
+        while result.poll() is None:
+            progress = {"stage": stage, "elapsed_sec": int(time.monotonic() - began)}
+            for receipt in output.glob("trial/comparison/*/native-lifecycle/*.json"):
+                try:
+                    native = json.loads(receipt.read_text())
+                    progress[native.get("role", "native")] = {
+                        key: native[key] for key in ("status", "hardware", "isaac_version", "startup_exit_code") if key in native}
+                except (OSError, ValueError):
+                    pass
+            print("ISAAC_PROGRESS " + json.dumps(progress), flush=True)
+            try:
+                result.wait(timeout=30)
+            except subprocess.TimeoutExpired:
+                pass
     # Docker bind-mount output can be owned by root (including mode-0700 CLI
     # session directories). Recover it before collecting or scrubbing results.
     # This is limited to GitHub's disposable runner and this output directory.

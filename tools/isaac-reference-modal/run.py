@@ -1,4 +1,4 @@
-"""Explicit Isaac 5.1.0 reference/Nop execution with fresh native GPU verification.
+"""Explicit Isaac 6.0.1 reference/Nop execution with fresh native GPU verification.
 
 Runtime dependencies and public extensions originate from upstream PR #2195 at
  da218ea01206441256e7e9da6e76ef41e12cef65. Task code runs only in Modal.
@@ -32,7 +32,7 @@ def main():
     parser.add_argument("--task-root", type=Path, default=ROOT)
     parser.add_argument("--task-path", required=True)
     parser.add_argument("--source-sha", required=True)
-    parser.add_argument("--extensions", type=Path, required=True, help="Hash-verified public NVIDIA extension cache")
+    parser.add_argument("--extensions", type=Path, help="Legacy Isaac 5 cache; unused by Isaac 6")
     parser.add_argument("--gpu", choices=["A10"], default="A10")
     parser.add_argument("--mode", choices=["all", "oracle", "nop"], default="all")
     parser.add_argument("--reference", choices=["v12-layout0", "v13-round01-layout0", "v13-smoke-layout0"], default="v12-layout0")
@@ -41,8 +41,8 @@ def main():
     task = safe_task(args.task_root, args.task_path)
     for role in ("environment", "tests"):
         manifest = json.loads((task / role / "bundle/manifest.json").read_text())
-        if manifest["isaac_version"] != "5.1.0.0":
-            raise ValueError("This runner requires Isaac Sim 5.1.0")
+        if manifest["isaac_version"] != "6.0.1.0":
+            raise ValueError("This runner requires Isaac Sim 6.0.1")
     # Task bytes stay data on the credential-bearing host; only reviewed host
     # modules are imported. Fail if the selected task differs from its receipt.
     tracked = subprocess.check_output(["git", "ls-tree", "-r", "--name-only", args.source_sha, "--", args.task_path], cwd=args.task_root, text=True).splitlines()
@@ -63,7 +63,7 @@ def main():
         "runner_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
         "infra_pr": "https://github.com/harbor-framework/terminal-bench-science/pull/2195",
         "infra_commit": "da218ea01206441256e7e9da6e76ef41e12cef65",
-        "engine": "Isaac Sim 5.1.0.0", "physics": "PhysX CPU", "rendering": "NVIDIA RTX GPU",
+        "engine": "Isaac Sim 6.0.1.0", "physics": "PhysX CPU", "rendering": "NVIDIA RTX GPU",
         "base_image_id": BASE_IMAGE, "gpu": args.gpu, "cpus": 4, "memory_mib": 16384,
         "modal_version": modal.__version__, "model_calls": 0, "reference": args.reference, "files": files,
     })
@@ -72,7 +72,7 @@ def main():
     def save():
         write(args.output / "lifecycle.json", records)
     def image_for(role):
-        return native_image(task / role, args.extensions)
+        return native_image(task / role)
     def allocate(image, role):
         print("Allocating " + role, flush=True)
         with modal.enable_output():
@@ -154,7 +154,7 @@ def main():
             raise
         finally:
             stop(sb, record)
-    summary = {"passed": all(v == (1 if k == "oracle" else 0) for k, v in outcomes.items()), "engine": "Isaac Sim 5.1.0.0", "outcomes": outcomes, "model_calls": 0}
+    summary = {"passed": all(v == (1 if k == "oracle" else 0) for k, v in outcomes.items()), "engine": "Isaac Sim 6.0.1.0", "outcomes": outcomes, "model_calls": 0}
     write(args.output / "summary.json", summary)
     print(json.dumps(summary), flush=True)
     if not summary["passed"]:

@@ -1,3 +1,4 @@
+# Adapted for the user-requested Isaac 6 cohort: 610.57.04, 4 CPU / 16 GiB.
 # Vendored host helpers from harbor-framework/terminal-bench-science PR #2195
 # da218ea01206441256e7e9da6e76ef41e12cef65:tools/pr61-a10-eval/a10_environment.py
 # The original Harbor adapter class is intentionally excluded.
@@ -38,7 +39,7 @@ from modal.exception import NotFoundError
 
 GPU = "A10"
 GPU_NAME = "NVIDIA A10"
-DRIVER_VERSION = "580.95.05"
+DRIVER_VERSION = "610.57.04"
 CLOUD = "oci"
 REGION = "eu-west"
 CPUS = 4
