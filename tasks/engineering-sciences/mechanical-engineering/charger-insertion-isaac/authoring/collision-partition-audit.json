@@ -1,0 +1,565 @@
+{
+  "scope": "CPU convex partition geometry only; no PhysX cooking or native GPU execution",
+  "python": "3.12.12",
+  "tests_run": 16,
+  "tests_failed": 0,
+  "tests_skipped": 0,
+  "source_collider_count": 61,
+  "total_native_pieces": 1313,
+  "largest_piece_vertices": 128,
+  "largest_piece_triangles": 252,
+  "max_relative_volume_error": 3.696349892834405e-10,
+  "max_sampled_support_error_m": 6.488698467421727e-13,
+  "union_checks": "All piece vertices inside original source planes within 2e-10 m; every source vertex and 96 convex-combination samples per source covered; blade surface +/-2 micrometre probes preserved",
+  "colliders": [
+    {
+      "collider": "base_link/base_link_collision_0",
+      "source_hull_vertices": 190,
+      "pieces": 6,
+      "largest_piece_vertices": 125,
+      "largest_piece_triangles": 246,
+      "relative_volume_error": 2.9132252166164108e-12,
+      "max_sampled_support_error_m": 5.038053307870882e-13
+    },
+    {
+      "collider": "link1/link1_collision_0",
+      "source_hull_vertices": 100,
+      "pieces": 1,
+      "largest_piece_vertices": 100,
+      "largest_piece_triangles": 196,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "link2/link2_collision_0",
+      "source_hull_vertices": 738,
+      "pieces": 105,
+      "largest_piece_vertices": 128,
+      "largest_piece_triangles": 252,
+      "relative_volume_error": 2.098099471936621e-12,
+      "max_sampled_support_error_m": 5.603850716795478e-13
+    },
+    {
+      "collider": "link3/link3_collision_0",
+      "source_hull_vertices": 234,
+      "pieces": 18,
+      "largest_piece_vertices": 113,
+      "largest_piece_triangles": 222,
+      "relative_volume_error": 1.465161325597819e-11,
+      "max_sampled_support_error_m": 6.408693020709677e-13
+    },
+    {
+      "collider": "link4/link4_collision_0",
+      "source_hull_vertices": 186,
+      "pieces": 6,
+      "largest_piece_vertices": 117,
+      "largest_piece_triangles": 230,
+      "relative_volume_error": 1.003219729511784e-11,
+      "max_sampled_support_error_m": 5.214856324542438e-13
+    },
+    {
+      "collider": "link5/link5_collision_0",
+      "source_hull_vertices": 333,
+      "pieces": 9,
+      "largest_piece_vertices": 118,
+      "largest_piece_triangles": 232,
+      "relative_volume_error": 2.4104052087636774e-11,
+      "max_sampled_support_error_m": 6.488698467421727e-13
+    },
+    {
+      "collider": "link6/link6_collision_0",
+      "source_hull_vertices": 182,
+      "pieces": 2,
+      "largest_piece_vertices": 113,
+      "largest_piece_triangles": 222,
+      "relative_volume_error": 1.2938095039771724e-11,
+      "max_sampled_support_error_m": 6.232098170855238e-13
+    },
+    {
+      "collider": "camera_base/camera_base_collision_0",
+      "source_hull_vertices": 42,
+      "pieces": 1,
+      "largest_piece_vertices": 42,
+      "largest_piece_triangles": 80,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "camera/camera_collision_0",
+      "source_hull_vertices": 5087,
+      "pieces": 1041,
+      "largest_piece_vertices": 128,
+      "largest_piece_triangles": 252,
+      "relative_volume_error": 4.9881876407198433e-11,
+      "max_sampled_support_error_m": 6.392386620035495e-13
+    },
+    {
+      "collider": "link7/link7_collision_0",
+      "source_hull_vertices": 20,
+      "pieces": 1,
+      "largest_piece_vertices": 20,
+      "largest_piece_triangles": 36,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "link7/link7_collision_1",
+      "source_hull_vertices": 36,
+      "pieces": 1,
+      "largest_piece_vertices": 36,
+      "largest_piece_triangles": 68,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "link7/link7_collision_2",
+      "source_hull_vertices": 19,
+      "pieces": 1,
+      "largest_piece_vertices": 19,
+      "largest_piece_triangles": 34,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "link7/link7_collision_3",
+      "source_hull_vertices": 17,
+      "pieces": 1,
+      "largest_piece_vertices": 17,
+      "largest_piece_triangles": 30,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "link7/link7_collision_4",
+      "source_hull_vertices": 9,
+      "pieces": 1,
+      "largest_piece_vertices": 9,
+      "largest_piece_triangles": 14,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "link7/link7_collision_5",
+      "source_hull_vertices": 44,
+      "pieces": 1,
+      "largest_piece_vertices": 44,
+      "largest_piece_triangles": 84,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "link7/link7_collision_6",
+      "source_hull_vertices": 10,
+      "pieces": 1,
+      "largest_piece_vertices": 10,
+      "largest_piece_triangles": 16,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "link7/link7_collision_7",
+      "source_hull_vertices": 26,
+      "pieces": 1,
+      "largest_piece_vertices": 26,
+      "largest_piece_triangles": 48,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "link7/link7_collision_8",
+      "source_hull_vertices": 40,
+      "pieces": 1,
+      "largest_piece_vertices": 40,
+      "largest_piece_triangles": 76,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "link8/link8_collision_0",
+      "source_hull_vertices": 11,
+      "pieces": 1,
+      "largest_piece_vertices": 11,
+      "largest_piece_triangles": 18,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "link8/link8_collision_1",
+      "source_hull_vertices": 31,
+      "pieces": 1,
+      "largest_piece_vertices": 31,
+      "largest_piece_triangles": 58,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "link8/link8_collision_2",
+      "source_hull_vertices": 16,
+      "pieces": 1,
+      "largest_piece_vertices": 16,
+      "largest_piece_triangles": 28,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "link8/link8_collision_3",
+      "source_hull_vertices": 9,
+      "pieces": 1,
+      "largest_piece_vertices": 9,
+      "largest_piece_triangles": 14,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "link8/link8_collision_4",
+      "source_hull_vertices": 18,
+      "pieces": 1,
+      "largest_piece_vertices": 18,
+      "largest_piece_triangles": 32,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "link8/link8_collision_5",
+      "source_hull_vertices": 8,
+      "pieces": 1,
+      "largest_piece_vertices": 8,
+      "largest_piece_triangles": 12,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "link8/link8_collision_6",
+      "source_hull_vertices": 43,
+      "pieces": 1,
+      "largest_piece_vertices": 43,
+      "largest_piece_triangles": 82,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "link8/link8_collision_7",
+      "source_hull_vertices": 8,
+      "pieces": 1,
+      "largest_piece_vertices": 8,
+      "largest_piece_triangles": 12,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "link8/link8_collision_8",
+      "source_hull_vertices": 40,
+      "pieces": 1,
+      "largest_piece_vertices": 40,
+      "largest_piece_triangles": 76,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "charger/part-0000.stl",
+      "source_hull_vertices": 67,
+      "pieces": 1,
+      "largest_piece_vertices": 67,
+      "largest_piece_triangles": 130,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "charger/part-0001.stl",
+      "source_hull_vertices": 500,
+      "pieces": 39,
+      "largest_piece_vertices": 112,
+      "largest_piece_triangles": 220,
+      "relative_volume_error": 3.696349892834405e-10,
+      "max_sampled_support_error_m": 6.128181729431192e-13
+    },
+    {
+      "collider": "charger/part-0002.stl",
+      "source_hull_vertices": 502,
+      "pieces": 35,
+      "largest_piece_vertices": 126,
+      "largest_piece_triangles": 248,
+      "relative_volume_error": 2.527529296969533e-10,
+      "max_sampled_support_error_m": 5.775644719430151e-13
+    },
+    {
+      "collider": "socket/part-0",
+      "source_hull_vertices": 6,
+      "pieces": 1,
+      "largest_piece_vertices": 6,
+      "largest_piece_triangles": 8,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "socket/part-1",
+      "source_hull_vertices": 6,
+      "pieces": 1,
+      "largest_piece_vertices": 6,
+      "largest_piece_triangles": 8,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "socket/part-2",
+      "source_hull_vertices": 6,
+      "pieces": 1,
+      "largest_piece_vertices": 6,
+      "largest_piece_triangles": 8,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "socket/part-3",
+      "source_hull_vertices": 6,
+      "pieces": 1,
+      "largest_piece_vertices": 6,
+      "largest_piece_triangles": 8,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "socket/part-4",
+      "source_hull_vertices": 6,
+      "pieces": 1,
+      "largest_piece_vertices": 6,
+      "largest_piece_triangles": 8,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "socket/part-5",
+      "source_hull_vertices": 6,
+      "pieces": 1,
+      "largest_piece_vertices": 6,
+      "largest_piece_triangles": 8,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "socket/part-6",
+      "source_hull_vertices": 6,
+      "pieces": 1,
+      "largest_piece_vertices": 6,
+      "largest_piece_triangles": 8,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "socket/part-7",
+      "source_hull_vertices": 6,
+      "pieces": 1,
+      "largest_piece_vertices": 6,
+      "largest_piece_triangles": 8,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "socket/part-8",
+      "source_hull_vertices": 6,
+      "pieces": 1,
+      "largest_piece_vertices": 6,
+      "largest_piece_triangles": 8,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "socket/part-9",
+      "source_hull_vertices": 6,
+      "pieces": 1,
+      "largest_piece_vertices": 6,
+      "largest_piece_triangles": 8,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "socket/part-10",
+      "source_hull_vertices": 6,
+      "pieces": 1,
+      "largest_piece_vertices": 6,
+      "largest_piece_triangles": 8,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "socket/part-11",
+      "source_hull_vertices": 6,
+      "pieces": 1,
+      "largest_piece_vertices": 6,
+      "largest_piece_triangles": 8,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "socket/part-12",
+      "source_hull_vertices": 6,
+      "pieces": 1,
+      "largest_piece_vertices": 6,
+      "largest_piece_triangles": 8,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "socket/part-13",
+      "source_hull_vertices": 6,
+      "pieces": 1,
+      "largest_piece_vertices": 6,
+      "largest_piece_triangles": 8,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "socket/part-14",
+      "source_hull_vertices": 6,
+      "pieces": 1,
+      "largest_piece_vertices": 6,
+      "largest_piece_triangles": 8,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "socket/part-15",
+      "source_hull_vertices": 6,
+      "pieces": 1,
+      "largest_piece_vertices": 6,
+      "largest_piece_triangles": 8,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "socket/part-16",
+      "source_hull_vertices": 6,
+      "pieces": 1,
+      "largest_piece_vertices": 6,
+      "largest_piece_triangles": 8,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "socket/part-17",
+      "source_hull_vertices": 6,
+      "pieces": 1,
+      "largest_piece_vertices": 6,
+      "largest_piece_triangles": 8,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "socket/part-18",
+      "source_hull_vertices": 6,
+      "pieces": 1,
+      "largest_piece_vertices": 6,
+      "largest_piece_triangles": 8,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "socket/part-19",
+      "source_hull_vertices": 6,
+      "pieces": 1,
+      "largest_piece_vertices": 6,
+      "largest_piece_triangles": 8,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "socket/part-20",
+      "source_hull_vertices": 6,
+      "pieces": 1,
+      "largest_piece_vertices": 6,
+      "largest_piece_triangles": 8,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "socket/part-21",
+      "source_hull_vertices": 6,
+      "pieces": 1,
+      "largest_piece_vertices": 6,
+      "largest_piece_triangles": 8,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "socket/part-22",
+      "source_hull_vertices": 6,
+      "pieces": 1,
+      "largest_piece_vertices": 6,
+      "largest_piece_triangles": 8,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "socket/part-23",
+      "source_hull_vertices": 6,
+      "pieces": 1,
+      "largest_piece_vertices": 6,
+      "largest_piece_triangles": 8,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "socket/part-24",
+      "source_hull_vertices": 6,
+      "pieces": 1,
+      "largest_piece_vertices": 6,
+      "largest_piece_triangles": 8,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "socket/part-25",
+      "source_hull_vertices": 6,
+      "pieces": 1,
+      "largest_piece_vertices": 6,
+      "largest_piece_triangles": 8,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "socket/part-26",
+      "source_hull_vertices": 6,
+      "pieces": 1,
+      "largest_piece_vertices": 6,
+      "largest_piece_triangles": 8,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "socket/part-27",
+      "source_hull_vertices": 6,
+      "pieces": 1,
+      "largest_piece_vertices": 6,
+      "largest_piece_triangles": 8,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "socket/part-28",
+      "source_hull_vertices": 6,
+      "pieces": 1,
+      "largest_piece_vertices": 6,
+      "largest_piece_triangles": 8,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "socket/part-29",
+      "source_hull_vertices": 6,
+      "pieces": 1,
+      "largest_piece_vertices": 6,
+      "largest_piece_triangles": 8,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    },
+    {
+      "collider": "table",
+      "source_hull_vertices": 8,
+      "pieces": 1,
+      "largest_piece_vertices": 8,
+      "largest_piece_triangles": 12,
+      "relative_volume_error": 0.0,
+      "max_sampled_support_error_m": 0.0
+    }
+  ]
+}

@@ -70,6 +70,31 @@ XML loaded by MuJoCo **3.4.0**, with maximum absolute transform error
 `1.33e-15`. That is not the source task's pinned engine version and is only a
 conversion/FK check. MuJoCo is not a native runtime dependency.
 
+## Convex cooking limits
+
+A source-collider census found five hulls above PhysX's 255-vertex cooking limit:
+X5 link2 (738), link5 (333), camera (5087), and the two charger blades (500/502).
+`collision_partition.py` now recursively intersects native collision hulls with
+complementary half spaces. Each piece has at most 128 vertices and therefore at
+most 252 triangular faces, within both vertex and polygon limits. The original
+convex shapes remain untouched in the geometric verifier. Child meshes retain
+the same rigid actor, local transform, material and contact offsets; visual
+meshes and frozen acceptance criteria are unchanged. Native hull minimum
+thickness is explicitly zero, because the
+[USD schema default is 1 mm](https://docs.omniverse.nvidia.com/kit/docs/omni_physics/107.2/dev_guide/schemas/physxschema.html)
+and would otherwise thicken thin pieces.
+
+The recorded [partition audit](collision-partition-audit.json) covers all 61
+source colliders, yielding 1313 pieces (1041 belong to the detailed camera).
+Largest pieces have 128 vertices / 252 triangular faces. Maximum relative
+volume error is `3.70e-10`, and maximum sampled support error is `6.49e-13` m.
+Tests also check every piece against every original supporting plane, cover all
+original vertices and 96 interior samples per collider, and preserve inside /
+outside classification at 2 micrometres from both thin-blade surfaces. The full
+16-test suite passed on Linux Python 3.12.12 without skips. These are CPU geometry
+results, not PhysX cooking or contact evidence. Cooking success, seam contacts
+and performance with this many pieces remain explicit native smoke-test items.
+
 ## Native validation
 
 On Linux with Docker, NVIDIA Container Toolkit and a compatible GPU, run from
