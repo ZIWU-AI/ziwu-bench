@@ -1,4 +1,4 @@
-"""Explicit Isaac 6.0.1 reference/Nop execution with fresh native GPU verification.
+"""Explicit Isaac 5.1.0 reference/Nop execution with fresh native GPU verification.
 
 Runtime dependencies and public extensions originate from upstream PR #2195 at
  da218ea01206441256e7e9da6e76ef41e12cef65. Task code runs only in Modal.
@@ -20,7 +20,7 @@ ROOT = HERE.parents[1]
 sys.path.insert(0, str(HERE.parent / "mujoco-modal"))
 from config import safe_task
 from run import command, download, preflight
-from image import image_for as native_image, BASE_IMAGE
+from image import image_for as native_image, BASE_IMAGE, verify_hardware
 
 IGNORE = ["**/__pycache__/**", "**/*.pyc"]
 PYTHON = "/opt/venv/bin/python"
@@ -32,8 +32,8 @@ def main():
     parser.add_argument("--task-root", type=Path, default=ROOT)
     parser.add_argument("--task-path", required=True)
     parser.add_argument("--source-sha", required=True)
-    parser.add_argument("--extensions", type=Path, help="Deprecated; Isaac 6 ships its extensions")
-    parser.add_argument("--gpu", choices=["L40S", "A10"], default="L40S")
+    parser.add_argument("--extensions", type=Path, required=True, help="Hash-verified public NVIDIA extension cache")
+    parser.add_argument("--gpu", choices=["A10"], default="A10")
     parser.add_argument("--mode", choices=["all", "oracle", "nop"], default="all")
     parser.add_argument("--reference", choices=["v12-layout0", "v13-round01-layout0", "v13-smoke-layout0"], default="v12-layout0")
     args = parser.parse_args()
@@ -41,8 +41,8 @@ def main():
     task = safe_task(args.task_root, args.task_path)
     for role in ("environment", "tests"):
         manifest = json.loads((task / role / "bundle/manifest.json").read_text())
-        if manifest["isaac_version"] != "6.0.1.0":
-            raise ValueError("This runner requires Isaac Sim 6.0.1")
+        if manifest["isaac_version"] != "5.1.0.0":
+            raise ValueError("This runner requires Isaac Sim 5.1.0")
     # Task bytes stay data on the credential-bearing host; only reviewed host
     # modules are imported. Fail if the selected task differs from its receipt.
     tracked = subprocess.check_output(["git", "ls-tree", "-r", "--name-only", args.source_sha, "--", args.task_path], cwd=args.task_root, text=True).splitlines()
@@ -63,8 +63,8 @@ def main():
         "runner_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
         "infra_pr": "https://github.com/harbor-framework/terminal-bench-science/pull/2195",
         "infra_commit": "da218ea01206441256e7e9da6e76ef41e12cef65",
-        "engine": "Isaac Sim 6.0.1.0.0", "physics": "PhysX CPU", "rendering": "NVIDIA RTX GPU",
-        "base_image_id": BASE_IMAGE, "gpu": args.gpu, "cpus": 8, "memory_mib": 65536,
+        "engine": "Isaac Sim 5.1.0.0", "physics": "PhysX CPU", "rendering": "NVIDIA RTX GPU",
+        "base_image_id": BASE_IMAGE, "gpu": args.gpu, "cpus": 4, "memory_mib": 16384,
         "modal_version": modal.__version__, "model_calls": 0, "reference": args.reference, "files": files,
     })
     app = modal.App.lookup("ziwu-isaac-reference", create_if_missing=True)
@@ -72,12 +72,12 @@ def main():
     def save():
         write(args.output / "lifecycle.json", records)
     def image_for(role):
-        return native_image(task / role)
+        return native_image(task / role, args.extensions)
     def allocate(image, role):
         print("Allocating " + role, flush=True)
         with modal.enable_output():
-            sb = modal.Sandbox.create("sleep", "infinity", app=app, image=image, gpu=args.gpu,
-                cpu=(8, 8), memory=(65536, 65536), timeout=10800, block_network=True)
+            sb = modal.Sandbox.create("sleep", "infinity", app=app, image=image, gpu=args.gpu, cloud="oci", region="eu-west",
+                cpu=(4, 4), memory=(16384, 16384), timeout=10800, block_network=True)
         record = {"role": role, "sandbox_id": sb.object_id, "image_id": image.object_id,
                   "started": time.time(), "gpu_requested": args.gpu, "network": "blocked"}
         records.append(record); save()
@@ -107,6 +107,7 @@ def main():
         sb, record = allocate(image, mode)
         try:
             record["hardware"] = asyncio.run(preflight(sb)); save()
+            record.update(asyncio.run(verify_hardware(sb))); save()
             if args.gpu not in record["hardware"]:
                 raise RuntimeError("Requested GPU was not allocated")
             command(sb, out, "packages", PYTHON, "-m", "pip", "freeze")
@@ -133,6 +134,7 @@ def main():
         sb, record = allocate(image_for("tests").add_local_dir(data, "/var/lib/pen-transfer/recording", copy=True), mode + "-verifier")
         try:
             record["hardware"] = asyncio.run(preflight(sb)); save()
+            record.update(asyncio.run(verify_hardware(sb))); save()
             command(sb, out, "replay", "bash", "/tests/test.sh", timeout=7300)
             download(sb, "/logs/verifier/reward.txt", out / "reward.txt")
             reward = int((out / "reward.txt").read_text().strip())
@@ -152,7 +154,7 @@ def main():
             raise
         finally:
             stop(sb, record)
-    summary = {"passed": True, "engine": "Isaac Sim 6.0.1.0.0", "outcomes": outcomes, "model_calls": 0}
+    summary = {"passed": all(v == (1 if k == "oracle" else 0) for k, v in outcomes.items()), "engine": "Isaac Sim 5.1.0.0", "outcomes": outcomes, "model_calls": 0}
     write(args.output / "summary.json", summary)
     print(json.dumps(summary), flush=True)
     if not summary["passed"]:

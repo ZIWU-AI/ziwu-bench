@@ -1,4 +1,4 @@
-"""Trusted Harbor adapter for the reviewed protected Isaac 6.0.1 service.
+"""Trusted Harbor adapter for the reviewed protected Isaac 5.1.0 service.
 
 No policy or scoring patches. Agent runs as uid agent; root starts and collects
 its simulator. The independent GPU verifier receives data, not agent secrets.
@@ -17,7 +17,7 @@ from harbor.environments.modal import ModalEnvironment
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent / "isaac-reference-modal"))
-from image import image_for, BASE_IMAGE
+from image import image_for, BASE_IMAGE, verify_hardware
 
 
 class IsaacEnvironment(ModalEnvironment):
@@ -29,8 +29,8 @@ class IsaacEnvironment(ModalEnvironment):
         super().__init__(*args, **kwargs)
         self._isaac_role = "agent" if (self.environment_dir / "sim-service").is_dir() else "verifier"
         manifest = json.loads((self.environment_dir / "bundle/manifest.json").read_text())
-        if manifest["isaac_version"] != "6.0.1.0":
-            raise ValueError("This adapter requires the Isaac 6.0.1 bundle")
+        if manifest["isaac_version"] != "5.1.0.0":
+            raise ValueError("This adapter requires the Isaac 5.1.0 bundle")
         if self._compose_mode or self._vm_runtime_enabled:
             raise ValueError("Only direct Modal containers are supported")
         if self._isaac_role == "verifier" and not self._network_disabled:
@@ -56,19 +56,19 @@ class IsaacEnvironment(ModalEnvironment):
         # One allocation, no paid replacement loop. Fresh source-only Dockerfile
         # image: never reuse the Oracle image that contains /solution.
         sb = await modal.Sandbox.create.aio(*(entrypoint or ["sleep", "infinity"]),
-            app=self._app, image=self._image, gpu="L40S", cpu=(8, 8), memory=(65536, 65536),
+            app=self._app, image=self._image, gpu="A10", cloud="oci", region="eu-west", cpu=(4, 4), memory=(16384, 16384),
             timeout=18000 if self._isaac_role == "agent" else 10800,
             block_network=block_network, **options)
         self._sandbox_termination_requested = False
         self._native_receipt.update(sandbox_id=sb.object_id, image_id=self._image.object_id,
             started_at=time.time(), status="allocated", network=self.network_policy.network_mode.value,
-            base_image_id=BASE_IMAGE, cpus=8, memory_mib=65536, isaac_version="6.0.1.0")
+            base_image_id=BASE_IMAGE, cpus=4, memory_mib=16384, isaac_version="5.1.0.0")
         self._save_native()
         try:
             proc = await sb.exec.aio("nvidia-smi", "--query-gpu=name,driver_version", "--format=csv,noheader", timeout=30)
             self._native_receipt["hardware"] = (await proc.stdout.read.aio()).strip()
-            if await proc.wait.aio() or "L40S" not in self._native_receipt["hardware"]:
-                raise RuntimeError("GPU hardware preflight failed")
+            self._save_native()
+            self._native_receipt.update(await verify_hardware(sb))
             self._save_native()
             return sb
         except BaseException:
@@ -101,7 +101,7 @@ class IsaacEnvironment(ModalEnvironment):
             data = await proc.stdout.read.aio()
             out = self.trial_paths.trial_dir / "private-native"
             out.mkdir(parents=True, exist_ok=True)
-            (out / (self._isaac_role + ".log")).write_text(data[-65536:])
+            (out / (self._isaac_role + ".log")).write_text(data[-16384:])
         except Exception:
             pass
         await sb.terminate.aio()

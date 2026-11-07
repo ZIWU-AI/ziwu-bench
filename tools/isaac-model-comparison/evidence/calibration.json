@@ -1,0 +1,21 @@
+{
+  "status": "hardware_blocked",
+  "evaluation_tree_sha256": "c98796ce6f5b2c8959179a72c29f583277f6fff8912535e698bac8ae65a6c75e",
+  "runtime": {
+    "gpu": "A10",
+    "cpus": 4,
+    "memory_mib": 16384,
+    "isaac_version": "5.1.0.0",
+    "modal_version": "1.5.5",
+    "cloud": "oci",
+    "region": "eu-west",
+    "required_driver": "580.95.05",
+    "a10_runtime_sha256": "cb65b5be68b1d01f1256dd496589b2880788639ad02c6ac7c90d9602052fef93",
+    "image_builder_sha256": "6ee9ee4b3f5c136d3ee3f7a2c7b5612a784c30dd08c83e42b82181bfc1df4abe"
+  },
+  "historical_task_source": "fed3c441ab5c112e998b27e26eb17f2693d96f99",
+  "infra_source": "da218ea01206441256e7e9da6e76ef41e12cef65",
+  "fresh_oracle": null,
+  "fresh_nop": null,
+  "reason": "Observed Modal A10 driver 610.57.04 differs from the original 580.95.05 contract. No model score."
+}

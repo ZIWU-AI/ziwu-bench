@@ -15,8 +15,8 @@ none of the friction-pinch-lift results are transferred to Isaac.
 | sol | gpt-6-sol | Codex |
 | opus | claude-opus-5-5 | Claude Code |
 
-Each native environment uses one L40S, 8 CPU cores and 64 GiB, matching PR #2195’s
-Isaac 6 provisioning. Each combination gets one exploratory trial, high reasoning, and a 5400-second
+Each native environment uses one A10 in OCI eu-west, 4 CPU cores and 16 GiB,
+with Isaac 5.1.0.0 and driver 580.95.05, following PR #2195’s accepted infra. Each combination gets one exploratory trial, high reasoning, and a 5400-second
 agent budget. Native clients/prompts, protocol, context windows and compaction
 policies differ; this does not equalize inference compute or establish a model
 ranking. Native versions: Harbor 0.23.0, Codex 0.155.1, Claude Code 2.1.318,
@@ -30,8 +30,10 @@ gh workflow run gpu-task-validation.yml --repo ZIWU-AI/ziwu-bench \
   -f model_profile=kimi -f harness=all -f model_stage=preflight
 ```
 
-After Oracle/Nop pass on the same native configuration, select `model_stage=all`
-for preflight plus a real Isaac task. `model_profile=all` selects all 11 pairs;
+Select `model_stage=all` for preflight plus a real Isaac task. Oracle/Nop
+acceptance is recorded separately and bound to the evaluation files. If the
+positive control fails, model rows are exploratory results from an uncalibrated
+cohort, not official task acceptance; failed reference scores stay visible. `model_profile=all` selects all 11 pairs;
 at most two run concurrently, with no trial retry. The model agent runs as the
 unprivileged `agent` user; the host starts the root-owned protected simulator,
 collects sealed execution, and runs a fresh no-network GPU verifier. No Oracle
@@ -53,11 +55,13 @@ API/authentication errors, native infrastructure failures, budget exhaustion and
 missing results retain distinct statuses and no model score. Usage absent from
 native clients remains unknown. CLI cost estimates are not provider invoices.
 
-Both L40S and OCI A10 with driver 610.57.04 crashed inside Isaac 5.1 RTX before
-any policy actions. The current cohort uses Isaac 6.0.1, following PR #2195's
-migration. Its minimal L40S application startup exits zero; full Oracle/Nop and
-model scores are tracked separately. Historical Isaac 5.1 results are not mixed
-into this cohort.
+The active cohort is **Isaac 5.1 / A10**. The Isaac 6 migration has been withdrawn.
+The latest actual A10 allocation returned driver 610.57.04, which fails the
+original infra's 580.95.05 contract. Current native trials are blocked pending a
+matching allocation. Historical Isaac 6 diagnostics are excluded; old PR #2195
+model scores are not transferred to this run. See
+[evidence/a10-placement-2026-11-07.json](evidence/a10-placement-2026-11-07.json).
+The current PR body lists every requested pair and its actual status.
 
 Real CPU tool-use preflights passed all four Kimi and all four DeepSeek harnesses
 in Actions [42336905217](https://github.com/ZIWU-AI/ziwu-bench/actions/runs/42336905217)

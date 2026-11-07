@@ -19,7 +19,9 @@ def aggregate(source, output, profile, harness):
         result.append(rows.get(key, {**pair, "model": PROFILES[key[0]]["model"], "status": "result_missing", "reward": None}))
     output.mkdir(parents=True, exist_ok=True)
     (output / "comparison.json").write_text(json.dumps(result, indent=2) + "\n")
+    calibrations = sorted({row.get("calibration", {}).get("status", "not_recorded") for row in result})
     lines = ["# Isaac / Modal model and harness comparison", "",
+             "Native calibration: " + ", ".join(calibrations) + ". Only a passed positive control establishes acceptance.", "",
              "One exploratory trial per pair. Preflight is not a task score; errors and missing results have no reward.", "",
              "| Model | Harness | Status | Reward | Native score | Input / output tokens |", "|---|---|---|---:|---:|---:|"]
     for row in result:

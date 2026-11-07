@@ -1,29 +1,47 @@
-"""Isaac 6 image derivation from PR #2195's pinned Modal engine image.
+"""Isaac 5.1 provisioning and hardware contract from PR #2195's A10 infra.
 
-The public task Dockerfiles offer the independent NGC rebuild. This path uses
-its tested Python 3.12 / Isaac 6 engine cache, then removes inherited task code
-and installs only the selected hash-checked task. Never includes /solution.
+Task Dockerfiles are unchanged. Host layers contain only the original reviewed
+RTX packages, pinned Python dependencies, and hash-verified NVIDIA extensions.
 """
+import os
 from pathlib import Path
 import modal
+from a10_runtime import (RTX_USERSPACE_PACKAGES, NATIVE_BUILD_COMMANDS,
+    EXTENSION_ROOTS, EXTENSION_TARGET, verified_host_extension_cache,
+    inspect_gpu, inspect_placement, inspect_resources, GPU_NAME, DRIVER_VERSION,
+    CLOUD, REGION)
 
-BASE_IMAGE = "im-VbjOSj3gdypwNyoZQA58DH"
-ENGINE = "6.0.1.0"
+BASE_IMAGE = "task Dockerfile: nvidia/cuda:12.8.1-cudnn-devel-ubuntu22.04"
+ENGINE = "5.1.0.0"
 IGNORE = ["**/__pycache__/**", "**/*.pyc"]
 
 
-def image_for(directory):
+def image_for(directory, extensions=None):
     directory = Path(directory)
-    dockerfile = (directory / "Dockerfile").read_text()
-    # Only the engine provisioning prefix differs from the public NGC build.
-    task_steps = dockerfile[dockerfile.index("COPY runtime-requirements.txt"):]
-    commands = [line.strip() for line in task_steps.replace("\\\n", " ").splitlines()
-                if line.strip() and not line.lstrip().startswith("#")]
-    image = modal.Image.from_id(BASE_IMAGE).dockerfile_commands(
-        "USER root",
-        "RUN rm -rf /workspace/RoboDojo /workspace/anchor_merged /workspace/anchor_runs /opt/physicalrsi /opt/robodojo /solution /tests /app /opt/pen-runtime /root/autodl-tmp/LXC/RoboDojo && chmod 700 /root",
-        "RUN test ! -e /opt/venv && ln -s /workspace/miniconda3/envs/RoboDojo /opt/venv",
-        "ENV PATH=/opt/venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin PYTHONPATH= PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 ACCEPT_EULA=Y OMNI_KIT_ACCEPT_EULA=YES PRIVACY_CONSENT=Y NVIDIA_DRIVER_CAPABILITIES=all",
-        "RUN apt-get update && apt-get install -y --no-install-recommends sudo ffmpeg && rm -rf /var/lib/apt/lists/*",
-    )
-    return image.dockerfile_commands(commands, context_dir=directory, ignore=IGNORE)
+    root = Path(extensions or os.environ["ZIWU_ISAAC_EXTENSIONS"]).resolve()
+    os.environ["PR61_ISAAC_EXTENSION_CACHE"] = str(root)
+    os.environ["PR61_ISAAC_EXTENSION_MANIFEST"] = str(root / "EXTENSIONS.json")
+    root, _ = verified_host_extension_cache()
+    image = modal.Image.from_dockerfile(directory / "Dockerfile",
+        context_dir=directory, ignore=IGNORE)
+    image = image.apt_install(*RTX_USERSPACE_PACKAGES).run_commands(*NATIVE_BUILD_COMMANDS)
+    for name in EXTENSION_ROOTS:
+        image = image.add_local_dir(root / name, EXTENSION_TARGET + "/" + name, copy=True)
+    return image
+
+
+async def verify_hardware(sb):
+    name, driver = await inspect_gpu(sb)
+    result = {"hardware": name + ", " + driver,
+              "required_driver_version": DRIVER_VERSION}
+    if name != GPU_NAME or driver != DRIVER_VERSION:
+        raise RuntimeError("PR #2195 hardware mismatch: expected " + GPU_NAME +
+            " / " + DRIVER_VERSION + "; allocated " + result["hardware"])
+    placement = await inspect_placement(sb)
+    result.update(placement)
+    if placement["cloud_provider"] not in (None, CLOUD) or placement["region"] not in (None, REGION):
+        raise RuntimeError("PR #2195 OCI eu-west placement mismatch")
+    result["resources"] = await inspect_resources(sb)
+    if result["resources"]["measured"]["limit_check"] != "matches_requested_hard_limits":
+        raise RuntimeError("Unable to confirm PR #2195 hard 4 CPU / 16 GiB limits")
+    return result

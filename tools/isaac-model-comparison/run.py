@@ -10,6 +10,7 @@ import tempfile
 
 from harness_common import now, write_json, make_preflight, job_config, execute, collect, scrub_tree
 from profiles import PROFILES, route_for
+from calibration import calibration, runtime_spec
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
@@ -36,7 +37,8 @@ def main():
                "host_sha": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
                "requested_trials": 1, "trial_count": 0, "reward": None, "status": "preparing",
                "agent_timeout_sec": 5400, "started_at": now(), "run_url": os.environ.get("COMPARISON_RUN_URL"),
-               "harbor_version": version("harbor"), "gpu": "L40S", "cpus": 8, "memory_mib": 65536, "isaac_version": "6.0.1.0"}
+               "harbor_version": version("harbor"), "gpu": "A10", "cpus": 4, "memory_mib": 16384, "isaac_version": "5.1.0.0"}
+    summary["calibration"] = calibration(args.task_root, sha, TASK, HERE / "evidence/calibration.json", runtime_spec(ROOT))
     code = 1
     try:
         if version("harbor") != "0.23.0":
@@ -71,6 +73,9 @@ def main():
                 summary["status"] = "preflight_passed"
                 code = 0
                 return code
+            if args.extensions is None:
+                raise ValueError("Native trials require --extensions")
+            env["ZIWU_ISAAC_EXTENSIONS"] = str(args.extensions.resolve())
             # Materialize committed bytes only; no mutable working-tree overlay,
             # solution or authoring files are uploaded to the model environment.
             import tarfile, io

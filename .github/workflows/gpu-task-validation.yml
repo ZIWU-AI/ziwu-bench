@@ -36,8 +36,8 @@ on:
       gpu:
         type: choice
         description: "GPU for NVIDIA rendering"
-        options: [L40S, A10]
-        default: L40S
+        options: [A10, L40S]
+        default: A10
       mode:
         type: choice
         description: "Reference and/or negative control"
@@ -60,7 +60,7 @@ on:
       model_stage: {type: string, default: preflight}
       pr_number: {type: string, default: "0"}
       task_path: {type: string, required: true}
-      gpu: {type: string, default: L40S}
+      gpu: {type: string, default: A10}
       mode: {type: string, default: all}
       trials: {type: number, default: 1}
       oracle_reference: {type: string, default: v12-layout0}
@@ -140,7 +140,10 @@ jobs:
           test -n "$MODAL_TOKEN_ID" && test -n "$MODAL_TOKEN_SECRET"
           case "$BACKEND" in
             mujoco) runner=tools/mujoco-modal/run.py; extra=() ;;
-            isaac) runner=tools/isaac-reference-modal/run.py; extra=(--reference "$ORACLE_REFERENCE") ;;
+            isaac)
+              python tools/isaac-reference-modal/prepare_extensions.py --output work/extensions --accept-nvidia-license
+              runner=tools/isaac-reference-modal/run.py
+              extra=(--reference "$ORACLE_REFERENCE" --extensions work/extensions) ;;
             *) echo 'Unsupported simulator'; exit 1 ;;
           esac
           python "$runner" --task-root candidate --task-path "$TASK_PATH" \
@@ -190,6 +193,9 @@ jobs:
       - uses: actions/setup-python@v5
         with: {python-version: "3.12"}
       - run: python -m pip install -r tools/isaac-model-comparison/requirements-host.txt
+      - name: Prepare pinned Isaac 5.1 extensions
+        if: inputs.model_stage == 'all'
+        run: python tools/isaac-reference-modal/prepare_extensions.py --output work/extensions --accept-nvidia-license
       - name: One real harness preflight and optional native trial
         env:
           MODAL_TOKEN_ID: ${{ secrets.MODAL_TOKEN_ID }}
@@ -209,7 +215,7 @@ jobs:
           umask 077
           python tools/isaac-model-comparison/run.py --profile "$MODEL_PROFILE" --harness "$HARNESS" \
             --task-root candidate --source-sha "$SOURCE_SHA" --stage "$MODEL_STAGE" \
-            --output comparison-output/run
+            --output comparison-output/run --extensions work/extensions
       - name: Stop remaining native containers
         if: always()
         timeout-minutes: 3
