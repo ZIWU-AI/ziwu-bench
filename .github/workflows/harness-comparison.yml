@@ -1,0 +1,123 @@
+name: Same-model harness comparison
+
+on:
+  workflow_call:
+    inputs:
+      provider:
+        description: "Fixed model provider: kimi or deepseek"
+        type: string
+        default: kimi
+      harnesses:
+        description: "JSON list of harnesses to execute"
+        type: string
+        default: '["claude-code","codex","kimi-code","deepseek-harness"]'
+      existing_codex_run_id:
+        description: "Optional earlier Codex run whose evidence should be reused"
+        type: string
+        default: ""
+
+permissions:
+  contents: read
+
+jobs:
+  compare:
+    name: ${{ inputs.provider == 'deepseek' && 'DeepSeek Flash' || 'Kimi k3.1-pro' }} / ${{ matrix.harness }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        harness: ${{ fromJSON(inputs.harnesses) }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: astral-sh/setup-uv@v4
+      - name: Install pinned evaluator and test adapters
+        run: |
+          uv venv .comparison-venv --python 3.12
+          uv pip install --python .comparison-venv/bin/python 'harbor==0.23.0'
+          .comparison-venv/bin/python -m unittest discover -s tools/harness-comparison -p 'test_*.py' -v
+      - name: Run fresh preflight and benchmark trial
+        env:
+          KIMI_CODE_API_KEY: ${{ inputs.provider == 'kimi' && secrets.KIMI_CODE_API_KEY || '' }}
+          DEEPSEEK_API_KEY: ${{ inputs.provider == 'deepseek' && secrets.DEEPSEEK_API_KEY || '' }}
+          COMPARISON_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          COMPARISON_TASK_REF: ${{ github.sha }}
+          HARNESS: ${{ matrix.harness }}
+          PROVIDER: ${{ inputs.provider }}
+        run: |
+          export PATH="$PWD/.comparison-venv/bin:$PATH"
+          python tools/harness-comparison/run.py run --provider "$PROVIDER" --harness "$HARNESS" --output "comparison-output/$HARNESS"
+      - name: Make collected results readable
+        if: always()
+        run: |
+          if [ -d comparison-output ] && [ ! -L comparison-output ]; then
+            sudo chown -hR -- "$(id -u):$(id -g)" comparison-output
+            sudo find -P comparison-output -type d -exec chmod u+rwx {} +
+            sudo find -P comparison-output -type f -exec chmod u+rw {} +
+          fi
+      - name: Final credential scrub before upload
+        id: scrub
+        if: always()
+        env:
+          ACTIVE_API_KEY: ${{ (inputs.provider == 'deepseek' && secrets.DEEPSEEK_API_KEY) || (inputs.provider == 'kimi' && secrets.KIMI_CODE_API_KEY) || '' }}
+        run: |
+          python - <<'PY'
+          import importlib.util, os
+          from pathlib import Path
+          spec = importlib.util.spec_from_file_location('comparison', 'tools/harness-comparison/run.py')
+          mod = importlib.util.module_from_spec(spec)
+          spec.loader.exec_module(mod)
+          mod.scrub_tree(Path('comparison-output'), os.environ.get('ACTIVE_API_KEY', ''))
+          PY
+      - name: Upload scrubbed comparison evidence
+        if: ${{ always() && !cancelled() && steps.scrub.outcome == 'success' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: harness-comparison-${{ inputs.provider }}-${{ matrix.harness }}
+          path: comparison-output/${{ matrix.harness }}/
+          if-no-files-found: warn
+          include-hidden-files: true
+
+  report:
+    if: always()
+    needs: compare
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: harness-comparison-${{ inputs.provider }}-*
+          path: collected-comparison
+      - name: Collect the existing Codex run without running it again
+        if: ${{ always() && inputs.existing_codex_run_id != '' }}
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          name: harness-comparison-${{ inputs.provider }}-codex
+          path: collected-comparison/reused-codex
+          run-id: ${{ inputs.existing_codex_run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Keep every requested harness in the provider's result table
+        if: always()
+        env:
+          PROVIDER: ${{ inputs.provider }}
+          EXISTING_CODEX_RUN_ID: ${{ inputs.existing_codex_run_id }}
+        run: |
+          mkdir -p collected-comparison
+          python3 tools/harness-comparison/run.py report --provider "$PROVIDER" --external-codex-run "$EXISTING_CODEX_RUN_ID" --input collected-comparison --output comparison-report > "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: harness-comparison-report-${{ inputs.provider }}
+          path: comparison-report/

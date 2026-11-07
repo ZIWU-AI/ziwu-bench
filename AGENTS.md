@@ -47,6 +47,7 @@ Agent benchmark built with [Harbor](https://github.com/harbor-framework/harbor).
 - **TASK_REVIEW_AUTOMATION.md** — full CI pipeline reference: automatic checks, `/validate`, `/run`, `/cheat`, `/review`, `/overview` commands, required secrets
 - **rubrics/** — criteria definitions used by automated reviewers (implementation, proposal, trial analysis)
 - **tools/*/README.md** — usage docs for each tool
+- **tools/harness-comparison/README.md** — opt-in fixed-model comparison protocol and CI invocation; keep interface failures separate from scored trials
 
 ## For Agents Reviewing Task PRs
 

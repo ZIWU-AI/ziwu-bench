@@ -16,6 +16,28 @@ on:
         default: ""
   workflow_dispatch:
     inputs:
+      harness_comparison:
+        description: "Run the pinned harness comparison for the selected provider"
+        required: false
+        type: boolean
+        default: false
+      harness_provider:
+        description: "Comparison/API trial profile (only used with harness_comparison=true)"
+        required: false
+        type: choice
+        options: [kimi, deepseek]
+        default: kimi
+      harness_subset:
+        description: "Run all harnesses, Codex only, or the other three"
+        required: false
+        type: choice
+        options: [all, codex, remaining]
+        default: all
+      existing_codex_run_id:
+        description: "Optional existing Codex run to include in the report; use with remaining"
+        required: false
+        type: string
+        default: ""
       pr_number:
         description: "PR number to run trials against"
         required: true
@@ -27,7 +49,20 @@ on:
         default: ""
 
 jobs:
+  harness-comparison:
+    if: github.event_name == 'workflow_dispatch' && inputs.harness_comparison == true
+    permissions:
+      contents: read
+      actions: read
+    uses: ./.github/workflows/harness-comparison.yml
+    with:
+      provider: ${{ inputs.harness_provider || 'kimi' }}
+      harnesses: ${{ inputs.harness_subset == 'remaining' && '["claude-code","kimi-code","deepseek-harness"]' || inputs.harness_subset == 'codex' && '["codex"]' || '["claude-code","codex","kimi-code","deepseek-harness"]' }}
+      existing_codex_run_id: ${{ inputs.existing_codex_run_id || '' }}
+    secrets: inherit
+
   check-trigger:
+    if: inputs.harness_comparison != true
     runs-on: ubuntu-latest
     outputs:
       should_run: ${{ steps.check.outputs.should_run }}
@@ -255,6 +290,12 @@ jobs:
           # Normalize: every agent gets a kwargs and env object (defaulting to {}).
           # Downstream steps can then assume the keys exist.
           AGENTS=$(echo "$AGENTS" | jq -c 'map(. + {kwargs: (.kwargs // {}), env: (.env // {})})')
+
+          # Keep requested reproducibility runs in Actions only. Apply after
+          # defaults because yq's // fallback also treats false as missing.
+          if [[ "$COMMENT_BODY" =~ (^|[[:space:]])hub_upload=(true|false)([[:space:]]|$) ]]; then
+            HUB_UPLOAD="${BASH_REMATCH[2]}"
+          fi
 
           # Override analyze: analyze=true or analyze=false
           ANALYZE_EXPLICIT=false
@@ -658,8 +699,8 @@ jobs:
           agent: ${{ matrix.agent_config.agent }}
           model: ${{ matrix.agent_config.model }}
           config_file: .github/llm-config.yml
-          ppapi_api_key: ${{ secrets.PPAPI_API_KEY }}
-          ppapi_base_url: ${{ secrets.PPAPI_BASE_URL }}
+          ppapi_api_key: ${{ secrets[matrix.agent_config.api_key_secret || 'PPAPI_API_KEY'] }}
+          ppapi_base_url: ${{ matrix.agent_config.base_url || secrets.PPAPI_BASE_URL }}
           mercor_api_key: ${{ secrets.MERCOR_API_KEY }}
           mercor_base_url: ${{ secrets.MERCOR_BASE_URL }}
           portkey_api_key: ${{ secrets[matrix.agent_config.portkey_key || 'PORTKEY_API_KEY'] }}
@@ -667,6 +708,38 @@ jobs:
           portkey_provider: ${{ secrets.PORTKEY_PROVIDER }}
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           openai_api_key: ${{ secrets.OPENAI_API_KEY }}
+
+      - name: Verify Kimi Code model access
+        if: matrix.agent_config.api_key_secret == 'KIMI_CODE_API_KEY'
+        timeout-minutes: 5
+        env:
+          PREFLIGHT_MODEL: ${{ matrix.agent_config.model }}
+          PREFLIGHT_CODEX_VERSION: ${{ matrix.agent_config.kwargs.version }}
+          GATEWAY_FLAGS_B64: ${{ steps.gateway.outputs.extra_flags_b64 }}
+        run: |
+          set -euo pipefail
+          export CODEX_HOME="$RUNNER_TEMP/kimi-preflight-home"
+          mkdir -p "$CODEX_HOME" "$RUNNER_TEMP/kimi-preflight-work"
+          python3 - <<'PY'
+          import base64, json, os, shutil
+          flags = json.loads(base64.b64decode(os.environ["GATEWAY_FLAGS_B64"]))
+          path = next(value.removeprefix("config=") for value in flags if value.startswith("config="))
+          shutil.copyfile(path, os.path.join(os.environ["CODEX_HOME"], "config.toml"))
+          PY
+          cd "$RUNNER_TEMP/kimi-preflight-work"
+          npx --yes "@openai/codex@$PREFLIGHT_CODEX_VERSION" exec \
+            --skip-git-repo-check --json --model "$PREFLIGHT_MODEL" \
+            -c model_reasoning_effort=high \
+            "Reply with OK only. Do not use tools or read or write files." \
+            > "$RUNNER_TEMP/kimi-preflight.jsonl"
+          python3 - <<'PY'
+          import json, os, pathlib
+          events = [json.loads(line) for line in pathlib.Path(os.environ["RUNNER_TEMP"], "kimi-preflight.jsonl").read_text().splitlines() if line.startswith("{")]
+          completed = [e for e in events if e.get("type") == "turn.completed"]
+          if not completed:
+              raise SystemExit("Kimi Code model preflight did not complete")
+          print(json.dumps({"model": os.environ["PREFLIGHT_MODEL"], "preflight": "passed", "usage": completed[-1].get("usage")}, ensure_ascii=False))
+          PY
 
       - name: Run agent trial
         id: trial

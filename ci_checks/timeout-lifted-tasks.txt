@@ -88,3 +88,5 @@ inverse-lithography
 inverse-waveguide-shape
 leaky-bloch-meep
 spin-glass-groundstate
+# Imported unchanged from upstream's merged PR #2224 (published 8h budget).
+friction-pinch-lift

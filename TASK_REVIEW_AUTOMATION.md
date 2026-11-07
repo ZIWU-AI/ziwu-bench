@@ -6,6 +6,25 @@ PRs that add or modify tasks go through controlled checks and manual review from
 
 See [REVIEWING.md](REVIEWING.md) for the human reviewer guide and the [Task Dashboard](https://stevendillmann.github.io/tb-science-task-dashboard/) for a live view of every open PR's review stage, DRI, and ball-in-court.
 
+## Same-model harness comparison
+
+The opt-in `harness_comparison=true` input on `run-trials.yml` calls
+`harness-comparison.yml` at the selected branch commit. It runs Claude Code,
+Codex, Kimi Code, and DeepSeek Harness against the unchanged friction-pinch-lift
+task with Kimi k3.1-pro, one attempt each and a 90-minute agent budget. It uses
+the repository's `KIMI_CODE_API_KEY` secret. Normal `/run` behavior is unchanged.
+Each harness must first pass a fresh tool-use preflight; interface failures and
+timeouts are reported separately from benchmark scores. See
+[protocol, versions, invocation, and evidence](tools/harness-comparison/README.md).
+
+Setting `harness_provider=deepseek` selects a separate four-harness comparison
+on the official `deepseek-flash` model, using `DEEPSEEK_API_KEY`.
+Its provider-specific report is kept separate from the four-harness Kimi matrix;
+the default remains `harness_provider=kimi`.
+`harness_subset=remaining` runs Claude Code, Kimi Code, and DeepSeek Harness;
+`existing_codex_run_id` lets the report reuse a matching earlier Codex artifact
+without launching it again. Missing external evidence is reported as unknown.
+
 ## Setup
 
 When adopting this template in a new repo, create the labels the review automations depend on. The [task overview](#task-overview) workflow applies `new task`, [checks-passed](#static-checks) applies `waiting on reviewer`, and [review label automation](#review-label-automation) moves PRs through `waiting on author`, `domain review ✅`, `technical review ✅`, and `final review ✅`. If the labels don't exist, those workflow steps silently no-op.
@@ -731,11 +750,17 @@ e.g. `/review agent=terminus-2 model=openai/gpt-5.6-terra`. The comment footer s
 - **`trials=N`** — Number of trials per agent (max 10)
 - **`agents=list`** — Comma-separated `agent:model` pairs. The `:model` half is optional — `agents=codex` runs that agent alone on the model (and gateway) `llm-config.yml` assigns it, which is the cheap way to re-test one arm
 - **`analyze=true|false`** — Run `harbor analyze` on completed trials (default: `true`)
+- **`hub_upload=true|false`** — Override Harbor Hub uploads for `/run`; `false` keeps this run's evidence in Actions only. Hinted runs still force uploads off.
 - **`analyze_model=model-name`** — Model used for analysis (default: `sonnet`)
 - **`env=backend`** — Environment backend for trials (see [Environment backend](#environment-backend))
 - **`hints`** / **`hints=1,3`** — Attach the task's own hints to the instruction (see [Hinted runs](#hinted-runs)). Bare `hints` attaches all of them; a list attaches exactly those
 
+For Docker `/run` trials using the `ppapi` transport, an agent entry in `.github/llm-config.yml` may set `api_key_secret` and `base_url` together to select an Actions secret and its matching endpoint. The Codex agent uses `KIMI_CODE_API_KEY` with Kimi Code's native Responses API at `https://api.kimi.com/coding/v1`. Use `agents=codex:k3.1-pro,codex:k3` to compare both models; thinking stays enabled at `high`. These are the official API model IDs. The secret value is never stored in the config. Omitted fields retain the existing `PPAPI_API_KEY` / `PPAPI_BASE_URL` behavior. These fields do not change `/cheat`, review, or non-Docker routing. See [Kimi model configuration](https://www.kimi.com/code/docs/kimi-code/models.html).
+
+Kimi runs first make one small request using the actual pinned Codex CLI to verify model access. No client identity is spoofed. A failed preflight stops the task trial. K3 contexts are capped at 262144 tokens with compaction at 220000, within the documented Plus-tier limit; larger membership windows are not assumed.
+
 **`/cheat` overrides:**
+
 - **`agents=list`** — Comma-separated `agent:model` pairs. The `:model` half is optional — `agents=codex` runs that agent alone on the model (and gateway) `llm-config.yml` assigns it, which is the cheap way to re-test one arm
 - **`analyze=true|false`** — Run `harbor analyze` on completed trials (default: `true`)
 - **`analyze_model=model-name`** — Model used for analysis (default: `sonnet`)

@@ -74,11 +74,12 @@ write_codex_config() {
   local name="$1" base="$2" path="${TMPDIR_}/codex-${1}-config.toml"
   cat > "$path" <<EOF
 model_provider = "${name}"
-
+$(if [[ "${MODEL:-}" == k3* ]]; then printf 'model_context_window = 262144\nmodel_auto_compact_token_limit = 220000\n'; fi)
 [model_providers.${name}]
 name = "${name}"
 base_url = "${base}/v1"
 env_key = "OPENAI_API_KEY"
+wire_api = "responses"
 supports_websockets = false
 EOF
   add_flag "--ak" "config=${path}"

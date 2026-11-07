@@ -10,6 +10,12 @@ Turn a research idea, a real-world problem, or a plain-language proposal into a 
 
 **Idea → Task → Validation → Pull request → Shared benchmark**
 
+Evaluation runs use **Harbor** to provision containers, launch an agent harness,
+and execute the task verifier. The harness is selected separately from its model
+provider. See the [same-model harness comparison](tools/harness-comparison/README.md)
+for pinned Claude Code, Codex, Kimi Code, and DeepSeek Harness configurations,
+with separate fixed-model profiles for Kimi k3.1-pro and DeepSeek Flash.
+
 ## Measure intelligence. Together.
 
 Like the Prime Meridian, we aim to unite researchers and developers worldwide to precisely measure the boundaries of AGI.
