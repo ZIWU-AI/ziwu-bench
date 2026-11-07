@@ -1,0 +1,23 @@
+{
+  "config": {
+    "simulation_limit_s": 90.0,
+    "cpu_limit_s": 600,
+    "memory_limit_bytes": 3221225472,
+    "reset_limit_s": 120,
+    "step_limit_s": 30,
+    "episode_wall_limit_s": 3600,
+    "geometry_tolerance_m": 5e-05,
+    "penetration_tolerance_m": 5e-05,
+    "release_gap_m": 0.001,
+    "insertion_depth_m": 0.015,
+    "hold_s": 2.0,
+    "stable_window_s": 0.5,
+    "position_span_m": 0.001,
+    "angle_span_rad": 0.02,
+    "linear_speed_m_s": 0.005,
+    "angular_speed_rad_s": 0.05
+  },
+  "instance_count": 1,
+  "public_uncertainty": {},
+  "quality_status": "uncalibrated_native"
+}

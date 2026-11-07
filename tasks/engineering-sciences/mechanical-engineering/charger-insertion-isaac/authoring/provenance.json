@@ -1,0 +1,8 @@
+{
+  "source_pr": "https://github.com/RoboIndustrial-Benchmark/terminal-bench-science/pull/16",
+  "source_commit": "679ac99e2b46556bd5ab7bdf7c9ca8ba9eaf1ef9",
+  "source_assets_sha256": "c8128702561ecf5952f0ac9eee0e787aede56f0e49b5129a9abb9b715776c0f2",
+  "native_assets_sha256": "93560a7587f8ff03550c3777de62897e7844714726c33f6251e9fa2bfdb5c98d",
+  "conversion": "authoring/convert_assets.py; Python standard-library XML parsing, no runtime engine",
+  "native_validation": "pending"
+}
