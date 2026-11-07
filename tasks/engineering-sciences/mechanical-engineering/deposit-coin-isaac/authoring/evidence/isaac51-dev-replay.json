@@ -1,0 +1,509 @@
+{
+ "purpose": "development replay of authoring/plans with authoring/dev_replay.py on the author host (Isaac 5.1, RTX 4090). Not the acceptance path; the acceptance runs are modal-6.0.1-*.json.",
+ "implementation_sha256": {
+  "deposit_coin.py": "b69999f837a9e7d3ad9ad0153a615fbe3017705acb7a914a9760d1378ca9459a",
+  "verdict.py": "b4bb10d88fda6c304e75a71ca2efa5e5a159b6096a5953ec04db393ee0ad173c",
+  "runtime.py": "2bf47ec4ab1ad16b5c6c8ff1b0161786829dc95313f7dcc2f8518e865f4a1f5f",
+  "scene_geometry.json": "52367c5a980dcbe852d283d04c7a77d98c4c762ca84c1c2f7c286dd24142cc1c"
+ },
+ "physics": {
+  "isaac_version": "5.1.0.0",
+  "configured_gpu_dynamics": false,
+  "broadphase": "MBP",
+  "solver": "TGS",
+  "host_gpu_driver": [
+   "NVIDIA GeForce RTX 4090, 570.124.04, 24564 MiB"
+  ],
+  "cylinder_collider": "custom geometry (exact)",
+  "dt": 0.002,
+  "solver_iterations": [
+   255,
+   64
+  ]
+ },
+ "rows": [
+  {
+   "plan": "reference",
+   "passed": true,
+   "rules": {
+    "budget": true,
+    "tamper": true,
+    "coin_in_bank": true,
+    "released": true
+   },
+   "coin_pos": [
+    0.1569581925868988,
+    -0.11213472485542297,
+    0.006999993696808815
+   ],
+   "local_centre": [
+    -4.139088303255385e-05,
+    -0.013988076286180146,
+    0.006999993696808815
+   ],
+   "settle": [
+    "quiescent",
+    30
+   ],
+   "events": [
+    {
+     "step": 120,
+     "event": "grasped"
+    },
+    {
+     "step": 360,
+     "event": "released"
+    }
+   ],
+   "steps": 514,
+   "wall_s": 16.82
+  },
+  {
+   "plan": "alternative",
+   "passed": true,
+   "rules": {
+    "budget": true,
+    "tamper": true,
+    "coin_in_bank": true,
+    "released": true
+   },
+   "coin_pos": [
+    0.14350080490112305,
+    -0.08759467303752899,
+    0.007000000216066837
+   ],
+   "local_centre": [
+    0.0005741954214567527,
+    0.013992925841190417,
+    0.007000000216066837
+   ],
+   "settle": [
+    "quiescent",
+    30
+   ],
+   "events": [
+    {
+     "step": 120,
+     "event": "grasped"
+    },
+    {
+     "step": 380,
+     "event": "released"
+    }
+   ],
+   "steps": 588,
+   "wall_s": 5.15
+  },
+  {
+   "plan": "no_wrist",
+   "passed": false,
+   "rules": {
+    "budget": true,
+    "tamper": true,
+    "coin_in_bank": false,
+    "released": true
+   },
+   "coin_pos": [
+    0.18890026211738586,
+    -0.06444042921066284,
+    0.011092117987573147
+   ],
+   "local_centre": [
+    0.05146840060219818,
+    0.011345360592544117,
+    0.011092117987573147
+   ],
+   "settle": [
+    "capped",
+    4000
+   ],
+   "events": [
+    {
+     "step": 120,
+     "event": "grasped"
+    },
+    {
+     "step": 363,
+     "event": "not_converged",
+     "skill": "move_to"
+    },
+    {
+     "step": 382,
+     "event": "released"
+    },
+    {
+     "step": 488,
+     "event": "not_converged",
+     "skill": "gripper"
+    }
+   ],
+   "steps": 4536,
+   "wall_s": 28.8
+  },
+  {
+   "plan": "cross_slot",
+   "passed": false,
+   "rules": {
+    "budget": true,
+    "tamper": true,
+    "coin_in_bank": false,
+    "released": true
+   },
+   "coin_pos": [
+    0.13763795793056488,
+    -0.10734563320875168,
+    0.07600002735853195
+   ],
+   "local_centre": [
+    -0.0143786590791586,
+    -0.00018048393094399328,
+    0.07600002735853195
+   ],
+   "settle": [
+    "quiescent",
+    67
+   ],
+   "events": [
+    {
+     "step": 120,
+     "event": "grasped"
+    },
+    {
+     "step": 392,
+     "event": "not_converged",
+     "skill": "move_to"
+    },
+    {
+     "step": 411,
+     "event": "released"
+    }
+   ],
+   "steps": 595,
+   "wall_s": 5.12
+  },
+  {
+   "plan": "no_release",
+   "passed": false,
+   "rules": {
+    "budget": true,
+    "tamper": true,
+    "coin_in_bank": true,
+    "released": false
+   },
+   "coin_pos": [
+    0.1501007080078125,
+    -0.10030970722436905,
+    0.05495615303516388
+   ],
+   "local_centre": [
+    -6.763791905437021e-05,
+    -0.00031856832794541147,
+    0.05495615303516388
+   ],
+   "settle": [
+    "capped",
+    4000
+   ],
+   "events": [
+    {
+     "step": 120,
+     "event": "grasped"
+    }
+   ],
+   "steps": 4341,
+   "wall_s": 28.41
+  },
+  {
+   "plan": "lid_drop",
+   "passed": false,
+   "rules": {
+    "budget": true,
+    "tamper": true,
+    "coin_in_bank": false,
+    "released": true
+   },
+   "coin_pos": [
+    0.14399674534797668,
+    -0.08950629830360413,
+    0.08700000494718552
+   ],
+   "local_centre": [
+    4.787981415864222e-05,
+    0.012089439574826347,
+    0.08700000494718552
+   ],
+   "settle": [
+    "capped",
+    4000
+   ],
+   "events": [
+    {
+     "step": 120,
+     "event": "grasped"
+    },
+    {
+     "step": 350,
+     "event": "released"
+    }
+   ],
+   "steps": 4464,
+   "wall_s": 27.26
+  },
+  {
+   "plan": "table_drop",
+   "passed": false,
+   "rules": {
+    "budget": true,
+    "tamper": true,
+    "coin_in_bank": false,
+    "released": true
+   },
+   "coin_pos": [
+    0.007406000047922134,
+    -0.2120489627122879,
+    0.0010000033071264625
+   ],
+   "local_centre": [
+    -0.1795145077418804,
+    -0.025740248200497723,
+    0.0010000033071264625
+   ],
+   "settle": [
+    "quiescent",
+    31
+   ],
+   "events": [
+    {
+     "step": 120,
+     "event": "grasped"
+    },
+    {
+     "step": 353,
+     "event": "released"
+    }
+   ],
+   "steps": 503,
+   "wall_s": 4.37
+  },
+  {
+   "plan": "skew_10deg",
+   "passed": true,
+   "rules": {
+    "budget": true,
+    "tamper": true,
+    "coin_in_bank": true,
+    "released": true
+   },
+   "coin_pos": [
+    0.15484902262687683,
+    -0.11312791705131531,
+    0.0069999960251152515
+   ],
+   "local_centre": [
+    -0.0023645817472567584,
+    -0.01379362097865237,
+    0.0069999960251152515
+   ],
+   "settle": [
+    "quiescent",
+    30
+   ],
+   "events": [
+    {
+     "step": 120,
+     "event": "grasped"
+    },
+    {
+     "step": 358,
+     "event": "released"
+    },
+    {
+     "step": 506,
+     "event": "not_converged",
+     "skill": "move_to"
+    }
+   ],
+   "steps": 536,
+   "wall_s": 4.6
+  },
+  {
+   "plan": "skew_20deg",
+   "passed": true,
+   "rules": {
+    "budget": true,
+    "tamper": true,
+    "coin_in_bank": true,
+    "released": true
+   },
+   "coin_pos": [
+    0.15869951248168945,
+    -0.08333364874124527,
+    0.006999999284744263
+   ],
+   "local_centre": [
+    0.015867174439060244,
+    0.010083727337631628,
+    0.006999999284744263
+   ],
+   "settle": [
+    "quiescent",
+    30
+   ],
+   "events": [
+    {
+     "step": 120,
+     "event": "grasped"
+    },
+    {
+     "step": 376,
+     "event": "not_converged",
+     "skill": "move_to"
+    },
+    {
+     "step": 395,
+     "event": "released"
+    },
+    {
+     "step": 456,
+     "event": "not_converged",
+     "skill": "gripper"
+    },
+    {
+     "step": 536,
+     "event": "not_converged",
+     "skill": "gripper"
+    }
+   ],
+   "steps": 615,
+   "wall_s": 5.09
+  },
+  {
+   "plan": "schema_invalid",
+   "passed": false,
+   "rejected": "skills[0]: unknown skill 'teleport'; allowed ['move_to', 'gripper', 'wrist']"
+  },
+  {
+   "plan": "empty_object",
+   "passed": false,
+   "rejected": "missing required field version; skills must be an array"
+  },
+  {
+   "plan": "skew_25deg",
+   "passed": true,
+   "rules": {
+    "budget": true,
+    "tamper": true,
+    "coin_in_bank": true,
+    "released": true
+   },
+   "coin_pos": [
+    0.1508791595697403,
+    -0.08664023131132126,
+    0.006999997887760401
+   ],
+   "local_centre": [
+    0.00744125886571467,
+    0.011130319288209563,
+    0.006999997887760401
+   ],
+   "settle": [
+    "quiescent",
+    30
+   ],
+   "events": [
+    {
+     "step": 120,
+     "event": "grasped"
+    },
+    {
+     "step": 373,
+     "event": "not_converged",
+     "skill": "move_to"
+    },
+    {
+     "step": 392,
+     "event": "released"
+    },
+    {
+     "step": 497,
+     "event": "not_converged",
+     "skill": "gripper"
+    }
+   ],
+   "steps": 576,
+   "wall_s": 17.47
+  },
+  {
+   "plan": "no_wrist_hover",
+   "passed": false,
+   "rules": {
+    "budget": true,
+    "tamper": true,
+    "coin_in_bank": false,
+    "released": true
+   },
+   "coin_pos": [
+    0.15097637474536896,
+    -0.089089035987854,
+    0.07599997520446777
+   ],
+   "local_centre": [
+    0.0063010473391760845,
+    0.00896098464161174,
+    0.07599997520446777
+   ],
+   "settle": [
+    "capped",
+    4000
+   ],
+   "events": [
+    {
+     "step": 120,
+     "event": "grasped"
+    },
+    {
+     "step": 333,
+     "event": "released"
+    }
+   ],
+   "steps": 4449,
+   "wall_s": 41.5
+  },
+  {
+   "plan": "no_wrist_high",
+   "passed": false,
+   "rules": {
+    "budget": true,
+    "tamper": true,
+    "coin_in_bank": false,
+    "released": true
+   },
+   "coin_pos": [
+    0.1421857625246048,
+    -0.0858638808131218,
+    0.07599998265504837
+   ],
+   "local_centre": [
+    0.0003007314285424856,
+    0.01614935706445875,
+    0.07599998265504837
+   ],
+   "settle": [
+    "quiescent",
+    30
+   ],
+   "events": [
+    {
+     "step": 120,
+     "event": "grasped"
+    },
+    {
+     "step": 319,
+     "event": "released"
+    }
+   ],
+   "steps": 460,
+   "wall_s": 4.17
+  }
+ ]
+}

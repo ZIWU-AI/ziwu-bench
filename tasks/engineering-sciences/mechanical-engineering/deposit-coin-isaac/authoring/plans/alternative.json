@@ -1,0 +1,105 @@
+{
+  "version": 1,
+  "skills": [
+    {
+      "name": "gripper",
+      "params": {
+        "open": 1.0
+      }
+    },
+    {
+      "name": "move_to",
+      "params": {
+        "xyz": [
+          -0.15,
+          -0.1,
+          0.122
+        ]
+      }
+    },
+    {
+      "name": "move_to",
+      "params": {
+        "xyz": [
+          -0.15,
+          -0.1,
+          0.062
+        ]
+      }
+    },
+    {
+      "name": "gripper",
+      "params": {
+        "open": 0.0
+      }
+    },
+    {
+      "name": "move_to",
+      "params": {
+        "xyz": [
+          -0.15,
+          -0.1,
+          0.155
+        ]
+      }
+    },
+    {
+      "name": "wrist",
+      "params": {
+        "yaw": -2.6179938779914944
+      }
+    },
+    {
+      "name": "move_to",
+      "params": {
+        "xyz": [
+          0.15,
+          -0.1,
+          0.155
+        ]
+      }
+    },
+    {
+      "name": "move_to",
+      "params": {
+        "xyz": [
+          0.15,
+          -0.1,
+          0.05449999999999999
+        ]
+      }
+    },
+    {
+      "name": "gripper",
+      "params": {
+        "open": 1.0
+      }
+    },
+    {
+      "name": "gripper",
+      "params": {
+        "open": 0.2
+      }
+    },
+    {
+      "name": "move_to",
+      "params": {
+        "xyz": [
+          0.15,
+          -0.1,
+          0.145
+        ]
+      }
+    },
+    {
+      "name": "move_to",
+      "params": {
+        "xyz": [
+          0.04999999999999999,
+          0.0,
+          0.145
+        ]
+      }
+    }
+  ]
+}

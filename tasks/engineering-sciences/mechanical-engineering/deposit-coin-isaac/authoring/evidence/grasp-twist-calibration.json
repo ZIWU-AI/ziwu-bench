@@ -1,0 +1,11 @@
+{
+ "purpose": "Choose solver iteration counts so the PhysX grasp joint stays rigid like the MuJoCo weld (torquescale=1). Measured with authoring/grasp_twist_probe.py on the author host (Isaac 5.1.0.0, RTX 4090, CPU PhysX TGS, dt 0.002) before SOLVER_*_ITERATIONS were added to deposit_coin.py; the probe overrides the counts on every rigid body.",
+ "metric": "largest rotation of the held coin relative to the gripper while held, degrees",
+ "rows": [
+  {"iterations": [32, 8], "no_wrist": {"max_twist_deg": 15.312, "passed": false, "note": "coin self-aligned to ~14 deg skew and wedged 10 mm into the lid; on Isaac 6.0.1 / Modal the jaw then released it and it fell in (reward 1, run modal_r1)"}, "reference": {"max_twist_deg": 0.078, "passed": true}, "cross_slot": {"max_twist_deg": 3.451, "passed": false}},
+  {"iterations": [128, 32], "no_wrist": {"max_twist_deg": 3.134, "passed": false}, "reference": {"max_twist_deg": 0.026, "passed": true}, "cross_slot": {"max_twist_deg": 0.488, "passed": false}},
+  {"iterations": [255, 64], "no_wrist": {"max_twist_deg": 0.489, "passed": false}, "reference": {"max_twist_deg": 0.021, "passed": true}, "cross_slot": {"max_twist_deg": 0.293, "passed": false}}
+ ],
+ "chosen": [255, 64],
+ "reason": "255 is the PhysX maximum position iteration count; it keeps the twist under 0.5 deg when the 200 N gantry drives a held 5 g coin into the lid."
+}

@@ -1,0 +1,456 @@
+{
+ "engine": "MuJoCo 3.13.0",
+ "rows": [
+  {
+   "plan": "alternative",
+   "passed": true,
+   "rules": {
+    "budget": true,
+    "tamper": true,
+    "coin_in_bank": true,
+    "released": true
+   },
+   "coin_pos": [
+    0.15049291339151688,
+    -0.10073555909716045,
+    0.017991255052610032
+   ],
+   "settle": [
+    "quiescent",
+    30
+   ],
+   "events": [
+    {
+     "step": 118,
+     "event": "grasped",
+     "note": "\u5939\u722a\u5408\u62e2\u4e14\u5df2\u5bf9\u4f4d\uff0c\u542f\u7528 weld \u7ea6\u675f"
+    },
+    {
+     "step": 284,
+     "event": "not_converged",
+     "skill": "wrist",
+     "note": "\u8fbe\u5230\u6b65\u6570\u4e0a\u9650\u4ecd\u672a\u5230\u4f4d"
+    },
+    {
+     "step": 421,
+     "event": "released",
+     "note": "open \u5927\u4e8e\u9608\u503c\uff0c\u5173\u95ed weld \u7ea6\u675f = \u677e\u624b"
+    }
+   ]
+  },
+  {
+   "plan": "cross_slot",
+   "passed": false,
+   "rules": {
+    "budget": true,
+    "tamper": true,
+    "coin_in_bank": false,
+    "released": false
+   },
+   "coin_pos": [
+    0.14926734738849567,
+    -0.10047710155577452,
+    0.20479309684535058
+   ],
+   "settle": [
+    "quiescent",
+    59
+   ],
+   "events": [
+    {
+     "step": 118,
+     "event": "grasped",
+     "note": "\u5939\u722a\u5408\u62e2\u4e14\u5df2\u5bf9\u4f4d\uff0c\u542f\u7528 weld \u7ea6\u675f"
+    },
+    {
+     "step": 279,
+     "event": "not_converged",
+     "skill": "wrist",
+     "note": "\u8fbe\u5230\u6b65\u6570\u4e0a\u9650\u4ecd\u672a\u5230\u4f4d"
+    },
+    {
+     "step": 437,
+     "event": "not_converged",
+     "skill": "move_to",
+     "note": "\u8fbe\u5230\u6b65\u6570\u4e0a\u9650\u4ecd\u672a\u5230\u4f4d"
+    },
+    {
+     "step": 517,
+     "event": "not_converged",
+     "skill": "gripper",
+     "note": "\u8fbe\u5230\u6b65\u6570\u4e0a\u9650\u4ecd\u672a\u5230\u4f4d"
+    },
+    {
+     "step": 597,
+     "event": "not_converged",
+     "skill": "gripper",
+     "note": "\u8fbe\u5230\u6b65\u6570\u4e0a\u9650\u4ecd\u672a\u5230\u4f4d"
+    }
+   ]
+  },
+  {
+   "plan": "empty_object",
+   "passed": false,
+   "rejected": [
+    "\u7f3a\u5c11\u5fc5\u9700\u5b57\u6bb5 version",
+    "\u7f3a\u5c11\u5fc5\u9700\u5b57\u6bb5 skills"
+   ]
+  },
+  {
+   "plan": "lid_drop",
+   "passed": false,
+   "rules": {
+    "budget": true,
+    "tamper": true,
+    "coin_in_bank": false,
+    "released": true
+   },
+   "coin_pos": [
+    0.14355118929694372,
+    -0.08887303455393723,
+    0.08699125659395136
+   ],
+   "settle": [
+    "quiescent",
+    30
+   ],
+   "events": [
+    {
+     "step": 118,
+     "event": "grasped",
+     "note": "\u5939\u722a\u5408\u62e2\u4e14\u5df2\u5bf9\u4f4d\uff0c\u542f\u7528 weld \u7ea6\u675f"
+    },
+    {
+     "step": 310,
+     "event": "not_converged",
+     "skill": "move_to",
+     "note": "\u8fbe\u5230\u6b65\u6570\u4e0a\u9650\u4ecd\u672a\u5230\u4f4d"
+    },
+    {
+     "step": 355,
+     "event": "released",
+     "note": "open \u5927\u4e8e\u9608\u503c\uff0c\u5173\u95ed weld \u7ea6\u675f = \u677e\u624b"
+    }
+   ]
+  },
+  {
+   "plan": "no_release",
+   "passed": false,
+   "rules": {
+    "budget": true,
+    "tamper": true,
+    "coin_in_bank": true,
+    "released": false
+   },
+   "coin_pos": [
+    0.14952290493396356,
+    -0.09926777063649497,
+    0.05579404550722619
+   ],
+   "settle": [
+    "quiescent",
+    64
+   ],
+   "events": [
+    {
+     "step": 118,
+     "event": "grasped",
+     "note": "\u5939\u722a\u5408\u62e2\u4e14\u5df2\u5bf9\u4f4d\uff0c\u542f\u7528 weld \u7ea6\u675f"
+    }
+   ]
+  },
+  {
+   "plan": "no_wrist",
+   "passed": false,
+   "rules": {
+    "budget": true,
+    "tamper": true,
+    "coin_in_bank": false,
+    "released": false
+   },
+   "coin_pos": [
+    0.14995298701419274,
+    -0.09906409460709743,
+    0.20479450849037942
+   ],
+   "settle": [
+    "quiescent",
+    59
+   ],
+   "events": [
+    {
+     "step": 118,
+     "event": "grasped",
+     "note": "\u5939\u722a\u5408\u62e2\u4e14\u5df2\u5bf9\u4f4d\uff0c\u542f\u7528 weld \u7ea6\u675f"
+    },
+    {
+     "step": 357,
+     "event": "not_converged",
+     "skill": "move_to",
+     "note": "\u8fbe\u5230\u6b65\u6570\u4e0a\u9650\u4ecd\u672a\u5230\u4f4d"
+    },
+    {
+     "step": 437,
+     "event": "not_converged",
+     "skill": "gripper",
+     "note": "\u8fbe\u5230\u6b65\u6570\u4e0a\u9650\u4ecd\u672a\u5230\u4f4d"
+    },
+    {
+     "step": 517,
+     "event": "not_converged",
+     "skill": "gripper",
+     "note": "\u8fbe\u5230\u6b65\u6570\u4e0a\u9650\u4ecd\u672a\u5230\u4f4d"
+    }
+   ]
+  },
+  {
+   "plan": "no_wrist_high",
+   "passed": true,
+   "rules": {
+    "budget": true,
+    "tamper": true,
+    "coin_in_bank": true,
+    "released": true
+   },
+   "coin_pos": [
+    0.14415662191821949,
+    -0.09594245856364864,
+    0.0069955506053824956
+   ],
+   "settle": [
+    "capped",
+    4000
+   ],
+   "events": [
+    {
+     "step": 118,
+     "event": "grasped",
+     "note": "\u5939\u722a\u5408\u62e2\u4e14\u5df2\u5bf9\u4f4d\uff0c\u542f\u7528 weld \u7ea6\u675f"
+    },
+    {
+     "step": 311,
+     "event": "released",
+     "note": "open \u5927\u4e8e\u9608\u503c\uff0c\u5173\u95ed weld \u7ea6\u675f = \u677e\u624b"
+    }
+   ]
+  },
+  {
+   "plan": "no_wrist_hover",
+   "passed": true,
+   "rules": {
+    "budget": true,
+    "tamper": true,
+    "coin_in_bank": true,
+    "released": true
+   },
+   "coin_pos": [
+    0.15640743352935532,
+    -0.09424441415976931,
+    0.006995552429915044
+   ],
+   "settle": [
+    "capped",
+    4000
+   ],
+   "events": [
+    {
+     "step": 118,
+     "event": "grasped",
+     "note": "\u5939\u722a\u5408\u62e2\u4e14\u5df2\u5bf9\u4f4d\uff0c\u542f\u7528 weld \u7ea6\u675f"
+    },
+    {
+     "step": 325,
+     "event": "released",
+     "note": "open \u5927\u4e8e\u9608\u503c\uff0c\u5173\u95ed weld \u7ea6\u675f = \u677e\u624b"
+    }
+   ]
+  },
+  {
+   "plan": "reference",
+   "passed": true,
+   "rules": {
+    "budget": true,
+    "tamper": true,
+    "coin_in_bank": true,
+    "released": true
+   },
+   "coin_pos": [
+    0.14955845655845468,
+    -0.09926006203349909,
+    0.01799125504529647
+   ],
+   "settle": [
+    "quiescent",
+    75
+   ],
+   "events": [
+    {
+     "step": 118,
+     "event": "grasped",
+     "note": "\u5939\u722a\u5408\u62e2\u4e14\u5df2\u5bf9\u4f4d\uff0c\u542f\u7528 weld \u7ea6\u675f"
+    },
+    {
+     "step": 363,
+     "event": "released",
+     "note": "open \u5927\u4e8e\u9608\u503c\uff0c\u5173\u95ed weld \u7ea6\u675f = \u677e\u624b"
+    }
+   ]
+  },
+  {
+   "plan": "schema_invalid",
+   "passed": false,
+   "rejected": [
+    "skills[0]: \u672a\u77e5\u6280\u80fd 'teleport'\uff08\u53ea\u5141\u8bb8 ['move_to', 'gripper', 'wrist']\uff09"
+   ]
+  },
+  {
+   "plan": "skew_10deg",
+   "passed": true,
+   "rules": {
+    "budget": true,
+    "tamper": true,
+    "coin_in_bank": true,
+    "released": true
+   },
+   "coin_pos": [
+    0.1495596165841263,
+    -0.09923758905417833,
+    0.017991255614113442
+   ],
+   "settle": [
+    "quiescent",
+    1228
+   ],
+   "events": [
+    {
+     "step": 118,
+     "event": "grasped",
+     "note": "\u5939\u722a\u5408\u62e2\u4e14\u5df2\u5bf9\u4f4d\uff0c\u542f\u7528 weld \u7ea6\u675f"
+    },
+    {
+     "step": 354,
+     "event": "released",
+     "note": "open \u5927\u4e8e\u9608\u503c\uff0c\u5173\u95ed weld \u7ea6\u675f = \u677e\u624b"
+    }
+   ]
+  },
+  {
+   "plan": "skew_20deg",
+   "passed": true,
+   "rules": {
+    "budget": true,
+    "tamper": true,
+    "coin_in_bank": true,
+    "released": true
+   },
+   "coin_pos": [
+    0.15033844323519127,
+    -0.0990205926186892,
+    0.017991256579469515
+   ],
+   "settle": [
+    "quiescent",
+    74
+   ],
+   "events": [
+    {
+     "step": 118,
+     "event": "grasped",
+     "note": "\u5939\u722a\u5408\u62e2\u4e14\u5df2\u5bf9\u4f4d\uff0c\u542f\u7528 weld \u7ea6\u675f"
+    },
+    {
+     "step": 370,
+     "event": "not_converged",
+     "skill": "move_to",
+     "note": "\u8fbe\u5230\u6b65\u6570\u4e0a\u9650\u4ecd\u672a\u5230\u4f4d"
+    },
+    {
+     "step": 388,
+     "event": "released",
+     "note": "open \u5927\u4e8e\u9608\u503c\uff0c\u5173\u95ed weld \u7ea6\u675f = \u677e\u624b"
+    },
+    {
+     "step": 532,
+     "event": "not_converged",
+     "skill": "move_to",
+     "note": "\u8fbe\u5230\u6b65\u6570\u4e0a\u9650\u4ecd\u672a\u5230\u4f4d"
+    }
+   ]
+  },
+  {
+   "plan": "skew_25deg",
+   "passed": false,
+   "rules": {
+    "budget": true,
+    "tamper": true,
+    "coin_in_bank": false,
+    "released": false
+   },
+   "coin_pos": [
+    0.14987166906096788,
+    -0.09907176483602802,
+    0.2047945170264936
+   ],
+   "settle": [
+    "quiescent",
+    59
+   ],
+   "events": [
+    {
+     "step": 118,
+     "event": "grasped",
+     "note": "\u5939\u722a\u5408\u62e2\u4e14\u5df2\u5bf9\u4f4d\uff0c\u542f\u7528 weld \u7ea6\u675f"
+    },
+    {
+     "step": 367,
+     "event": "not_converged",
+     "skill": "move_to",
+     "note": "\u8fbe\u5230\u6b65\u6570\u4e0a\u9650\u4ecd\u672a\u5230\u4f4d"
+    },
+    {
+     "step": 447,
+     "event": "not_converged",
+     "skill": "gripper",
+     "note": "\u8fbe\u5230\u6b65\u6570\u4e0a\u9650\u4ecd\u672a\u5230\u4f4d"
+    },
+    {
+     "step": 527,
+     "event": "not_converged",
+     "skill": "gripper",
+     "note": "\u8fbe\u5230\u6b65\u6570\u4e0a\u9650\u4ecd\u672a\u5230\u4f4d"
+    }
+   ]
+  },
+  {
+   "plan": "table_drop",
+   "passed": false,
+   "rules": {
+    "budget": true,
+    "tamper": true,
+    "coin_in_bank": false,
+    "released": true
+   },
+   "coin_pos": [
+    -0.0010202209697301675,
+    -0.19960215890214242,
+    0.011991189323789658
+   ],
+   "settle": [
+    "capped",
+    4000
+   ],
+   "events": [
+    {
+     "step": 118,
+     "event": "grasped",
+     "note": "\u5939\u722a\u5408\u62e2\u4e14\u5df2\u5bf9\u4f4d\uff0c\u542f\u7528 weld \u7ea6\u675f"
+    },
+    {
+     "step": 356,
+     "event": "released",
+     "note": "open \u5927\u4e8e\u9608\u503c\uff0c\u5173\u95ed weld \u7ea6\u675f = \u677e\u624b"
+    }
+   ]
+  }
+ ]
+}

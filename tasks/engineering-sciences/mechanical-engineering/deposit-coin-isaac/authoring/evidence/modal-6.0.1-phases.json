@@ -1,0 +1,546 @@
+{
+ "purpose": "Acceptance replay of both Harbor phases on the Modal Isaac image, reproduced with authoring/modal_phases.py (host Modal SDK 1.5.4). Phase A runs solution/solve.sh against the /app overlay; phase B is a fresh network-blocked sandbox holding only the /tests overlay, running tests/test.sh once per candidate.",
+ "image": "im-Nm8iLJCxhB14rzlvQjzhLD",
+ "gpu": "L40S",
+ "cpu": 8,
+ "memory_mb": [
+  32768,
+  65536
+ ],
+ "agent_phase": {
+  "sandbox_id": "sb-CUXOliMAEoWv7AYvrBx1GY",
+  "host": "NVIDIA L40S, 610.57.04\n6.0.1.0",
+  "solve_exit": 0,
+  "seconds": 52.37,
+  "submission_sha256": "196c6385c9c148c2e5e495e6b954d25139cf68d1315b05acb4a77e05c37c5cf8",
+  "app_overlay_sha256": {
+   "implementation/deposit_coin.py": "b69999f837a9e7d3ad9ad0153a615fbe3017705acb7a914a9760d1378ca9459a",
+   "implementation/runtime.py": "2bf47ec4ab1ad16b5c6c8ff1b0161786829dc95313f7dcc2f8518e865f4a1f5f",
+   "implementation/scene_geometry.json": "52367c5a980dcbe852d283d04c7a77d98c4c762ca84c1c2f7c286dd24142cc1c",
+   "implementation/verdict.py": "b4bb10d88fda6c304e75a71ca2efa5e5a159b6096a5953ec04db393ee0ad173c",
+   "protocol.py": "d6a822521c23f5ae48009ab3d6bd128eb874bc18af77d99fdb1888693c957044",
+   "registration.json": "af440cb19af94700e755455483190efd54e367a150647d7d3c9de8e13bf4ecd7",
+   "simulator.py": "2fddc625f00360a164469d458fbaea2a0828f130b559d78c05560c6bc20f924d",
+   "worker.py": "72d17cf1a8af1eef4ceb28850169a4e75562181876e182d246232f8433b6a3b8"
+  }
+ },
+ "verifier_phases": [
+  {
+   "sandbox_id": "sb-1jeHxLqcuNKgQpMeVXs0UP",
+   "block_network": true,
+   "network_probe": "NET_BLOCKED",
+   "tests_overlay_sha256": {
+    "harbor_verify.py": "9ad54f7d795f215b8d2e3be76a26bfa15b74b8d7f2d9f6b70e19bfe7b5ad64c8",
+    "implementation/deposit_coin.py": "b69999f837a9e7d3ad9ad0153a615fbe3017705acb7a914a9760d1378ca9459a",
+    "implementation/runtime.py": "2bf47ec4ab1ad16b5c6c8ff1b0161786829dc95313f7dcc2f8518e865f4a1f5f",
+    "implementation/scene_geometry.json": "52367c5a980dcbe852d283d04c7a77d98c4c762ca84c1c2f7c286dd24142cc1c",
+    "implementation/verdict.py": "b4bb10d88fda6c304e75a71ca2efa5e5a159b6096a5953ec04db393ee0ad173c",
+    "protocol.py": "d6a822521c23f5ae48009ab3d6bd128eb874bc18af77d99fdb1888693c957044",
+    "registration.json": "af440cb19af94700e755455483190efd54e367a150647d7d3c9de8e13bf4ecd7",
+    "test.sh": "775e844c27fdb447f3362d6e915e5c1b3f556bd95f1e854f224f294ccf6d32b5",
+    "worker.py": "72d17cf1a8af1eef4ceb28850169a4e75562181876e182d246232f8433b6a3b8"
+   },
+   "started_utc": "2026-11-07T09:12:48Z",
+   "finished_utc": "2026-11-07T09:18:57Z",
+   "runs": [
+    {
+     "candidate": "oracle",
+     "candidate_sha256": "196c6385c9c148c2e5e495e6b954d25139cf68d1315b05acb4a77e05c37c5cf8",
+     "reward": "1",
+     "status": "completed",
+     "test_exit": 0,
+     "seconds": 34.05,
+     "error": null,
+     "engine": {
+      "engine": "isaac-physx",
+      "episodes": {
+       "home": {
+        "last_sim_time": 1.0820000513922423,
+        "steps": 539
+       }
+      },
+      "physics_device": "cpu",
+      "version": "6.0.1.0"
+     },
+     "episode": {
+      "passed": true,
+      "terminated": "plan_complete",
+      "rules": {
+       "budget": true,
+       "coin_in_bank": true,
+       "released": true,
+       "tamper": true
+      },
+      "steps": 539,
+      "settle_reason": "quiescent",
+      "coin_bank_local_centre": [
+       -0.00028685838068834724,
+       0.013684659304293861,
+       0.006999997887760401
+      ]
+     }
+    },
+    {
+     "candidate": "alternative",
+     "candidate_sha256": "48ef096e71967d02a8af40e234c105e3c110a21d9f9e3017f63e3791dd97b5ad",
+     "reward": "1",
+     "status": "completed",
+     "test_exit": 0,
+     "seconds": 136.18,
+     "error": null,
+     "engine": {
+      "engine": "isaac-physx",
+      "episodes": {
+       "home": {
+        "last_sim_time": 9.12200043327175,
+        "steps": 4559
+       }
+      },
+      "physics_device": "cpu",
+      "version": "6.0.1.0"
+     },
+     "episode": {
+      "passed": true,
+      "terminated": "plan_complete",
+      "rules": {
+       "budget": true,
+       "coin_in_bank": true,
+       "released": true,
+       "tamper": true
+      },
+      "steps": 4559,
+      "settle_reason": "capped",
+      "coin_bank_local_centre": [
+       0.02698517416615295,
+       -2.2726040076229484e-05,
+       0.018000014126300812
+      ]
+     }
+    },
+    {
+     "candidate": "no_wrist",
+     "candidate_sha256": "1a0e1b775254d600158ed54996ce3ef338b3a5a7466e76af6566394da85f541e",
+     "reward": "0",
+     "status": "completed",
+     "test_exit": 0,
+     "seconds": 16.17,
+     "error": null,
+     "engine": {
+      "engine": "isaac-physx",
+      "episodes": {
+       "home": {
+        "last_sim_time": 5.070000240812078,
+        "steps": 2533
+       }
+      },
+      "physics_device": "cpu",
+      "version": "6.0.1.0"
+     },
+     "episode": {
+      "passed": false,
+      "terminated": "plan_complete",
+      "rules": {
+       "budget": true,
+       "coin_in_bank": false,
+       "released": true,
+       "tamper": true
+      },
+      "steps": 2533,
+      "settle_reason": "quiescent",
+      "coin_bank_local_centre": [
+       0.004214202640652306,
+       -0.009246213758549827,
+       0.07599998265504837
+      ]
+     }
+    },
+    {
+     "candidate": "cross_slot",
+     "candidate_sha256": "892aae6290a0ded4b1c3ae503e40db38abc940847d32335594edecc1fa6da0a9",
+     "reward": "0",
+     "status": "completed",
+     "test_exit": 0,
+     "seconds": 19.99,
+     "error": null,
+     "engine": {
+      "engine": "isaac-physx",
+      "episodes": {
+       "home": {
+        "last_sim_time": 9.062000430421904,
+        "steps": 4529
+       }
+      },
+      "physics_device": "cpu",
+      "version": "6.0.1.0"
+     },
+     "episode": {
+      "passed": false,
+      "terminated": "plan_complete",
+      "rules": {
+       "budget": true,
+       "coin_in_bank": false,
+       "released": true,
+       "tamper": true
+      },
+      "steps": 4529,
+      "settle_reason": "capped",
+      "coin_bank_local_centre": [
+       0.0010003359934186045,
+       -0.005552288642458688,
+       0.08700000494718552
+      ]
+     }
+    },
+    {
+     "candidate": "no_release",
+     "candidate_sha256": "01f90b8825f5e49a17b845faae2495b915e84dcfbd2155784efa6c5d38c8d544",
+     "reward": "0",
+     "status": "completed",
+     "test_exit": 0,
+     "seconds": 19.78,
+     "error": null,
+     "engine": {
+      "engine": "isaac-physx",
+      "episodes": {
+       "home": {
+        "last_sim_time": 8.688000412657857,
+        "steps": 4342
+       }
+      },
+      "physics_device": "cpu",
+      "version": "6.0.1.0"
+     },
+     "episode": {
+      "passed": false,
+      "terminated": "plan_complete",
+      "rules": {
+       "budget": true,
+       "coin_in_bank": true,
+       "released": false,
+       "tamper": true
+      },
+      "steps": 4342,
+      "settle_reason": "capped",
+      "coin_bank_local_centre": [
+       -8.391140854472064e-05,
+       -9.60116538713942e-06,
+       0.054839733988046646
+      ]
+     }
+    },
+    {
+     "candidate": "lid_drop",
+     "candidate_sha256": "463de62ede2fe62d3312f1ba393a23cde6be9f8e4c8d589f5d6f44db088a627a",
+     "reward": "0",
+     "status": "completed",
+     "test_exit": 0,
+     "seconds": 19.52,
+     "error": null,
+     "engine": {
+      "engine": "isaac-physx",
+      "episodes": {
+       "home": {
+        "last_sim_time": 8.93400042434223,
+        "steps": 4465
+       }
+      },
+      "physics_device": "cpu",
+      "version": "6.0.1.0"
+     },
+     "episode": {
+      "passed": false,
+      "terminated": "plan_complete",
+      "rules": {
+       "budget": true,
+       "coin_in_bank": false,
+       "released": true,
+       "tamper": true
+      },
+      "steps": 4465,
+      "settle_reason": "capped",
+      "coin_bank_local_centre": [
+       -0.00024318455621308126,
+       0.012002056973339007,
+       0.08700001239776611
+      ]
+     }
+    },
+    {
+     "candidate": "table_drop",
+     "candidate_sha256": "7040588e19f5a4215aa3e8591148e577d448050310213cfd31070823fe5266fb",
+     "reward": "0",
+     "status": "completed",
+     "test_exit": 0,
+     "seconds": 12.73,
+     "error": null,
+     "engine": {
+      "engine": "isaac-physx",
+      "episodes": {
+       "home": {
+        "last_sim_time": 1.048000049777329,
+        "steps": 522
+       }
+      },
+      "physics_device": "cpu",
+      "version": "6.0.1.0"
+     },
+     "episode": {
+      "passed": false,
+      "terminated": "plan_complete",
+      "rules": {
+       "budget": true,
+       "coin_in_bank": false,
+       "released": true,
+       "tamper": true
+      },
+      "steps": 522,
+      "settle_reason": "quiescent",
+      "coin_bank_local_centre": [
+       -0.17944814203145315,
+       0.0020241907445728846,
+       0.0010000007459893823
+      ]
+     }
+    },
+    {
+     "candidate": "skew_10deg",
+     "candidate_sha256": "ae320a54cb633a259ebd0eadc4f9cc1931c463b29267db03d52aa08fb9f33af4",
+     "reward": "1",
+     "status": "completed",
+     "test_exit": 0,
+     "seconds": 12.94,
+     "error": null,
+     "engine": {
+      "engine": "isaac-physx",
+      "episodes": {
+       "home": {
+        "last_sim_time": 1.0780000512022525,
+        "steps": 537
+       }
+      },
+      "physics_device": "cpu",
+      "version": "6.0.1.0"
+     },
+     "episode": {
+      "passed": true,
+      "terminated": "plan_complete",
+      "rules": {
+       "budget": true,
+       "coin_in_bank": true,
+       "released": true,
+       "tamper": true
+      },
+      "steps": 537,
+      "settle_reason": "quiescent",
+      "coin_bank_local_centre": [
+       0.0017930213174807237,
+       0.01354501780686514,
+       0.006999998353421688
+      ]
+     }
+    },
+    {
+     "candidate": "skew_20deg",
+     "candidate_sha256": "66192f0f230cf72ebcb1b7ef893f43fd938cf167093f22f8aaa274a50d7ab482",
+     "reward": "1",
+     "status": "completed",
+     "test_exit": 0,
+     "seconds": 13.03,
+     "error": null,
+     "engine": {
+      "engine": "isaac-physx",
+      "episodes": {
+       "home": {
+        "last_sim_time": 1.2360000587068498,
+        "steps": 616
+       }
+      },
+      "physics_device": "cpu",
+      "version": "6.0.1.0"
+     },
+     "episode": {
+      "passed": true,
+      "terminated": "plan_complete",
+      "rules": {
+       "budget": true,
+       "coin_in_bank": true,
+       "released": true,
+       "tamper": true
+      },
+      "steps": 616,
+      "settle_reason": "quiescent",
+      "coin_bank_local_centre": [
+       -0.0009555238162901037,
+       -0.004733071179431485,
+       0.00699999975040555
+      ]
+     }
+    },
+    {
+     "candidate": "schema_invalid",
+     "candidate_sha256": "60def68786e197b54e3ffee0f2918de72e4f0c63ded859cf2c188b6f9e2b40d9",
+     "reward": "0",
+     "status": "invalid_submission",
+     "test_exit": 0,
+     "seconds": 0.44,
+     "error": "skills[0]: unknown skill 'teleport'; allowed ['move_to', 'gripper', 'wrist']",
+     "engine": null,
+     "episode": null
+    },
+    {
+     "candidate": "empty_object",
+     "candidate_sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
+     "reward": "0",
+     "status": "invalid_submission",
+     "test_exit": 0,
+     "seconds": 0.44,
+     "error": "missing required field version; skills must be an array",
+     "engine": null,
+     "episode": null
+    },
+    {
+     "candidate": "missing",
+     "candidate_sha256": null,
+     "reward": "0",
+     "status": "invalid_submission",
+     "test_exit": 0,
+     "seconds": 0.27,
+     "error": "[Errno 2] No such file or directory: '/app/output/submission.json'",
+     "engine": null,
+     "episode": null
+    }
+   ]
+  },
+  {
+   "sandbox_id": "sb-lTzIk4t8TgahKsPGD7FTJC",
+   "block_network": true,
+   "network_probe": "NET_BLOCKED",
+   "tests_overlay_sha256": {
+    "harbor_verify.py": "9ad54f7d795f215b8d2e3be76a26bfa15b74b8d7f2d9f6b70e19bfe7b5ad64c8",
+    "implementation/deposit_coin.py": "b69999f837a9e7d3ad9ad0153a615fbe3017705acb7a914a9760d1378ca9459a",
+    "implementation/runtime.py": "2bf47ec4ab1ad16b5c6c8ff1b0161786829dc95313f7dcc2f8518e865f4a1f5f",
+    "implementation/scene_geometry.json": "52367c5a980dcbe852d283d04c7a77d98c4c762ca84c1c2f7c286dd24142cc1c",
+    "implementation/verdict.py": "b4bb10d88fda6c304e75a71ca2efa5e5a159b6096a5953ec04db393ee0ad173c",
+    "protocol.py": "d6a822521c23f5ae48009ab3d6bd128eb874bc18af77d99fdb1888693c957044",
+    "registration.json": "af440cb19af94700e755455483190efd54e367a150647d7d3c9de8e13bf4ecd7",
+    "test.sh": "775e844c27fdb447f3362d6e915e5c1b3f556bd95f1e854f224f294ccf6d32b5",
+    "worker.py": "72d17cf1a8af1eef4ceb28850169a4e75562181876e182d246232f8433b6a3b8"
+   },
+   "started_utc": "2026-11-07T09:19:01Z",
+   "finished_utc": "2026-11-07T09:22:12Z",
+   "runs": [
+    {
+     "candidate": "skew_25deg",
+     "candidate_sha256": "1d7758e08c2d13311217a456b698c3cfcd5a372f4d1c7319aed8f17169c354b2",
+     "reward": "0",
+     "status": "completed",
+     "test_exit": 0,
+     "seconds": 33.66,
+     "error": null,
+     "engine": {
+      "engine": "isaac-physx",
+      "episodes": {
+       "home": {
+        "last_sim_time": 1.1400000541470945,
+        "steps": 568
+       }
+      },
+      "physics_device": "cpu",
+      "version": "6.0.1.0"
+     },
+     "episode": {
+      "passed": false,
+      "terminated": "plan_complete",
+      "rules": {
+       "budget": true,
+       "coin_in_bank": false,
+       "released": true,
+       "tamper": true
+      },
+      "steps": 568,
+      "settle_reason": "quiescent",
+      "coin_bank_local_centre": [
+       0.003428586672886424,
+       -0.009190793774739223,
+       0.07599997520446777
+      ]
+     }
+    },
+    {
+     "candidate": "no_wrist_hover",
+     "candidate_sha256": "65bd1afacc9ef7582fe33ba924e79f68476a5610b3bea3958cc4f69b4201f6c3",
+     "reward": "0",
+     "status": "completed",
+     "test_exit": 0,
+     "seconds": 127.41,
+     "error": null,
+     "engine": {
+      "engine": "isaac-physx",
+      "episodes": {
+       "home": {
+        "last_sim_time": 1.0860000515822321,
+        "steps": 541
+       }
+      },
+      "physics_device": "cpu",
+      "version": "6.0.1.0"
+     },
+     "episode": {
+      "passed": false,
+      "terminated": "plan_complete",
+      "rules": {
+       "budget": true,
+       "coin_in_bank": false,
+       "released": true,
+       "tamper": true
+      },
+      "steps": 541,
+      "settle_reason": "quiescent",
+      "coin_bank_local_centre": [
+       0.017954384813395258,
+       0.012632316238453886,
+       0.07600000500679016
+      ]
+     }
+    },
+    {
+     "candidate": "no_wrist_high",
+     "candidate_sha256": "59b4fa0beb9cfda60b0d7b157002b89f3dc3b9f3e65a6b1ccf84e281645d4c00",
+     "reward": "0",
+     "status": "completed",
+     "test_exit": 0,
+     "seconds": 19.6,
+     "error": null,
+     "engine": {
+      "engine": "isaac-physx",
+      "episodes": {
+       "home": {
+        "last_sim_time": 8.866000421112403,
+        "steps": 4431
+       }
+      },
+      "physics_device": "cpu",
+      "version": "6.0.1.0"
+     },
+     "episode": {
+      "passed": false,
+      "terminated": "plan_complete",
+      "rules": {
+       "budget": true,
+       "coin_in_bank": false,
+       "released": true,
+       "tamper": true
+      },
+      "steps": 4431,
+      "settle_reason": "capped",
+      "coin_bank_local_centre": [
+       -20.495039536625768,
+       -52.44348685942616,
+       -62.18075180053711
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}
