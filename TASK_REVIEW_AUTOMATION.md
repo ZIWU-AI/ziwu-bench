@@ -886,3 +886,11 @@ Reviewer-run by design: an automatic score on every push becomes something contr
 ## GPU Task Validation and official export
 
 `gpu-task-validation.yml` is an explicit dispatch/reusable workflow for protected-service MuJoCo reference and Nop validation. It requires `MODAL_TOKEN_ID` and `MODAL_TOKEN_SECRET`, uses 1–3 sequential trials, and uploads allowlisted reports for 30 days. `gpu-tools-tests.yml` runs offline without secrets on relevant PR/push changes. `upstream-task-bundle.yml` exports only a selected new task against official main; it performs no remote writes. See the [complete runbook](tools/mujoco-modal/README.md).
+
+The same manual workflow also supports `backend=isaac` for the Isaac Sim 6.0.1
+reference/Nop example, including fresh native GPU verification. See the
+[Isaac Modal runbook](tools/isaac-reference-modal/README.md) for dispatch and provenance.
+
+`backend=isaac-model` adds explicitly dispatched, single-trial model/harness
+comparisons with a real tool-use preflight and sanitized result table. See the
+[model runbook](tools/isaac-model-comparison/README.md).

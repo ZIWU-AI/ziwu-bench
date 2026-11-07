@@ -1,0 +1,102 @@
+{
+  "profile": "kimi",
+  "model": "k3.1-pro",
+  "harness": "codex",
+  "source_sha": "c79e9573d914e53663bb9b550d4a4d9e0c6c1ab7",
+  "task_tree": "a35b266a20a4aa07d7d0c077322fcbdd4ecc4bda",
+  "task_path": "tasks/engineering-sciences/mechanical-engineering/physicalrsi-bimanual-control",
+  "host_sha": "c79e9573d914e53663bb9b550d4a4d9e0c6c1ab7",
+  "requested_trials": 1,
+  "trial_count": 1,
+  "reward": null,
+  "status": "execution_error",
+  "agent_timeout_sec": 5400,
+  "started_at": "2026-11-07T05:07:28.096322Z",
+  "run_url": "https://github.com/ZIWU-AI/ziwu-bench/actions/runs/42341185573",
+  "harbor_version": "0.23.0",
+  "gpu": "A10",
+  "cpus": 4,
+  "memory_mib": 16384,
+  "isaac_version": "5.1.0.0",
+  "calibration": {
+    "status": "exploratory_current_driver",
+    "reference_driver": "580.95.05",
+    "historical_acceptance_transferred": false
+  },
+  "driver_policy": "observed",
+  "route": {
+    "harness": "codex",
+    "harness_version": "0.155.1",
+    "harbor_version": "0.23.0",
+    "provider": "kimi-code-official",
+    "model": "k3.1-pro",
+    "reasoning_effort": "high",
+    "context_limit_tokens": 262144,
+    "credential_source_env": "KIMI_CODE_API_KEY",
+    "agent_timeout_sec": 5400,
+    "client_identity": "native; no client impersonation",
+    "sources": [
+      "https://www.kimi.com/code/docs/third-party-tools/codex.html",
+      "https://github.com/harbor-framework/harbor/blob/1e5c5c6db929a10a140d05e606882c671ae20729/src/harbor/agents/installed/codex.py"
+    ],
+    "limitations": [],
+    "protocol": "responses",
+    "api_base": "https://api.kimi.com/coding/v1",
+    "context_compact_at_tokens": 220000
+  },
+  "preflight": {
+    "status": "passed",
+    "reward": 1.0,
+    "task_checksum": "330fa9644f5868748dda6ce744134d7a6f961ce6d38aecccf95b228c7894df3f",
+    "exception_info": null,
+    "agent_info": {
+      "name": "codex",
+      "version": "0.155.1",
+      "model_info": {
+        "name": "k3.1-pro",
+        "provider": "openai"
+      }
+    },
+    "started_at": "2026-11-07T05:06:05.960228Z",
+    "finished_at": "2026-11-07T05:07:26.033549Z",
+    "agent_execution": {
+      "started_at": "2026-11-07T05:07:03.720402Z",
+      "finished_at": "2026-11-07T05:07:18.382537Z"
+    },
+    "usage": {
+      "n_input_tokens": 16173,
+      "n_cache_tokens": 7936,
+      "n_output_tokens": 190
+    },
+    "cost_usd": null,
+    "cli_reported_cost_usd": null,
+    "cost_status": "unknown: CLI estimates are not verified provider billing",
+    "physical_metrics": null,
+    "result_path": "preflight/check/preflight__9haUxut/result.json"
+  },
+  "task_checksum": "16cbe8b5117c1b1e5fc3754f5872a79c18f91b9b644590427733f2bf827ce77d",
+  "exception_info": {
+    "exception_type": "RuntimeError"
+  },
+  "agent_info": {
+    "name": "codex",
+    "version": "0.155.1",
+    "model_info": {
+      "name": "k3.1-pro",
+      "provider": "openai"
+    }
+  },
+  "finished_at": "2026-11-07T05:17:18.611169+00:00",
+  "agent_execution": null,
+  "usage": {
+    "n_input_tokens": null,
+    "n_cache_tokens": null,
+    "n_output_tokens": null
+  },
+  "cost_usd": null,
+  "cli_reported_cost_usd": null,
+  "cost_status": "unknown: CLI estimates are not verified provider billing",
+  "physical_metrics": null,
+  "result_path": "trial/comparison/task__RUzYwiu/result.json",
+  "harbor_exit_code": 0
+}

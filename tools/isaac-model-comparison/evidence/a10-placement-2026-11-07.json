@@ -1,0 +1,57 @@
+{
+  "sandbox_id": "sb-MoN9UUgBQy9EhY6qjNSjBW",
+  "gpu": "A10",
+  "cloud": "oci",
+  "region": "eu-west",
+  "required_driver": "580.95.05",
+  "hardware": "NVIDIA A10, 610.57.04",
+  "exit_code": 0,
+  "cleanup_confirmed": true,
+  "status": "hardware_mismatch",
+  "source": "operator_host",
+  "observed_on": "2026-11-07",
+  "model_calls": 0,
+  "reward": null,
+  "probe_image_id": "im-2odcSgoiaWzyuY49eRVAKc",
+  "note": "Hardware inventory only; no native task or model execution. Original infra requires driver 580.95.05.",
+  "additional_probes": [
+    {
+      "probe": 2,
+      "cloud_requested": "oci",
+      "region_requested": "eu-west",
+      "required_driver": "580.95.05",
+      "model_calls": 0,
+      "sandbox_id": "sb-UJAiVlcNgmxT7l1nhuKJzf",
+      "error": "Expecting value: line 1 column 1 (char 0)",
+      "cleanup_confirmed": true
+    },
+    {
+      "probe": 3,
+      "cloud_requested": "oci",
+      "region_requested": "eu-west",
+      "required_driver": "580.95.05",
+      "model_calls": 0,
+      "sandbox_id": "sb-moXAc1KoZTjzcfCgSKYIaW",
+      "error": "Expecting value: line 1 column 1 (char 0)",
+      "cleanup_confirmed": true
+    }
+  ],
+  "repeat_hardware_probe": {
+    "sandbox_id": "sb-aG5Lbx5yD4bLfl0uYDv8f9",
+    "cloud_requested": "oci",
+    "region_requested": "eu-west",
+    "model_calls": 0,
+    "hardware": {
+      "stdout": "NVIDIA A10, 610.57.04",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "kernel": {
+      "stdout": "",
+      "stderr": "cat: /proc/driver/nvidia/version: No such file or directory",
+      "exit_code": 1
+    },
+    "cleanup_confirmed": true
+  },
+  "conclusion": "Two successful nvidia-smi readbacks returned NVIDIA A10 / 610.57.04. Two compound diagnostic commands failed to yield JSON and provide no driver observation. All four sandboxes were terminated."
+}

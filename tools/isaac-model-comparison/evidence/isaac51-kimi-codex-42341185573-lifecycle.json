@@ -1,0 +1,62 @@
+[
+  {
+    "role": "agent",
+    "status": "native_startup_failed",
+    "sandbox_id": "sb-SZei0xNa9CaOcN9N2tgQg8",
+    "image_id": "im-R0UnoERhjgZXsShtJTYpwk",
+    "started_at": 1794028597.7086868,
+    "network": "public",
+    "base_image_id": "task Dockerfile: nvidia/cuda:12.8.1-cudnn-devel-ubuntu22.04",
+    "cpus": 4,
+    "memory_mib": 16384,
+    "isaac_version": "5.1.0.0",
+    "hardware": "NVIDIA A10, 610.57.04",
+    "reference_driver_version": "580.95.05",
+    "driver_policy": "observed",
+    "driver_matches_reference": false,
+    "cloud_provider": "oci",
+    "region": "eu-west",
+    "resources": {
+      "cgroup": {
+        "/sys/fs/cgroup/cpu/cpu.cfs_quota_us": "4000000",
+        "/sys/fs/cgroup/cpu/cpu.cfs_period_us": "1000000",
+        "/sys/fs/cgroup/cpuacct/cpuacct.usage": "240000000",
+        "/sys/fs/cgroup/memory/memory.limit_in_bytes": "17179869184",
+        "/sys/fs/cgroup/memory/memory.usage_in_bytes": "28033024"
+      },
+      "unavailable": {
+        "/sys/fs/cgroup/cpu.max": "FileNotFoundError",
+        "/sys/fs/cgroup/cpu.stat": "FileNotFoundError",
+        "/sys/fs/cgroup/memory.max": "FileNotFoundError",
+        "/sys/fs/cgroup/memory.current": "FileNotFoundError",
+        "/sys/fs/cgroup/memory.peak": "FileNotFoundError",
+        "/sys/fs/cgroup/memory.events": "FileNotFoundError",
+        "/sys/fs/cgroup/cpu/cpu.stat": "FileNotFoundError",
+        "/sys/fs/cgroup/memory/memory.max_usage_in_bytes": "FileNotFoundError",
+        "/sys/fs/cgroup/memory/memory.failcnt": "FileNotFoundError"
+      },
+      "measured": {
+        "limit_check": "matches_requested_hard_limits",
+        "observed_cpu_quota_us": 4000000,
+        "observed_cpu_period_us": 1000000,
+        "observed_cpu_limit_cores": 4.0,
+        "observed_memory_limit_bytes": 17179869184,
+        "observed_memory_current_bytes": 28033024,
+        "observed_memory_peak_bytes": null,
+        "memory_peak_source": null,
+        "memory_peak_scope": "unavailable; snapshots are not a true peak",
+        "observed_cpu_usage_usec": 240000.0,
+        "cpu_counters": {},
+        "memory_events": {},
+        "memory_failcnt": null,
+        "measurement_scope": "visible cgroup files; not host resource capacity or requested allocation values"
+      }
+    },
+    "startup_exit_code": 1,
+    "cleanup_requested": true,
+    "ended_at": 1794028634.884718,
+    "exit_code": 137,
+    "cleanup_confirmed": true,
+    "cleanup_exit_code": 137
+  }
+]

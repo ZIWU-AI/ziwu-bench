@@ -1,0 +1,20 @@
+{
+  "status": "isaac6_a10_unvalidated",
+  "evaluation_tree_sha256": "b46b6ee192e83186bbe5d6081837e2a15a1f2d62e6ac1749980c347a82eade74",
+  "runtime": {
+    "gpu": "A10",
+    "cpus": 4,
+    "memory_mib": 16384,
+    "isaac_version": "6.0.1.0",
+    "modal_version": "1.5.5",
+    "cloud": "oci",
+    "region": "eu-west",
+    "required_driver": "610.57.04",
+    "a10_runtime_sha256": "312674a68309684a5e30210b40aa392eb8ddc61ac806e04182e2997fbb63ea69",
+    "image_builder_sha256": "342b8a22b867e30f3008629ffbefe072b23b3e05024c2e65e799309237f15176"
+  },
+  "fresh_oracle": null,
+  "fresh_nop": null,
+  "historical_acceptance_transferred": false,
+  "note": "User-requested Isaac 6.0.1 migration after Isaac 5.1 RTX startup failure; A10, hard 4 CPU / 16 GiB. No automatic resource increase."
+}

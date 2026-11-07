@@ -1,5 +1,5 @@
 name: GPU Task Validation
-run-name: GPU validation PR ${{ inputs.pr_number }} / ${{ inputs.mode }} / ${{ inputs.gpu }}
+run-name: GPU validation PR ${{ inputs.pr_number }} / ${{ inputs.mode }} / ${{ inputs.gpu }} / ${{ inputs.backend || 'mujoco' }}
 
 on:
   workflow_dispatch:
@@ -8,35 +8,71 @@ on:
         description: "PR in this repository (0 = selected workflow revision)"
         type: string
         default: "0"
+      backend:
+        description: "Simulator (Isaac uses GPU in runner and verifier)"
+        type: choice
+        options: [isaac, isaac-model, mujoco]
+        default: isaac
+      model_profile:
+        description: "Isaac model comparison profile"
+        type: choice
+        options: [all, kimi, deepseek, astra, sol, opus]
+        default: all
+      harness:
+        description: "Harness for model comparison"
+        type: choice
+        options: [all, codex, claude-code, kimi-code, deepseek-harness]
+        default: all
+      model_stage:
+        description: "preflight; all requires driver 610; all-current-driver tests allocated driver"
+        type: choice
+        options: [preflight, all, all-current-driver]
+        default: preflight
       task_path:
-        description: "Protected MuJoCo task path"
+        description: "Protected MuJoCo or Isaac task path"
         type: string
         required: true
         default: tasks/engineering-sciences/mechanical-engineering/physicalrsi-bimanual-control
       gpu:
         type: choice
-        description: "GPU for NVIDIA EGL rendering"
-        options: [L40S, A10]
-        default: L40S
+        description: "GPU for NVIDIA rendering"
+        options: [A10, L40S]
+        default: A10
       mode:
         type: choice
         description: "Reference and/or negative control"
         options: [all, oracle, nop]
         default: all
+      oracle_reference:
+        description: "Historical Isaac reference (each requires fresh acceptance)"
+        type: choice
+        options: [v12-layout0, v13-round01-layout0, v13-smoke-layout0]
+        default: v12-layout0
       trials:
         description: "Independent repeats (1–3)"
         type: number
         default: 1
   workflow_call:
     inputs:
+      backend: {type: string, default: mujoco}
+      model_profile: {type: string, default: all}
+      harness: {type: string, default: all}
+      model_stage: {type: string, default: preflight}
       pr_number: {type: string, default: "0"}
       task_path: {type: string, required: true}
-      gpu: {type: string, default: L40S}
+      gpu: {type: string, default: A10}
       mode: {type: string, default: all}
       trials: {type: number, default: 1}
+      oracle_reference: {type: string, default: v12-layout0}
     secrets:
       MODAL_TOKEN_ID: {required: true}
       MODAL_TOKEN_SECRET: {required: true}
+      KIMI_CODE_API_KEY: {required: false}
+      DEEPSEEK_API_KEY: {required: false}
+      FRONTIER_OPENAI_API_KEY: {required: false}
+      FRONTIER_OPENAI_BASE_URL: {required: false}
+      FRONTIER_ANTHROPIC_API_KEY: {required: false}
+      FRONTIER_ANTHROPIC_BASE_URL: {required: false}
 
 permissions:
   contents: read
@@ -48,6 +84,7 @@ jobs:
     outputs:
       sha: ${{ steps.source.outputs.source_sha }}
       matrix: ${{ steps.source.outputs.matrix }}
+      model_matrix: ${{ steps.models.outputs.model_matrix }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with: {persist-credentials: false}
@@ -59,10 +96,18 @@ jobs:
           TASK_PATH: ${{ inputs.task_path }}
           TRIALS: ${{ inputs.trials }}
         run: python tools/mujoco-modal/resolve.py
+      - name: Resolve model/harness matrix
+        if: inputs.backend == 'isaac-model'
+        id: models
+        env:
+          MODEL_PROFILE: ${{ inputs.model_profile }}
+          HARNESS: ${{ inputs.harness }}
+        run: python tools/isaac-model-comparison/matrix.py
   validate:
+    if: inputs.backend != 'isaac-model'
     needs: resolve
     runs-on: ubuntu-24.04
-    timeout-minutes: 90
+    timeout-minutes: 350
     strategy:
       fail-fast: false
       max-parallel: 1
@@ -89,10 +134,19 @@ jobs:
           SOURCE_SHA: ${{ needs.resolve.outputs.sha }}
           GPU: ${{ inputs.gpu }}
           MODE: ${{ inputs.mode }}
+          ORACLE_REFERENCE: ${{ inputs.oracle_reference }}
+          BACKEND: ${{ inputs.backend || 'mujoco' }}
         run: |
           test -n "$MODAL_TOKEN_ID" && test -n "$MODAL_TOKEN_SECRET"
-          python tools/mujoco-modal/run.py --task-root candidate --task-path "$TASK_PATH" \
-            --source-sha "$SOURCE_SHA" --gpu "$GPU" --mode "$MODE" --output work/run
+          case "$BACKEND" in
+            mujoco) runner=tools/mujoco-modal/run.py; extra=() ;;
+            isaac)
+              runner=tools/isaac-reference-modal/run.py
+              extra=(--reference "$ORACLE_REFERENCE") ;;
+            *) echo 'Unsupported simulator'; exit 1 ;;
+          esac
+          python "$runner" --task-root candidate --task-path "$TASK_PATH" \
+            --source-sha "$SOURCE_SHA" --gpu "$GPU" --mode "$MODE" --output work/run "${extra[@]}"
       - name: Stop this run's sandboxes, including failed phases
         if: always()
         timeout-minutes: 3
@@ -103,6 +157,7 @@ jobs:
       - name: Summarize results and package safe evidence
         if: always()
         env:
+          BACKEND: ${{ inputs.backend || 'mujoco' }}
           SOURCE_SHA: ${{ needs.resolve.outputs.sha }}
           TASK_PATH: ${{ inputs.task_path }}
         run: python tools/mujoco-modal/report.py --run work/run --output work/report
@@ -114,3 +169,110 @@ jobs:
           path: work/report/
           retention-days: 30
           if-no-files-found: warn
+
+  models:
+    if: inputs.backend == 'isaac-model'
+    needs: resolve
+    runs-on: ubuntu-24.04
+    timeout-minutes: 350
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix: ${{ fromJSON(needs.resolve.outputs.model_matrix) }}
+    steps:
+      - name: Trusted orchestration
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with: {persist-credentials: false}
+      - name: Frozen task source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ needs.resolve.outputs.sha }}
+          path: candidate
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: python -m pip install -r tools/isaac-model-comparison/requirements-host.txt
+      - name: One real harness preflight and optional native trial
+        env:
+          MODAL_TOKEN_ID: ${{ secrets.MODAL_TOKEN_ID }}
+          MODAL_TOKEN_SECRET: ${{ secrets.MODAL_TOKEN_SECRET }}
+          KIMI_CODE_API_KEY: ${{ matrix.profile == 'kimi' && secrets.KIMI_CODE_API_KEY || '' }}
+          DEEPSEEK_API_KEY: ${{ matrix.profile == 'deepseek' && secrets.DEEPSEEK_API_KEY || '' }}
+          FRONTIER_OPENAI_API_KEY: ${{ (matrix.profile == 'astra' || matrix.profile == 'sol') && secrets.FRONTIER_OPENAI_API_KEY || '' }}
+          FRONTIER_OPENAI_BASE_URL: ${{ secrets.FRONTIER_OPENAI_BASE_URL }}
+          FRONTIER_ANTHROPIC_API_KEY: ${{ matrix.profile == 'opus' && secrets.FRONTIER_ANTHROPIC_API_KEY || '' }}
+          FRONTIER_ANTHROPIC_BASE_URL: ${{ secrets.FRONTIER_ANTHROPIC_BASE_URL }}
+          SOURCE_SHA: ${{ needs.resolve.outputs.sha }}
+          MODEL_PROFILE: ${{ matrix.profile }}
+          HARNESS: ${{ matrix.harness }}
+          MODEL_STAGE: ${{ inputs.model_stage }}
+          COMPARISON_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          umask 077
+          driver_policy=strict
+          if [ "$MODEL_STAGE" = all-current-driver ]; then
+            MODEL_STAGE=all
+            driver_policy=observed
+          fi
+          python tools/isaac-model-comparison/run.py --profile "$MODEL_PROFILE" --harness "$HARNESS" \
+            --task-root candidate --source-sha "$SOURCE_SHA" --stage "$MODEL_STAGE" \
+            --output comparison-output/run --driver-policy "$driver_policy"
+      - name: Stop remaining native containers
+        if: always()
+        timeout-minutes: 3
+        env:
+          MODAL_TOKEN_ID: ${{ secrets.MODAL_TOKEN_ID }}
+          MODAL_TOKEN_SECRET: ${{ secrets.MODAL_TOKEN_SECRET }}
+        run: python tools/isaac-model-comparison/cleanup.py --source comparison-output/run
+      - name: Publish sanitized result only
+        if: always()
+        env:
+          MODEL_PROFILE: ${{ matrix.profile }}
+          HARNESS: ${{ matrix.harness }}
+        run: python tools/isaac-model-comparison/publish.py --source comparison-output/run --output work/model-report
+      - name: Retain model result and native lifecycle
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: isaac-${{ matrix.profile }}-${{ matrix.harness }}-${{ github.run_id }}
+          path: work/model-report/
+          retention-days: 30
+          if-no-files-found: warn
+
+  model-report:
+    permissions:
+      contents: read
+      pull-requests: write
+    if: always() && inputs.backend == 'isaac-model'
+    needs: models
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with: {persist-credentials: false}
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: isaac-*
+          path: work/model-results
+      - name: Aggregate every requested pair
+        env:
+          MODEL_PROFILE: ${{ inputs.model_profile }}
+          HARNESS: ${{ inputs.harness }}
+        run: python tools/isaac-model-comparison/aggregate.py --source work/model-results --output work/comparison --profile "$MODEL_PROFILE" --harness "$HARNESS"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: isaac-comparison-${{ github.run_id }}
+          path: work/comparison/
+          retention-days: 30
+      - name: Update Agent Trial Results PR comment
+        if: github.repository == 'ZIWU-AI/ziwu-bench'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ inputs.pr_number }}
+          WORKFLOW_BRANCH: ${{ github.ref_name }}
+          RUN_ID: ${{ github.run_id }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          python tools/isaac-model-comparison/pr_comment.py \
+            --source work/comparison/comparison.json --output work/comparison/PR_COMMENT.md \
+            --run-id "$RUN_ID" --pr "$PR_NUMBER" --branch "$WORKFLOW_BRANCH" \
+            --repo "$REPOSITORY" --post
