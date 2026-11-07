@@ -62,7 +62,7 @@ class IsaacEnvironment(ModalEnvironment):
         self._sandbox_termination_requested = False
         self._native_receipt.update(sandbox_id=sb.object_id, image_id=self._image.object_id,
             started_at=time.time(), status="allocated", network=self.network_policy.network_mode.value,
-            base_image_id=BASE_IMAGE)
+            base_image_id=BASE_IMAGE, cpus=8, memory_mib=65536, isaac_version="6.0.1.0")
         self._save_native()
         try:
             proc = await sb.exec.aio("nvidia-smi", "--query-gpu=name,driver_version", "--format=csv,noheader", timeout=30)

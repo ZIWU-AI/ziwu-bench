@@ -36,7 +36,7 @@ def main():
                "host_sha": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
                "requested_trials": 1, "trial_count": 0, "reward": None, "status": "preparing",
                "agent_timeout_sec": 5400, "started_at": now(), "run_url": os.environ.get("COMPARISON_RUN_URL"),
-               "harbor_version": version("harbor"), "gpu": "L40S"}
+               "harbor_version": version("harbor"), "gpu": "L40S", "cpus": 8, "memory_mib": 65536, "isaac_version": "6.0.1.0"}
     code = 1
     try:
         if version("harbor") != "0.23.0":

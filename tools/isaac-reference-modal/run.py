@@ -63,7 +63,7 @@ def main():
         "infra_pr": "https://github.com/harbor-framework/terminal-bench-science/pull/2195",
         "infra_commit": "da218ea01206441256e7e9da6e76ef41e12cef65",
         "engine": "Isaac Sim 6.0.1.0.0", "physics": "PhysX CPU", "rendering": "NVIDIA RTX GPU",
-        "base_image_id": BASE_IMAGE, "gpu": args.gpu,
+        "base_image_id": BASE_IMAGE, "gpu": args.gpu, "cpus": 8, "memory_mib": 65536,
         "modal_version": modal.__version__, "model_calls": 0, "files": files,
     })
     app = modal.App.lookup("ziwu-isaac-reference", create_if_missing=True)
