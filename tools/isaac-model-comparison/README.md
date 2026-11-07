@@ -29,6 +29,22 @@ verification are distinct phases. Startup errors have no task score. Raw
 histories and recordings remain private. No model/harness substitution or
 automatic paid trial retry is enabled.
 
+## Codex setup regression repaired on 2026-11-07
+
+Run 42342454844 reached `native_ready` on Isaac 6.0.1, then failed before
+model execution. Reproducing Harbor 0.23.0's Codex installer in its exact
+agent image (`im-ixDFpNfBEIlqZUBg49KF3C`) returned exit 11: nvm rejects the
+image's `NPM_CONFIG_PREFIX=/home/agent/.local`. The migration omitted the
+Codex-only empty-prefix override already present in
+[PR #2195's gateway](https://github.com/RoboIndustrial-Benchmark/terminal-bench-science/blob/da218ea01206441256e7e9da6e76ef41e12cef65/tools/pr61-a10-eval/gateway.py#L412).
+
+The shared job builder now applies that override during both Codex setup and
+execution, including the DeepSeek Codex adapter. Other harnesses retain their
+npm prefix. CPU preflights now run as `agent` with the same image prefix, so
+this installation regression is caught before allocating an Isaac GPU.
+Published results include separate agent setup and execution timings.
+This repair does not change task files, scoring, model identities or resources.
+
 ## Historical Isaac 5.1 configuration (superseded)
 
 # Isaac / Modal model and harness trials

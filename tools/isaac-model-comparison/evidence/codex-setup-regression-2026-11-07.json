@@ -1,0 +1,35 @@
+{
+  "schema": "ziwu-codex-setup-regression-v1",
+  "date": "2026-11-07",
+  "failed_workflow_run": 42342454844,
+  "source_sha": "e8e0665145a4af1bd8a9fcdb6b4b1ea54eeed9d6",
+  "image_id": "im-ixDFpNfBEIlqZUBg49KF3C",
+  "harbor_version": "0.23.0",
+  "codex_version": "0.155.1",
+  "user": "agent",
+  "probe_resources": {
+    "gpu": null,
+    "cpus": 2,
+    "memory_mib": 4096
+  },
+  "model_calls": 0,
+  "scope": "Codex.setup and version command on the exact task image; no native simulation or model score",
+  "before": {
+    "sandbox_id": "sb-T9kLuCDAwVYeJJvJgboBpP",
+    "npm_config_prefix": "/home/agent/.local",
+    "setup_exit_code": 11,
+    "exception_type": "NonZeroAgentExitCodeError",
+    "failure_signature": "nvm is not compatible with the \"NPM_CONFIG_PREFIX\" environment variable",
+    "cleanup_confirmed": true
+  },
+  "after": {
+    "sandbox_id": "sb-X0DUGN6WwdCGMmWIlS60Uf",
+    "npm_config_prefix": "",
+    "setup_completed": true,
+    "version_command_exit_code": 0,
+    "version_stdout": "codex-cli 0.155.1",
+    "cleanup_confirmed": true,
+    "private_probe_log_sha256": "93602573ff287a3cf1d741581cc9636116e9159f7d8d686589d9dd0dcafb59f8"
+  },
+  "prior_fix": "https://github.com/RoboIndustrial-Benchmark/terminal-bench-science/blob/da218ea01206441256e7e9da6e76ef41e12cef65/tools/pr61-a10-eval/gateway.py#L412"
+}

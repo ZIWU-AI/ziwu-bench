@@ -29,8 +29,10 @@ name = "ziwu/harness-preflight"
 description = "Synthetic tool-use preflight, not a benchmark result."
 [agent]
 timeout_sec = 300
+user = "agent"
 [verifier]
 timeout_sec = 60
+user = "root"
 network_mode = "no-network"
 [environment]
 build_timeout_sec = 1200
@@ -40,6 +42,8 @@ network_mode = "public"
 ''')
     (root / "environment/Dockerfile").write_text('''FROM python:3.11.14-slim-bookworm
 RUN apt-get update && apt-get install -y --no-install-recommends git curl ca-certificates jq && rm -rf /var/lib/apt/lists/*
+RUN useradd --create-home --uid 1000 agent && mkdir -p /app && chown agent:agent /app
+ENV NPM_CONFIG_PREFIX=/home/agent/.local
 WORKDIR /app
 CMD ["sleep", "infinity"]
 ''')
@@ -63,6 +67,11 @@ def job_config(route, task, jobs, name, credential, timeout):
     else:
         agent["name"] = route["agent"]
     agent["env"].update({key: credential for key in route["credential_env_names"]})
+    if route["provenance"]["harness"] == "codex":
+        # Port PR #2195's gateway.py fix: nvm rejects the task image's npm
+        # prefix. Keep the override scoped to Codex setup AND execution, which
+        # sources nvm again; other harnesses still use the image's npm prefix.
+        agent["env"]["NPM_CONFIG_PREFIX"] = ""
     return {"job_name": name, "jobs_dir": str(jobs.resolve()), "n_attempts": 1,
             "n_concurrent_trials": 1, "retry": {"max_retries": 0},
             "environment": {"type": "docker", "delete": True},
@@ -96,6 +105,7 @@ def collect(job_dir):
             "exception_info": result.get("exception_info"),
             "agent_info": result.get("agent_info"),
             "started_at": result.get("started_at"), "finished_at": result.get("finished_at"),
+            "agent_setup": result.get("agent_setup"),
             "agent_execution": result.get("agent_execution"),
             "usage": {key: agent.get(key) for key in
                       ("n_input_tokens", "n_cache_tokens", "n_output_tokens")},
