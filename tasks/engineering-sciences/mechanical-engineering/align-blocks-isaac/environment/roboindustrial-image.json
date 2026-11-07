@@ -1,0 +1,24 @@
+{
+  "destination": "/app",
+  "files": {
+    "controller_runtime.py": "30f7a20d66682806c2f615e25dd42f29c53e38e2fca79c0ba33401b1d5e8cd93",
+    "instances/public_short_rectangular_00/instance.json": "472b9e289948d402f1a84de77b1065342d0f658ca3cf18d58f73b81c5d1cddc4",
+    "instances/public_short_rectangular_01/instance.json": "6c4d16147431f81d88fd737c24f746b206a8782767fcad5e417b714806da9af2",
+    "instances/public_short_rectangular_02/instance.json": "1819d6622b8da26235ddd8980f36d3d1527a48847832f1f4fc870e3b94d1e6d7",
+    "instances/public_short_rectangular_03/instance.json": "7f6500cac31a528e0d6342e7b1a3fee444ca73ccbc59337fc5dd5b03bda25a84",
+    "instances/public_slender_rectangular_00/instance.json": "6b36cbb1e7665c8685f858c63f18d09c1d8cd05da9d86ccaf576eaaea6ad31a1",
+    "instances/public_slender_rectangular_01/instance.json": "91fc6e162fd47884ae1e04b888773e5b04251bb5f00e94ddfd4e5a84a28e55eb",
+    "instances/public_slender_rectangular_02/instance.json": "457f897acbf81f491b2c493a579ff988943a612b6a56ae6a62248c936f3c2c62",
+    "instances/public_slender_rectangular_03/instance.json": "13946f6f01711debec80b850fcb1b8d53ad8db1704e51a075c944c7012a6f460",
+    "instances/public_square_00/instance.json": "d10e25f4820bfbd6b672603799d37433f58b4c1695f12b6f05d6c95dbabd4628",
+    "instances/public_square_01/instance.json": "3fe955660b7e4b7fb724ae59c87ece0b1bf45b3330e528ff678aee84bdb08fbc",
+    "instances/public_square_02/instance.json": "df0f0846863550d171639f40bc910fea4b1b0f68e884a729ea84f48c278f8501",
+    "instances/public_square_03/instance.json": "2bce81402a61e1abc794b6fce34157f5ae51bf16bda24ad0ec59e5db8915436e",
+    "isaac_scene.py": "73bad518fb4e9bb71d88cd5dd1e3fb9310f4d707e982d728594ef3ceae338472",
+    "public_rollout.py": "08b56a7f65e27c78198b7b0fa46261ece6c28350efb08f38914d65557956ac47",
+    "registration.json": "81eacfb39103d656bb964c243b39a4c1eae2a4dc67e3b7ce5c1d12bd6f8a05b8",
+    "sim/predicates.py": "4b28ca2b6a396ec11b9534ce17d8984187dd6ae2469a52ed6b71596f3fb01ecc",
+    "sim/scene.xml": "4610f5a48094728da144a3759792baddeb45d2f3131fb48d0bcf7abfbe1ef3e2",
+    "sim/schemas.json": "c580e63a2d08c87fa8248ec8b4fceb535a8c0e0d344145964af0cf787e00aef7"
+  }
+}

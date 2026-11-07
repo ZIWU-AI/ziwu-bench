@@ -38,3 +38,21 @@ The agent and separate verifier each use their own task resource table. No busin
 The implemented CI shim handles both the existing `harbor run -p ...` command shape and local JSON JobConfig. For a CLI run it substitutes only `--env` with the fixed import path; this was verified with the installed 0.21.0 `--print-config` command, not inferred from the factory. It preserves model/gateway flags. For JobConfig it replaces only the environment choice and refuses mixed native/ordinary batches. Native trial exceptions return exit 70; patched matrix steps and pipeline steps preserve this status rather than assigning a model reward of zero. Ordinary tasks retain their backend and installation behavior.
 
 Real evidence so far: `tools/isaac-modal/evidence/harbor-empty-summary.json` records the actual 63.57-second, zero-exception separate-verifier rejection of an empty candidate. This is transport/schema evidence only. The physical no-op follow-up completed eight episodes and 24,000 steps in 175.41 seconds with reward 0 and no exception (`tools/isaac-modal/evidence/harbor-physical-negative-summary.json`). Calibrated per-task oracle/alternative/negative evidence remains a separate gate; none of the ten registry placeholders is promoted by this infrastructure patch.
+
+## Controller task exception
+
+`align-blocks-isaac` is a task-specific executable-controller exception, not
+an extension of the numerical submission protocol. Its only transferred agent
+artifact is `/app/controller.py`; public and private overlays contain different
+case sets. `check_native_task.py` binds the exception to that task and checks
+the two phase manifests independently. The normal numerical path retains its
+original artifact, matching-registration and replay checks.
+
+`AlignBlocksControllerEnvironment` derives each fresh sandbox's maximum
+lifetime from that phase's declared timeout plus 1800 seconds of startup
+grace. This is an absolute lifetime for the whole sandbox, not a budget for
+each of the controller's fresh two-second subprocess calls. Other native tasks
+retain their existing 2400-second default. The task runs CPU PhysX but still
+requests the existing L40S Isaac host; that distinction does not establish
+support for a GPU-less Isaac installation. Its native replay and calibration
+remain unvalidated; a task PR cannot supply trusted-base CI code to itself.
