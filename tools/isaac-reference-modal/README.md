@@ -66,3 +66,10 @@ failure; hard container lifetimes bound a disconnected host.
 The existing `upstream-task-bundle.yml` can export this task against official
 main without remote writes. Official proposal, authorship and model evaluation
 requirements remain independent of this zero-model reference validation.
+
+Task authoring checks require the hash-verified runtime extracted locally so
+`physical_rsi`, `env_cfg` and robot assets are available. Run with
+`TMPDIR=/tmp PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/absolute/runtime` to preserve
+the Linux uid-dropping tests and publication byte-integrity assertions. The
+current local suite passed 251 tests plus 3 subtests; host tools passed 11 tests.
+These checks do not substitute for the GPU replay result.

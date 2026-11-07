@@ -104,8 +104,16 @@ def main():
         return sb, record
     def stop(sb, record):
         sb.terminate()
-        record.update(cleanup_requested=True, ended=time.time(), exit_code=sb.poll())
+        deadline = time.monotonic() + 30
+        code = sb.poll()
+        while code is None and time.monotonic() < deadline:
+            time.sleep(1)
+            code = sb.poll()
+        record.update(cleanup_requested=True, cleanup_confirmed=code is not None,
+                      ended=time.time(), exit_code=code)
         save()
+        if code is None:
+            raise RuntimeError("Sandbox termination not confirmed")
     def diagnostics(sb, out):
         command(sb, out, "native-diagnostics", "sh", "-c",
             "tail -100 /var/lib/pen-render/startup.log /logs/verifier/native.log 2>/dev/null", timeout=30, check=False)
