@@ -10,7 +10,7 @@
     "cloud": "oci",
     "region": "eu-west",
     "required_driver": "580.95.05",
-    "a10_runtime_sha256": "cb65b5be68b1d01f1256dd496589b2880788639ad02c6ac7c90d9602052fef93",
+    "a10_runtime_sha256": "ff76f8c8dcabb9d976be3dcafed42f6236f8cd3ddbe79118a4f776e6970c97b3",
     "image_builder_sha256": "6ee9ee4b3f5c136d3ee3f7a2c7b5612a784c30dd08c83e42b82181bfc1df4abe"
   },
   "historical_task_source": "fed3c441ab5c112e998b27e26eb17f2693d96f99",

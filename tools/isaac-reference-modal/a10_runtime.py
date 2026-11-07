@@ -309,5 +309,3 @@ async def inspect_resources(sandbox: Any) -> dict[str, Any]:
             raise ValueError("Conflicting cgroup readback")
         return {**data, "measured": normalize_cgroup(data["cgroup"])}
     return await asyncio.wait_for(query(), timeout=RESOURCE_TIMEOUT)
-
-
