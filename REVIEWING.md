@@ -248,7 +248,7 @@ _Further additions pending — additional agent harnesses, higher trial counts._
 
 [GPU Task Validation](tools/mujoco-modal/README.md) pins candidate source SHA and records native tests, separate replay, binary rewards and hardware identity. Check the selected mode: a successful Nop-only run verifies reward zero, not task completion. This SDK validation is not a Harbor CLI job or a frontier-model solve.
 
-The same manual workflow also supports `backend=isaac` for the Isaac Sim 5.1
+The same manual workflow also supports `backend=isaac` for the Isaac Sim 6.0.1
 reference/Nop example, including fresh native GPU verification. See the
 [Isaac Modal runbook](tools/isaac-reference-modal/README.md) for dispatch and provenance.
 

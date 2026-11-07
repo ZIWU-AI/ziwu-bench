@@ -933,7 +933,7 @@ Have questions, feedback or need help? Here's how to reach us:
 
 The [Modal runbook](tools/mujoco-modal/README.md) documents the manual `GPU Task Validation` workflow, supported task contract and `Export Official Task PR` bundle. Keep task fixes on their task PR; export only task files against official main, and satisfy proposal/authorship/model-trial gates before submission.
 
-The same manual workflow also supports `backend=isaac` for the Isaac Sim 5.1
+The same manual workflow also supports `backend=isaac` for the Isaac Sim 6.0.1
 reference/Nop example, including fresh native GPU verification. See the
 [Isaac Modal runbook](tools/isaac-reference-modal/README.md) for dispatch and provenance.
 

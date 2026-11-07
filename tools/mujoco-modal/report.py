@@ -19,7 +19,7 @@ def report(run, output):
     summary = json.loads((run / "summary.json").read_text()) if (run / "summary.json").exists() else {"passed": False, "error": "incomplete run; inspect workflow logs and lifecycle"}
     lines = ["### GPU task validation", "", f"Source: `{os.environ.get('SOURCE_SHA', 'local')}`",
              f"Task: `{os.environ.get('TASK_PATH', 'local')}`", "", "```json", json.dumps(summary, indent=2), "```", "",
-             ("Isaac Sim 5.1 / PhysX CPU physics / NVIDIA RTX rendering. Fresh native GPU verifier; no model calls."
+             ("Isaac Sim 6.0.1 / PhysX CPU physics / NVIDIA RTX rendering. Fresh native GPU verifier; no model calls."
               if os.environ.get("BACKEND") == "isaac" else "MuJoCo CPU physics / NVIDIA EGL rendering. Reference validation; no model calls."),
              "The artifact excludes oracle recordings, action plans and camera bundles."]
     text = "\n".join(lines) + "\n"
