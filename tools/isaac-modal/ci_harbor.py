@@ -10,6 +10,7 @@ from pathlib import Path
 from check_native_task import validate_native_task
 ROOT=Path(__file__).resolve().parent
 ADAPTER='harbor_image_adapter:RoboIndustrialModalEnvironment'
+CONTROLLER_ADAPTER='harbor_image_adapter:AlignBlocksControllerEnvironment'
 
 def documented_agent_budget_exhausted(row):
     """Harbor wraps inner asyncio timeouts too: require actual elapsed budget."""
@@ -38,12 +39,17 @@ def select(args):
     native=[(Path(t)/'environment/roboindustrial-image.json').is_file() for t in tasks]
     if not any(native):return args,False,None,job
     if not all(native):raise ValueError('partition native-image and ordinary tasks into separate Harbor jobs')
-    for t in tasks:validate_native_task(t)
+    registrations=[validate_native_task(t) for t in tasks]
+    adapters=[CONTROLLER_ADAPTER if r.get('task_spec',{}).get('controller_schema')=='python-controller-v1'
+              and r.get('task_id')=='align-blocks-isaac' else ADAPTER
+              for r in registrations]
+    if len(set(adapters))!=1:raise ValueError('partition controller and numerical native tasks')
+    adapter=adapters[0]
     if job is not None:
         env=job.setdefault('environment',{})
-        if env.get('type') not in (None,'modal') or env.get('import_path') not in (None,ADAPTER):raise ValueError('native job requires Modal')
+        if env.get('type') not in (None,'modal') or env.get('import_path') not in (None,adapter):raise ValueError('native job requires Modal')
         if env.get('kwargs') or env.get('mounts') or env.get('extra_docker_compose'):raise ValueError('native CI rejects environment overrides/mounts')
-        env.pop('type',None);env.update(import_path=ADAPTER,delete=True)
+        env.pop('type',None);env.update(import_path=adapter,delete=True)
         f=tempfile.NamedTemporaryFile(mode='w',suffix='.json',prefix='ri-harbor-',delete=False)
         with f:json.dump(job,f)
         temporary=Path(f.name)
@@ -53,8 +59,8 @@ def select(args):
         if len(envs)>1 or (envs and envs[0]!='modal'):raise ValueError('native task requires --env modal')
         if any(v.split('=')[0] in ('--ek','--environment-kwarg','--mounts','--mounts-json','--extra-docker-compose','--no-delete') for v in args):raise ValueError('native CI disallows environment overrides')
         if envs:
-            i=next(i for i,v in enumerate(args) if v in ('--env','-e'));args[i+1]=ADAPTER
-        else:args+=['--env',ADAPTER]
+            i=next(i for i,v in enumerate(args) if v in ('--env','-e'));args[i+1]=adapter
+        else:args+=['--env',adapter]
     return args,True,temporary,job
 
 def native_trial_infra(args,job):

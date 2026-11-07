@@ -1,0 +1,313 @@
+{
+  "generator_seed": 20260930,
+  "generation_status": "frozen",
+  "source_manifest_sha256": "17cb6d47af0362c58a7a4435f0533cc0c59b4316673df6c8927c91232077c32d",
+  "static_stability_screen": {
+    "idle_steps": 2000,
+    "max_center_drift_m": 0.01,
+    "max_tilt_deg": 10.0,
+    "whole_trajectory": true
+  },
+  "episodes": {
+    "hidden_short_rectangular_04": {
+      "family": "short_rectangular",
+      "stratum": "interpolation",
+      "geometry_sha256": "94a56859f1e7d6f14c8085c83007b438e355382833161148f986becd7d9a281a"
+    },
+    "hidden_short_rectangular_05": {
+      "family": "short_rectangular",
+      "stratum": "interpolation",
+      "geometry_sha256": "a118fcc9f2dd6431ec27b25e8def2d818f5bc67731ba5162a5da416c186343a9"
+    },
+    "hidden_short_rectangular_06": {
+      "family": "short_rectangular",
+      "stratum": "interpolation",
+      "geometry_sha256": "6ee5f10ee85ef67024bb67666ffc18f76ca32f78144bec9a822c2acf6fa9abb4"
+    },
+    "hidden_short_rectangular_07": {
+      "family": "short_rectangular",
+      "stratum": "interpolation",
+      "geometry_sha256": "d753101d64c440daa678e4a44d14070b5e764b0dd8c0f6abefab8bb6fccf79ed"
+    },
+    "hidden_short_rectangular_08": {
+      "family": "short_rectangular",
+      "stratum": "interpolation",
+      "geometry_sha256": "89641efc64e499a363e88238c88e6ebebed1063f4957c01b77b86d74300ff17b"
+    },
+    "hidden_short_rectangular_09": {
+      "family": "short_rectangular",
+      "stratum": "interpolation",
+      "geometry_sha256": "ea488238f6e86aa546d541999ee933e94539fb2ca05bf205dfbe77a91bb17379"
+    },
+    "hidden_short_rectangular_10": {
+      "family": "short_rectangular",
+      "stratum": "interpolation",
+      "geometry_sha256": "a8fe5ad1766b8be539e8e5b755179bd2149d4d310b6a3c0993c46207597ef279"
+    },
+    "hidden_short_rectangular_11": {
+      "family": "short_rectangular",
+      "stratum": "interpolation",
+      "geometry_sha256": "b73d13a1cc0ddb4abca0b394eb2cc928c96f3cbba42f1461dbdb95a37b72b95d"
+    },
+    "hidden_short_rectangular_12": {
+      "family": "short_rectangular",
+      "stratum": "interpolation",
+      "geometry_sha256": "ce43db8a0fba8c75c858d9bb87bab8e8eba54fa5376cdcd190ebd2152619e9b9"
+    },
+    "hidden_short_rectangular_13": {
+      "family": "short_rectangular",
+      "stratum": "interpolation",
+      "geometry_sha256": "94268f953f0d122b56afdffb0252813a286cc5036fdb72aec776c749ae352701"
+    },
+    "hidden_short_rectangular_14": {
+      "family": "short_rectangular",
+      "stratum": "interpolation",
+      "geometry_sha256": "c7503771fa5f7747af12ef0880c98af35d4cff114c1b695d62d5c2a4e360a860"
+    },
+    "hidden_short_rectangular_15": {
+      "family": "short_rectangular",
+      "stratum": "interpolation",
+      "geometry_sha256": "ae89e7e117ba9cc42aef106e888992594773d2425da74f4dda7cc4f7b0da95da"
+    },
+    "hidden_short_rectangular_16": {
+      "family": "short_rectangular",
+      "stratum": "composition",
+      "geometry_sha256": "e6cf99077b93ed00d8a1ad1ffb0e719f523a7987e80b181bf1616777ba436c02"
+    },
+    "hidden_short_rectangular_17": {
+      "family": "short_rectangular",
+      "stratum": "composition",
+      "geometry_sha256": "c812d4a01d8b811fbd512a3c952a58b478ebb4477d38e30d0916299104b6095e"
+    },
+    "hidden_short_rectangular_18": {
+      "family": "short_rectangular",
+      "stratum": "composition",
+      "geometry_sha256": "99a5f27b2009274f60550f0b0b79aa4de5cddccd87bdca1fdcdb62c71e193473"
+    },
+    "hidden_short_rectangular_19": {
+      "family": "short_rectangular",
+      "stratum": "composition",
+      "geometry_sha256": "c550d222da3e2bab35a334faf78f2c8485858b864f37032d59823812381ddd7e"
+    },
+    "hidden_short_rectangular_20": {
+      "family": "short_rectangular",
+      "stratum": "composition",
+      "geometry_sha256": "0c60e0058eeade1d7f8c47d228808d74f486bcda0cd5454815c6f19980214e1b"
+    },
+    "hidden_short_rectangular_21": {
+      "family": "short_rectangular",
+      "stratum": "composition",
+      "geometry_sha256": "cc90f5f46f723284198f53b09edb1385ac1854a7650347896cd92234156e1a9c"
+    },
+    "hidden_short_rectangular_22": {
+      "family": "short_rectangular",
+      "stratum": "stress",
+      "geometry_sha256": "3cf4e38365e1e2b7ba78e9b818b4f352a82f6892367c832d390fc701949bd558"
+    },
+    "hidden_short_rectangular_23": {
+      "family": "short_rectangular",
+      "stratum": "stress",
+      "geometry_sha256": "22be4ed7a5b4f1737508357c9ab44813ca36c2571ca6783e17064f5e68991729"
+    },
+    "hidden_slender_rectangular_04": {
+      "family": "slender_rectangular",
+      "stratum": "interpolation",
+      "geometry_sha256": "27dd0c424763ce0c58497dfe3095ca47463e331dcaa3b07f83d22ea2700462e2"
+    },
+    "hidden_slender_rectangular_05": {
+      "family": "slender_rectangular",
+      "stratum": "interpolation",
+      "geometry_sha256": "828f6a8917cbb6162fb8e80965b3495054b9c426ac191cb96ac38ac5225ef88c"
+    },
+    "hidden_slender_rectangular_06": {
+      "family": "slender_rectangular",
+      "stratum": "interpolation",
+      "geometry_sha256": "c6572cfc39f5cac9b951c951e506d82305b0f6bbe8c197e51e73e74c68638a3e"
+    },
+    "hidden_slender_rectangular_07": {
+      "family": "slender_rectangular",
+      "stratum": "interpolation",
+      "geometry_sha256": "d1d4e665a51b0ecb427fef570c806ead373f6d8b4dfaa19b7e0347b63dbf0a96"
+    },
+    "hidden_slender_rectangular_08": {
+      "family": "slender_rectangular",
+      "stratum": "interpolation",
+      "geometry_sha256": "93b2241ef5adfe78e04c7d63e0a93545be92f8505556638f7201e9613fdae179"
+    },
+    "hidden_slender_rectangular_09": {
+      "family": "slender_rectangular",
+      "stratum": "interpolation",
+      "geometry_sha256": "e45888bc34849caeb1d91d20c0ed4b3d3780fda4f48a4ce6d4046454f8098569"
+    },
+    "hidden_slender_rectangular_10": {
+      "family": "slender_rectangular",
+      "stratum": "interpolation",
+      "geometry_sha256": "10422ef180d955a8ddd034e750990397750663ba6b39f9f2e9930148958764a9"
+    },
+    "hidden_slender_rectangular_11": {
+      "family": "slender_rectangular",
+      "stratum": "interpolation",
+      "geometry_sha256": "af11f94b0d0276ba4178c8353d87d313e7f94bd7ddb242b6402255b0479fdc72"
+    },
+    "hidden_slender_rectangular_12": {
+      "family": "slender_rectangular",
+      "stratum": "interpolation",
+      "geometry_sha256": "dca5eaef2403a210038ca43de0409e66e6b6fecd58ff0335c1f307d1fb4b72b9"
+    },
+    "hidden_slender_rectangular_13": {
+      "family": "slender_rectangular",
+      "stratum": "interpolation",
+      "geometry_sha256": "abbb6aafc394eba3ebda23ffadae1f9c57f10a3afc69103811b6c8c8eb9f8634"
+    },
+    "hidden_slender_rectangular_14": {
+      "family": "slender_rectangular",
+      "stratum": "interpolation",
+      "geometry_sha256": "cfc2a92389806d34dec7dd4f4b5830a4a12c79ae5ba186ff6d658e5b968f2b18"
+    },
+    "hidden_slender_rectangular_15": {
+      "family": "slender_rectangular",
+      "stratum": "interpolation",
+      "geometry_sha256": "2f65c455bb31aa0473be160c6c4b94c852a7bae7245c45c5c3b33c2d21a94e22"
+    },
+    "hidden_slender_rectangular_16": {
+      "family": "slender_rectangular",
+      "stratum": "composition",
+      "geometry_sha256": "f77d0b358f55071596bf72930fab77c659ed17cce8de8dfdc6304ccd69b33f66"
+    },
+    "hidden_slender_rectangular_17": {
+      "family": "slender_rectangular",
+      "stratum": "composition",
+      "geometry_sha256": "290e00a456faf8a61b47f39c6cbf8474deeab406ea0428df2993879c1cd51545"
+    },
+    "hidden_slender_rectangular_18": {
+      "family": "slender_rectangular",
+      "stratum": "composition",
+      "geometry_sha256": "1cb83b6808ba967245985365c57e434fa3a75e39ed7144c8444f64c08db8b377"
+    },
+    "hidden_slender_rectangular_19": {
+      "family": "slender_rectangular",
+      "stratum": "composition",
+      "geometry_sha256": "d7d28e9dad3a3ce3d3f8c67f41e65861722ff0f66fcd527a93d617a187cead91"
+    },
+    "hidden_slender_rectangular_20": {
+      "family": "slender_rectangular",
+      "stratum": "composition",
+      "geometry_sha256": "b83e99fe703f6ed92ed70975da3b02ce597f4e93d9356f1108ea43c0b87b82a8"
+    },
+    "hidden_slender_rectangular_21": {
+      "family": "slender_rectangular",
+      "stratum": "composition",
+      "geometry_sha256": "9c55979a41880dc92a81a31ba5211bdb1782bb833180c206c76e7b8c0f597e00"
+    },
+    "hidden_slender_rectangular_22": {
+      "family": "slender_rectangular",
+      "stratum": "stress",
+      "geometry_sha256": "e088908c8410cab7727d5507c30b1f2e2ba3e3ef84cb6921058f08e9ba8b6330"
+    },
+    "hidden_slender_rectangular_23": {
+      "family": "slender_rectangular",
+      "stratum": "stress",
+      "geometry_sha256": "4287b7222f5878e270b27b79faeed31803dc0be984219644f3bfed85c5e56f16"
+    },
+    "hidden_square_04": {
+      "family": "square",
+      "stratum": "interpolation",
+      "geometry_sha256": "6ab8c0d68f2ee00489526aff05acbaec32e014f2e97592665696eb7d53fbf952"
+    },
+    "hidden_square_05": {
+      "family": "square",
+      "stratum": "interpolation",
+      "geometry_sha256": "e0c23fde8b93a4494d21a2c192020e1729e374efff67d80e1084462d4cb70080"
+    },
+    "hidden_square_06": {
+      "family": "square",
+      "stratum": "interpolation",
+      "geometry_sha256": "c22989cd2b429b55a4f1fcb67286fbb2b47622399801dee836da245e08eaf1cc"
+    },
+    "hidden_square_07": {
+      "family": "square",
+      "stratum": "interpolation",
+      "geometry_sha256": "e6bb3b23e7d59f2e5feb74ffc5eb40d75da2d4a11ad5d9c3913d2e88e9150e86"
+    },
+    "hidden_square_08": {
+      "family": "square",
+      "stratum": "interpolation",
+      "geometry_sha256": "8609712d2210dcc29777e72adb22f590b12d6979ae78b73153876b4d1b2b8b10"
+    },
+    "hidden_square_09": {
+      "family": "square",
+      "stratum": "interpolation",
+      "geometry_sha256": "e50e326de6281831b4050b11048cb088c8a0e0ef2a85e6fbfe878da32b90889b"
+    },
+    "hidden_square_10": {
+      "family": "square",
+      "stratum": "interpolation",
+      "geometry_sha256": "f958d9b4db17346c68fdca55805e16f81b563a114d2a109fe75939819299b4d5"
+    },
+    "hidden_square_11": {
+      "family": "square",
+      "stratum": "interpolation",
+      "geometry_sha256": "3b6a0a0218b2ed7fd0d50780611640476d619cdfa2fd9738588da6818b1a0ee1"
+    },
+    "hidden_square_12": {
+      "family": "square",
+      "stratum": "interpolation",
+      "geometry_sha256": "62d7046a2ff71d7f84c7dd4e07479ac680d884bed5f97fec6ac224659620826b"
+    },
+    "hidden_square_13": {
+      "family": "square",
+      "stratum": "interpolation",
+      "geometry_sha256": "0dae4809e565002745c199ac8cc1ce770f8ad1a8b1498b5a6c2e9437cc402434"
+    },
+    "hidden_square_14": {
+      "family": "square",
+      "stratum": "interpolation",
+      "geometry_sha256": "0293db5f342282d17a3b0d15c62a75a0691cda87169a238f6b812bac96083096"
+    },
+    "hidden_square_15": {
+      "family": "square",
+      "stratum": "interpolation",
+      "geometry_sha256": "cff1f519a4ffd2f28713bd0205a2a047eaa6e99d142d73f358aed17589ec1ba1"
+    },
+    "hidden_square_16": {
+      "family": "square",
+      "stratum": "composition",
+      "geometry_sha256": "e2e36460e59584b345b6a2bcd5d669e21ffd215cffb1ac207a030c226bb18ecc"
+    },
+    "hidden_square_17": {
+      "family": "square",
+      "stratum": "composition",
+      "geometry_sha256": "68e4782efd2384ab6950c74498622a719b52a231a8ac78fc80d651d8e6555a09"
+    },
+    "hidden_square_18": {
+      "family": "square",
+      "stratum": "composition",
+      "geometry_sha256": "5765e1fe4505e59647d38ed0cf752b377eee655be07823f8cbaef0370e3aa340"
+    },
+    "hidden_square_19": {
+      "family": "square",
+      "stratum": "composition",
+      "geometry_sha256": "db9b663f823bc0c828b6a9c6dc35cf491d8a55b6c01dfd81a41865d8d7376043"
+    },
+    "hidden_square_20": {
+      "family": "square",
+      "stratum": "composition",
+      "geometry_sha256": "a1d7049f0ff100cfed92fb4cf931c8bbb27efde0b4640317c14d5852ce5a6419"
+    },
+    "hidden_square_21": {
+      "family": "square",
+      "stratum": "composition",
+      "geometry_sha256": "79db045ad9beb8441594ee04d6404d349149ed73548ae1cbc157e5af8f1cbbea"
+    },
+    "hidden_square_22": {
+      "family": "square",
+      "stratum": "stress",
+      "geometry_sha256": "d97bb9dafcaea3e7f8e4a9a9e47f0361d217dc6f90db9b227052ba9ba5bed97e"
+    },
+    "hidden_square_23": {
+      "family": "square",
+      "stratum": "stress",
+      "geometry_sha256": "9c96a58997417ee906d5cce0beeb2e25f6ecc69903240d9f91d16b005acb2317"
+    }
+  }
+}

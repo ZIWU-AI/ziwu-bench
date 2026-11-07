@@ -4,7 +4,7 @@ Uses the released v0.21.0 ModalDirect strategy contract. Not a monkey patch.
 The agent and separate verifier get independent fresh sandboxes and overlays.
 """
 from __future__ import annotations
-import importlib.metadata,json,shlex
+import importlib.metadata,json,math,shlex,tomllib
 from pathlib import Path
 from protocol import InfrastructureError,safe_relative,sha256
 if importlib.metadata.version('harbor')!='0.21.0':
@@ -64,3 +64,26 @@ class RoboIndustrialModalEnvironment(ModalEnvironment):
         self._strategy=_ExistingImageDirect(self)
     def _validate_definition(self):
         if not (self.environment_dir/'roboindustrial-image.json').is_file():raise FileNotFoundError('missing immutable overlay manifest')
+
+
+class AlignBlocksControllerEnvironment(RoboIndustrialModalEnvironment):
+    """Use a phase-specific lifetime for this controller task only."""
+    def __init__(self,environment_dir,*args,**kwargs):
+        directory=Path(environment_dir)
+        if directory.name not in ('environment','tests'):
+            raise ValueError('unexpected align-blocks phase directory')
+        config=tomllib.loads((directory.parent/'task.toml').read_text())
+        if (directory.parent.name!='align-blocks-isaac'
+                or config.get('task',{}).get('name')!='terminal-bench-science/align-blocks-isaac'
+                or config.get('artifacts')!=['/app/controller.py']):
+            raise ValueError('controller adapter is restricted to align-blocks-isaac')
+        phase='agent' if directory.name=='environment' else 'verifier'
+        timeout=config.get(phase,{}).get('timeout_sec')
+        if type(timeout) not in (int,float) or not math.isfinite(timeout) or not 0<timeout<=28800:
+            raise ValueError('invalid phase timeout')
+        if 'sandbox_timeout_secs' in kwargs:
+            raise ValueError('controller sandbox lifetime is derived from task budgets')
+        # Harbor creates a distinct sandbox per phase; this is a wall-clock
+        # lifetime, not a per-controller-call timeout.
+        kwargs['sandbox_timeout_secs']=math.ceil(timeout)+1800
+        super().__init__(environment_dir,*args,**kwargs)
