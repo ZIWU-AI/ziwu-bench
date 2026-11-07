@@ -1,0 +1,79 @@
+{
+ "purpose": "Real Harbor 0.21.0 jobs (modal 1.5.4, Python 3.12) using ziwu-bench tools/isaac-modal/harbor_image_adapter.py: agent sandbox from the Modal Isaac image plus the /app overlay, artifact transfer, then a fresh no-network verifier sandbox with the /tests overlay.",
+ "harbor": "0.21.0",
+ "modal_sdk": "1.5.4",
+ "adapter_sha256": "69c7bffe8a359b38331f6554c58938e284b8d0a74b221b907f44db88d2bfdc2a",
+ "image": "im-Nm8iLJCxhB14rzlvQjzhLD",
+ "trials": [
+  {
+   "agent": "oracle",
+   "trial": "deposit-coin-isaac__GZ9bZHW",
+   "reward": 1.0,
+   "exception": null,
+   "verifier_status": "completed",
+   "verifier_error": null,
+   "trusted_inputs_verified": true,
+   "task_spec_sha256": "93518fdabad1c98a94fd91d028f891521c59511f2484ac2ad5f58a7e485c99c0",
+   "candidate_sha256": "196c6385c9c148c2e5e495e6b954d25139cf68d1315b05acb4a77e05c37c5cf8",
+   "engine": {
+    "engine": "isaac-physx",
+    "episodes": {
+     "home": {
+      "last_sim_time": 1.0820000513922423,
+      "steps": 539
+     }
+    },
+    "physics_device": "cpu",
+    "version": "6.0.1.0"
+   },
+   "episode": {
+    "passed": true,
+    "rules": {
+     "budget": true,
+     "coin_in_bank": true,
+     "released": true,
+     "tamper": true
+    },
+    "steps": 539,
+    "settle_reason": "quiescent"
+   },
+   "environment_setup": [
+    "2026-11-07T09:21:01.924153Z",
+    "2026-11-07T09:21:20.662630Z"
+   ],
+   "agent_execution": [
+    "2026-11-07T09:21:20.663396Z",
+    "2026-11-07T09:21:59.469417Z"
+   ],
+   "verifier": [
+    "2026-11-07T09:22:03.162924Z",
+    "2026-11-07T09:22:56.795409Z"
+   ]
+  },
+  {
+   "agent": "nop",
+   "trial": "deposit-coin-isaac__GENBDS4",
+   "reward": 0.0,
+   "exception": null,
+   "verifier_status": "invalid_submission",
+   "verifier_error": "[Errno 2] No such file or directory: '/app/output/submission.json'",
+   "trusted_inputs_verified": true,
+   "task_spec_sha256": "93518fdabad1c98a94fd91d028f891521c59511f2484ac2ad5f58a7e485c99c0",
+   "candidate_sha256": null,
+   "engine": null,
+   "episode": null,
+   "environment_setup": [
+    "2026-11-07T09:23:22.791663Z",
+    "2026-11-07T09:23:30.541778Z"
+   ],
+   "agent_execution": [
+    "2026-11-07T09:23:30.541968Z",
+    "2026-11-07T09:23:30.542042Z"
+   ],
+   "verifier": [
+    "2026-11-07T09:23:34.958549Z",
+    "2026-11-07T09:23:48.053849Z"
+   ]
+  }
+ ]
+}

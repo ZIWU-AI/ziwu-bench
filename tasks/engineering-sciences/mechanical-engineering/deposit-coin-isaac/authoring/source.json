@@ -1,0 +1,48 @@
+{
+ "source_repository": "https://github.com/RoboIndustrial-Benchmark/terminal-bench-science",
+ "source_pull_request": 13,
+ "source_commit": "de5b1a642a407da4bd0778824353f4341706e6fe",
+ "source_task_dir": "tasks/engineering-sciences/mechanical-engineering/deposit-coin",
+ "source_author": "Yuning Cao (cyn251880406-alt)",
+ "upstream_of_source": "RoboDojo-Benchmark/RoboDojo task/RoboDojo/tasks/deposit_coin.py (Isaac Sim 5.1, MIT)",
+ "files": {
+  "environment/runner/run_plan.py": {
+   "git_blob": "b0aa21820b7d7b419b5b20d8f4ca6df79a98965e",
+   "sha256": "02dd0669d9f08fc0c34ea29aa488896a772d71f1a88c87aaa683408c3d2eb6b5"
+  },
+  "environment/build_scene.py": {
+   "git_blob": "a1b27e623c5ab9781b6864bd6dde1e30f24b8d90",
+   "sha256": "95be075a57de7f9b05985ebf1d911419c1fe4de8b3b1e0b9b0d5189ac3282b5e"
+  },
+  "environment/scene_geometry.json": {
+   "git_blob": "03445c0f4a88c4703e77eb886c9b5f32e5595d73",
+   "sha256": "52367c5a980dcbe852d283d04c7a77d98c4c762ca84c1c2f7c286dd24142cc1c"
+  },
+  "environment/assets/scene.xml": {
+   "git_blob": "86023cb6eb6037c2457e759acc870497c27cc7fb",
+   "sha256": "dfa7313256060a16e269276bd76d27dfc6a95e8fea30f1b80b8548288abfb4a2"
+  },
+  "tests/verify_deposit.py": {
+   "git_blob": "ef629ee62119e204711a377fb596756a27b26fdb",
+   "sha256": "6662aee67d8cca80050c56cad58d1389f27438574245208640e3d7186f8e36a2"
+  },
+  "tests/scene_geometry.json": {
+   "git_blob": "6349d3bc4575af37bda04f04422640cf955b6000",
+   "sha256": "436fe369eefd9dc728668fc1c308fcfd3ee42b7c1c2e8d39bec2313e19d584c3"
+  },
+  "solution/make_plan.py": {
+   "git_blob": "029f1c6bf73248861134437ce2816792906a44e1",
+   "sha256": "dc76d52342bc900247e62e010fc38d8f685f48a5abfbda0a253bc50146639eb2"
+  },
+  "instruction.md": {
+   "git_blob": "b2bad99c15708168bde53cc4dcae3a144a74f50c",
+   "sha256": "550bffa52b128dab02ef733e86fb2f5f8412cdc1d56445239152a592e98b025f"
+  }
+ },
+ "ported": {
+  "implementation/deposit_coin.py": "run_plan.py execution semantics (skills, step budgets, convergence, grasp/release, settle) and build_scene.py geometry derivation; MuJoCo replaced by native USD/PhysX",
+  "implementation/verdict.py": "tests/verify_deposit.py verify(), English, same rules and tolerances",
+  "implementation/scene_geometry.json": "environment/scene_geometry.json, byte-identical",
+  "solution/oracle.py": "solution/make_plan.py plus one jaw-narrowing skill before withdrawal"
+ }
+}
