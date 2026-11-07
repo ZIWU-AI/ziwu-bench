@@ -159,3 +159,7 @@ Use the manual [GPU workflow and submission exporter](tools/mujoco-modal/README.
 The same manual workflow also supports `backend=isaac` for the Isaac Sim 5.1
 reference/Nop example, including fresh native GPU verification. See the
 [Isaac Modal runbook](tools/isaac-reference-modal/README.md) for dispatch and provenance.
+
+`backend=isaac-model` adds explicitly dispatched, single-trial model/harness
+comparisons with a real tool-use preflight and sanitized result table. See the
+[model runbook](tools/isaac-model-comparison/README.md).

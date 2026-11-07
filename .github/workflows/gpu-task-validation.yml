@@ -11,8 +11,23 @@ on:
       backend:
         description: "Simulator (Isaac uses GPU in runner and verifier)"
         type: choice
-        options: [mujoco, isaac]
+        options: [mujoco, isaac, isaac-model]
         default: mujoco
+      model_profile:
+        description: "Isaac model comparison profile"
+        type: choice
+        options: [all, kimi, deepseek, astra, sol, opus]
+        default: all
+      harness:
+        description: "Harness for model comparison"
+        type: choice
+        options: [all, codex, claude-code, kimi-code, deepseek-harness]
+        default: all
+      model_stage:
+        description: "Real CLI preflight only, or preflight plus native task"
+        type: choice
+        options: [preflight, all]
+        default: preflight
       task_path:
         description: "Protected MuJoCo or Isaac task path"
         type: string
@@ -35,6 +50,9 @@ on:
   workflow_call:
     inputs:
       backend: {type: string, default: mujoco}
+      model_profile: {type: string, default: all}
+      harness: {type: string, default: all}
+      model_stage: {type: string, default: preflight}
       pr_number: {type: string, default: "0"}
       task_path: {type: string, required: true}
       gpu: {type: string, default: L40S}
@@ -43,6 +61,12 @@ on:
     secrets:
       MODAL_TOKEN_ID: {required: true}
       MODAL_TOKEN_SECRET: {required: true}
+      KIMI_CODE_API_KEY: {required: false}
+      DEEPSEEK_API_KEY: {required: false}
+      FRONTIER_OPENAI_API_KEY: {required: false}
+      FRONTIER_OPENAI_BASE_URL: {required: false}
+      FRONTIER_ANTHROPIC_API_KEY: {required: false}
+      FRONTIER_ANTHROPIC_BASE_URL: {required: false}
 
 permissions:
   contents: read
@@ -54,6 +78,7 @@ jobs:
     outputs:
       sha: ${{ steps.source.outputs.source_sha }}
       matrix: ${{ steps.source.outputs.matrix }}
+      model_matrix: ${{ steps.models.outputs.model_matrix }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with: {persist-credentials: false}
@@ -65,7 +90,15 @@ jobs:
           TASK_PATH: ${{ inputs.task_path }}
           TRIALS: ${{ inputs.trials }}
         run: python tools/mujoco-modal/resolve.py
+      - name: Resolve model/harness matrix
+        if: inputs.backend == 'isaac-model'
+        id: models
+        env:
+          MODEL_PROFILE: ${{ inputs.model_profile }}
+          HARNESS: ${{ inputs.harness }}
+        run: python tools/isaac-model-comparison/matrix.py
   validate:
+    if: inputs.backend != 'isaac-model'
     needs: resolve
     runs-on: ubuntu-24.04
     timeout-minutes: 350
@@ -130,3 +163,92 @@ jobs:
           path: work/report/
           retention-days: 30
           if-no-files-found: warn
+
+  models:
+    if: inputs.backend == 'isaac-model'
+    needs: resolve
+    runs-on: ubuntu-24.04
+    timeout-minutes: 350
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix: ${{ fromJSON(needs.resolve.outputs.model_matrix) }}
+    steps:
+      - name: Trusted orchestration
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with: {persist-credentials: false}
+      - name: Frozen task source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ needs.resolve.outputs.sha }}
+          path: candidate
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: python -m pip install -r tools/isaac-model-comparison/requirements-host.txt
+      - name: Prepare public Isaac extensions
+        if: inputs.model_stage == 'all'
+        run: python tools/isaac-reference-modal/prepare_extensions.py --output work/extensions --accept-nvidia-license
+      - name: One real harness preflight and optional native trial
+        env:
+          MODAL_TOKEN_ID: ${{ secrets.MODAL_TOKEN_ID }}
+          MODAL_TOKEN_SECRET: ${{ secrets.MODAL_TOKEN_SECRET }}
+          KIMI_CODE_API_KEY: ${{ matrix.profile == 'kimi' && secrets.KIMI_CODE_API_KEY || '' }}
+          DEEPSEEK_API_KEY: ${{ matrix.profile == 'deepseek' && secrets.DEEPSEEK_API_KEY || '' }}
+          FRONTIER_OPENAI_API_KEY: ${{ (matrix.profile == 'astra' || matrix.profile == 'sol') && secrets.FRONTIER_OPENAI_API_KEY || '' }}
+          FRONTIER_OPENAI_BASE_URL: ${{ secrets.FRONTIER_OPENAI_BASE_URL }}
+          FRONTIER_ANTHROPIC_API_KEY: ${{ matrix.profile == 'opus' && secrets.FRONTIER_ANTHROPIC_API_KEY || '' }}
+          FRONTIER_ANTHROPIC_BASE_URL: ${{ secrets.FRONTIER_ANTHROPIC_BASE_URL }}
+          SOURCE_SHA: ${{ needs.resolve.outputs.sha }}
+          MODEL_PROFILE: ${{ matrix.profile }}
+          HARNESS: ${{ matrix.harness }}
+          MODEL_STAGE: ${{ inputs.model_stage }}
+          COMPARISON_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          umask 077
+          python tools/isaac-model-comparison/run.py --profile "$MODEL_PROFILE" --harness "$HARNESS" \
+            --task-root candidate --source-sha "$SOURCE_SHA" --stage "$MODEL_STAGE" \
+            --extensions work/extensions --output comparison-output/run
+      - name: Stop remaining native containers
+        if: always()
+        timeout-minutes: 3
+        env:
+          MODAL_TOKEN_ID: ${{ secrets.MODAL_TOKEN_ID }}
+          MODAL_TOKEN_SECRET: ${{ secrets.MODAL_TOKEN_SECRET }}
+        run: python tools/isaac-model-comparison/cleanup.py --source comparison-output/run
+      - name: Publish sanitized result only
+        if: always()
+        env:
+          MODEL_PROFILE: ${{ matrix.profile }}
+          HARNESS: ${{ matrix.harness }}
+        run: python tools/isaac-model-comparison/publish.py --source comparison-output/run --output work/model-report
+      - name: Retain model result and native lifecycle
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: isaac-${{ matrix.profile }}-${{ matrix.harness }}-${{ github.run_id }}
+          path: work/model-report/
+          retention-days: 30
+          if-no-files-found: warn
+
+  model-report:
+    if: always() && inputs.backend == 'isaac-model'
+    needs: models
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with: {persist-credentials: false}
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: isaac-*
+          path: work/model-results
+      - name: Aggregate every requested pair
+        env:
+          MODEL_PROFILE: ${{ inputs.model_profile }}
+          HARNESS: ${{ inputs.harness }}
+        run: python tools/isaac-model-comparison/aggregate.py --source work/model-results --output work/comparison --profile "$MODEL_PROFILE" --harness "$HARNESS"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: isaac-comparison-${{ github.run_id }}
+          path: work/comparison/
+          retention-days: 30
