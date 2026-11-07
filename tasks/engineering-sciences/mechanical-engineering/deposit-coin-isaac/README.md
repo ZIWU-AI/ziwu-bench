@@ -42,9 +42,9 @@ The plan is the MuJoCo source's reference plus that one narrowing skill. In MuJo
 
 ## Verification
 
-The verifier is a fresh, network-isolated sandbox with its own hash-pinned copy of the simulator. It receives only `/app/output/submission.json`. `harbor_verify.py` checks the registration and every implementation hash before reading the candidate. It then runs the native worker in a subprocess and writes reward 1 or 0 only after a normal exit with a complete, nonce- and hash-bound result. A malformed plan (unknown skill or parameter, out-of-range value, more than 20 skills, missing file, duplicate key, non-finite number) scores 0 before physics. An engine crash or missing result is an infrastructure error, never a zero.
+The verifier is a fresh, network-isolated sandbox with its own hash-pinned copy of the simulator, and it receives only `/app/output/submission.json`. `harbor_verify.py` checks every registered hash, runs the native worker in a subprocess, and writes reward 1 or 0 only after a normal exit with a complete, nonce-bound result. A malformed plan scores 0 before physics; an engine crash is an infrastructure error, never a zero.
 
-The replay executes the plan with the MuJoCo runner's skill semantics: at least 10 and at most 80 steps of 2 ms per skill, convergence tolerances of 1 mm, 0.02 rad and 0.1 mm, and the same grasp and release rules. It then settles the coin (at least 30 steps, then until it is still for 10 consecutive steps, at most 8 s). The pass condition is the MuJoCo verifier's rule set, ported line for line (`verdict.py`):
+The replay uses the MuJoCo runner's skill semantics: 10 to 80 steps of 2 ms per skill, convergence tolerances of 1 mm, 0.02 rad and 0.1 mm, and the same grasp and release rules. The coin then settles (at least 30 steps, until still for 10 steps, at most 8 s). The pass condition is the MuJoCo verifier's rule set, ported line for line (`verdict.py`):
 
 1. The replay ended normally.
 2. The bank pose read back from the stage equals the geometry file.
