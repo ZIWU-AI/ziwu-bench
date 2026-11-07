@@ -51,6 +51,7 @@ def main():
     parser.add_argument("--gpu", choices=["L40S", "A10"], default="L40S")
     parser.add_argument("--mode", choices=["all", "oracle", "nop"], default="all")
     args = parser.parse_args()
+    args.source_sha = subprocess.check_output(["git", "rev-parse", "--verify", args.source_sha + "^{commit}"], cwd=args.task_root, text=True).strip()
     task = safe_task(args.task_root, args.task_path)
     for role in ("environment", "tests"):
         manifest = json.loads((task / role / "bundle/manifest.json").read_text())

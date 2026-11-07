@@ -108,3 +108,6 @@ python -m unittest discover -s tools/mujoco-modal/tests -v
 
 Use a fresh output directory. The selected source SHA is recorded along with
 every task file's hash; the source checkout must match the SHA you supply.
+
+For the original Isaac Sim 5.1 example, select `backend=isaac` and follow the
+[Isaac runbook](../isaac-reference-modal/README.md). The default remains MuJoCo.

@@ -269,3 +269,8 @@ If the PR adds/removes/renames a CI check, workflow, rubric, or guide, update al
 ## GPU adapter and submission exporter
 
 `tools/mujoco-modal/` and `gpu-task-validation.yml` provide explicitly invoked, bounded Modal reference/Nop runs for the protected pen-service contract. Task files are data on the host; never import PR Python alongside host credentials. Preserve pinned source SHAs, fresh data-only verification, report allowlists and cleanup. Do not turn PR/push events into paid GPU triggers. `upstream-task-bundle.yml` exports task-only patches against official main without pushing or opening PRs. See [the runbook](tools/mujoco-modal/README.md).
+
+`tools/isaac-reference-modal/` extends that manual workflow with `backend=isaac`.
+Keep task source, runtime and extension hashes pinned; maintain no-network native
+verification, zero-model controls, bounded allocation and report filtering.
+See [the Isaac runbook](tools/isaac-reference-modal/README.md).

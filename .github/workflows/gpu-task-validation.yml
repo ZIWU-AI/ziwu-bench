@@ -1,5 +1,5 @@
 name: GPU Task Validation
-run-name: GPU validation PR ${{ inputs.pr_number }} / ${{ inputs.mode }} / ${{ inputs.gpu }}
+run-name: GPU validation PR ${{ inputs.pr_number }} / ${{ inputs.mode }} / ${{ inputs.gpu }} / ${{ inputs.backend || 'mujoco' }}
 
 on:
   workflow_dispatch:
@@ -8,14 +8,19 @@ on:
         description: "PR in this repository (0 = selected workflow revision)"
         type: string
         default: "0"
+      backend:
+        description: "Simulator (Isaac uses GPU in runner and verifier)"
+        type: choice
+        options: [mujoco, isaac]
+        default: mujoco
       task_path:
-        description: "Protected MuJoCo task path"
+        description: "Protected MuJoCo or Isaac task path"
         type: string
         required: true
         default: tasks/engineering-sciences/mechanical-engineering/physicalrsi-bimanual-control
       gpu:
         type: choice
-        description: "GPU for NVIDIA EGL rendering"
+        description: "GPU for NVIDIA rendering"
         options: [L40S, A10]
         default: L40S
       mode:
@@ -29,6 +34,7 @@ on:
         default: 1
   workflow_call:
     inputs:
+      backend: {type: string, default: mujoco}
       pr_number: {type: string, default: "0"}
       task_path: {type: string, required: true}
       gpu: {type: string, default: L40S}
@@ -62,7 +68,7 @@ jobs:
   validate:
     needs: resolve
     runs-on: ubuntu-24.04
-    timeout-minutes: 90
+    timeout-minutes: 350
     strategy:
       fail-fast: false
       max-parallel: 1
@@ -81,6 +87,9 @@ jobs:
       - uses: actions/setup-python@v5
         with: {python-version: "3.12"}
       - run: python -m pip install -r tools/mujoco-modal/requirements-host.txt
+      - name: Prepare hash-pinned Isaac engine extensions
+        if: inputs.backend == 'isaac'
+        run: python tools/isaac-reference-modal/prepare_extensions.py --output work/extensions --accept-nvidia-license
       - name: Run GPU reference and fresh data-only verifier
         env:
           MODAL_TOKEN_ID: ${{ secrets.MODAL_TOKEN_ID }}
@@ -89,10 +98,16 @@ jobs:
           SOURCE_SHA: ${{ needs.resolve.outputs.sha }}
           GPU: ${{ inputs.gpu }}
           MODE: ${{ inputs.mode }}
+          BACKEND: ${{ inputs.backend || 'mujoco' }}
         run: |
           test -n "$MODAL_TOKEN_ID" && test -n "$MODAL_TOKEN_SECRET"
-          python tools/mujoco-modal/run.py --task-root candidate --task-path "$TASK_PATH" \
-            --source-sha "$SOURCE_SHA" --gpu "$GPU" --mode "$MODE" --output work/run
+          case "$BACKEND" in
+            mujoco) runner=tools/mujoco-modal/run.py; extra=() ;;
+            isaac) runner=tools/isaac-reference-modal/run.py; extra=(--extensions work/extensions) ;;
+            *) echo 'Unsupported simulator'; exit 1 ;;
+          esac
+          python "$runner" --task-root candidate --task-path "$TASK_PATH" \
+            --source-sha "$SOURCE_SHA" --gpu "$GPU" --mode "$MODE" --output work/run "${extra[@]}"
       - name: Stop this run's sandboxes, including failed phases
         if: always()
         timeout-minutes: 3
@@ -103,6 +118,7 @@ jobs:
       - name: Summarize results and package safe evidence
         if: always()
         env:
+          BACKEND: ${{ inputs.backend || 'mujoco' }}
           SOURCE_SHA: ${{ needs.resolve.outputs.sha }}
           TASK_PATH: ${{ inputs.task_path }}
         run: python tools/mujoco-modal/report.py --run work/run --output work/report
