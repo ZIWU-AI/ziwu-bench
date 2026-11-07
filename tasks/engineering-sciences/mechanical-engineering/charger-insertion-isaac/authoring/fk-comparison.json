@@ -1,0 +1,8 @@
+{
+  "source_engine": "3.4.0",
+  "configurations": 12,
+  "body_comparisons": 132,
+  "max_absolute_transform_error": 1.3322676295501878e-15,
+  "passed": true,
+  "scope": "CPU source-model comparison of asset conversion/FK only; not native PhysX execution"
+}
