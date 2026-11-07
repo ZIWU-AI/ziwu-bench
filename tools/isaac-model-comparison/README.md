@@ -81,3 +81,10 @@ keeps Isaac 5.1, A10, OCI eu-west, hard resources and independent replay checks,
 but records rather than rejects a driver different from historical 580.95.05.
 This is an exploratory compatibility trial, not historical acceptance. The
 default `all` remains strict. Startup failures have no model reward.
+
+The report job also publishes a **🧪 Agent Trial Results** PR comment with one
+row per selected model/harness, trial verdict, scored-trial average, timing and
+cost availability. It updates a run-specific marker instead of creating repeated
+comments. `pr_number=0` resolves the single open PR for the selected ziwu branch.
+Comment writes are restricted to `ZIWU-AI/ziwu-bench`; the official repository
+is refused. Hub links and judge analysis remain absent unless actually produced.

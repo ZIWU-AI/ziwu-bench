@@ -244,6 +244,9 @@ jobs:
           if-no-files-found: warn
 
   model-report:
+    permissions:
+      contents: read
+      pull-requests: write
     if: always() && inputs.backend == 'isaac-model'
     needs: models
     runs-on: ubuntu-24.04
@@ -264,3 +267,16 @@ jobs:
           name: isaac-comparison-${{ github.run_id }}
           path: work/comparison/
           retention-days: 30
+      - name: Update Agent Trial Results PR comment
+        if: github.repository == 'ZIWU-AI/ziwu-bench'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ inputs.pr_number }}
+          WORKFLOW_BRANCH: ${{ github.ref_name }}
+          RUN_ID: ${{ github.run_id }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          python tools/isaac-model-comparison/pr_comment.py \
+            --source work/comparison/comparison.json --output work/comparison/PR_COMMENT.md \
+            --run-id "$RUN_ID" --pr "$PR_NUMBER" --branch "$WORKFLOW_BRANCH" \
+            --repo "$REPOSITORY" --post
