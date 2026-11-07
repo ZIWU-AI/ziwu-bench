@@ -1,0 +1,185 @@
+{
+  "date": "2026-11-07",
+  "platform": "Linux x86_64, Docker 24.0.9, Harbor 0.21.0",
+  "base_commit": "35527a9107a46686fcd424d91f29bdf7e70ac46d",
+  "static_checks": [
+    {
+      "check": "check-allow-internet.sh",
+      "exit_code": 0
+    },
+    {
+      "check": "check-binary-reward.sh",
+      "exit_code": 0
+    },
+    {
+      "check": "check-canary.sh",
+      "exit_code": 0
+    },
+    {
+      "check": "check-compose-host-binds.sh",
+      "exit_code": 0
+    },
+    {
+      "check": "check-dockerfile-platform.sh",
+      "exit_code": 0
+    },
+    {
+      "check": "check-dockerfile-references.sh",
+      "exit_code": 0
+    },
+    {
+      "check": "check-dockerfile-sanity.sh",
+      "exit_code": 0
+    },
+    {
+      "check": "check-gpu-types.sh",
+      "exit_code": 0
+    },
+    {
+      "check": "check-instruction-suffix.sh",
+      "exit_code": 0
+    },
+    {
+      "check": "check-nproc.sh",
+      "exit_code": 0
+    },
+    {
+      "check": "check-pip-pinning.sh",
+      "exit_code": 0
+    },
+    {
+      "check": "check-pytest-version.sh",
+      "exit_code": 0
+    },
+    {
+      "check": "check-separate-verifier.sh",
+      "exit_code": 0
+    },
+    {
+      "check": "check-task-absolute-path.sh",
+      "exit_code": 0
+    },
+    {
+      "check": "check-task-fields.sh",
+      "exit_code": 0
+    },
+    {
+      "check": "check-task-path.sh",
+      "exit_code": 0
+    },
+    {
+      "check": "check-task-readme.sh",
+      "exit_code": 0
+    },
+    {
+      "check": "check-task-slug.sh",
+      "exit_code": 0
+    },
+    {
+      "check": "check-task-structure.sh",
+      "exit_code": 0
+    },
+    {
+      "check": "check-task-timeout.sh",
+      "exit_code": 0
+    },
+    {
+      "check": "check-test-file-references.sh",
+      "exit_code": 0
+    },
+    {
+      "check": "check-test-sh-sanity.sh",
+      "exit_code": 0
+    },
+    {
+      "check": "check-trial-network-fetch.sh",
+      "exit_code": 0
+    },
+    {
+      "check": "check-verifier-tooling-baked.sh",
+      "exit_code": 0
+    }
+  ],
+  "similarity_max": 0.13,
+  "similarity_threshold": 0.8,
+  "oracle": {
+    "reward": 1,
+    "passed": 96,
+    "total": 96
+  },
+  "nop": {
+    "reward": 0,
+    "passed": 0,
+    "total": 96
+  },
+  "isolation_checks": {
+    "oracle": {
+      "reward": 1,
+      "passed": 96,
+      "total": 96,
+      "error": null,
+      "first_failure": []
+    },
+    "read_hidden": {
+      "reward": 0,
+      "passed": 0,
+      "total": 96,
+      "error": "submission process failed: Traceback (most recent call last):\n  File \"/opt/fit/worker.py\", line 23, in <module>\n    main()\n  File \"/opt/fit/worker.py\", line 11, in main\n    spec.loader.exec_module(module)\n  File \"<frozen importlib._bootstrap_external>\", line 940, in exec_module\n  File \"<frozen importlib._bootstrap>\", line 241, in _call_with_frames_removed\n  File \"/app/solution.py\", line 1, in <module>\n    open(\"/tests/data/fit_hidden.json\").read()\n    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nPermissionError: [Errno 13] Permission denied: '/tests/data/fit_hidden.json'\n",
+      "first_failure": []
+    },
+    "forge_reward": {
+      "reward": 0,
+      "passed": 0,
+      "total": 96,
+      "error": "submission process failed: Traceback (most recent call last):\n  File \"/opt/fit/worker.py\", line 23, in <module>\n    main()\n  File \"/opt/fit/worker.py\", line 11, in main\n    spec.loader.exec_module(module)\n  File \"<frozen importlib._bootstrap_external>\", line 940, in exec_module\n  File \"<frozen importlib._bootstrap>\", line 241, in _call_with_frames_removed\n  File \"/app/solution.py\", line 1, in <module>\n    open(\"/logs/verifier/reward.txt\",\"w\").write(\"1\")\n    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nPermissionError: [Errno 13] Permission denied: '/logs/verifier/reward.txt'\n",
+      "first_failure": []
+    },
+    "nonfinite": {
+      "reward": 0,
+      "passed": 0,
+      "total": 96,
+      "error": "submission process failed: Traceback (most recent call last):\n  File \"/opt/fit/worker.py\", line 23, in <module>\n    main()\n  File \"/opt/fit/worker.py\", line 20, in main\n    json.dump({\"calibration\": report, \"results\": results}, sys.stdout, allow_nan=False)\n  File \"/usr/local/lib/python3.11/json/__init__.py\", line 179, in dump\n    for chunk in iterable:\n  File \"/usr/local/lib/python3.11/json/encoder.py\", line 432, in _iterencode\n    yield from _iterencode_dict(o, _current_indent_level)\n  File \"/usr/local/lib/python3.11/json/encoder.py\", line 406, in _iterencode_dict\n    yield from chunks\n  File \"/usr/local/lib/python3.11/json/encoder.py\", line 326, in _iterencode_list\n    yield from chunks\n  File \"/usr/local/lib/python3.11/json/encoder.py\", line 406, in _iterencode_dict\n    yield from chunks\n  File \"/usr/local/lib/python3.11/json/encoder.py\", line 398, in _iterencode_dict\n    yield _floatstr(value)\n          ^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.11/json/encoder.py\", line 240, in floatstr\n    raise ValueError(\nValueError: Out of range float values are not JSON compliant: nan\n",
+      "first_failure": []
+    },
+    "overlong": {
+      "reward": 0,
+      "passed": 0,
+      "total": 96,
+      "error": null,
+      "first_failure": [
+        {
+          "id": 0,
+          "error": "segment violates duration or velocity limits"
+        }
+      ]
+    },
+    "overforce": {
+      "reward": 0,
+      "passed": 0,
+      "total": 96,
+      "error": null,
+      "first_failure": [
+        {
+          "id": 0,
+          "error": "force limit outside the request's operating range"
+        }
+      ]
+    },
+    "fork": {
+      "reward": 0,
+      "passed": 0,
+      "total": 96,
+      "error": "submission process failed: Traceback (most recent call last):\n  File \"/opt/fit/worker.py\", line 23, in <module>\n    main()\n  File \"/opt/fit/worker.py\", line 11, in main\n    spec.loader.exec_module(module)\n  File \"<frozen importlib._bootstrap_external>\", line 940, in exec_module\n  File \"<frozen importlib._bootstrap>\", line 241, in _call_with_frames_removed\n  File \"/app/solution.py\", line 2, in <module>\n    os.fork()\nPermissionError: [Errno 1] Operation not permitted\n",
+      "first_failure": []
+    }
+  },
+  "frontier_trial": {
+    "agent": "claude-code",
+    "model": "claude-opus-5-5",
+    "status": "authentication_failure",
+    "http_status": 401,
+    "reason": "OAuth token revoked",
+    "valid_difficulty_measurement": false,
+    "elapsed_seconds": 700
+  }
+}
