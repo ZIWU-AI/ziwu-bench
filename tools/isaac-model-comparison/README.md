@@ -73,3 +73,11 @@ profiles (`input` / `inputModalities`); the source friction comparison declared
 text only. This follows the [pinned harness configuration](https://github.com/deepseek-ai/deepseek-harness/blob/fcc0ad462172522aaf5c93a7b2e01f6b9f0b0159/docs/user/guide/providers.md)
 and [DeepSeek vision API](https://api-docs.deepseek.com/guides/vision/). Image
 capability declarations do not prove an individual trial inspected its cameras.
+
+## Explicit current-driver trial
+
+`model_stage=all-current-driver` (CLI `--stage all --driver-policy observed`)
+keeps Isaac 5.1, A10, OCI eu-west, hard resources and independent replay checks,
+but records rather than rejects a driver different from historical 580.95.05.
+This is an exploratory compatibility trial, not historical acceptance. The
+default `all` remains strict. Startup failures have no model reward.

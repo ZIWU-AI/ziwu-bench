@@ -26,6 +26,9 @@ class IsaacEnvironment(ModalEnvironment):
             raise ValueError("This adapter requires Harbor 0.23.0")
         if kwargs.get("secrets") or kwargs.get("volumes") or kwargs.get("extra_docker_compose"):
             raise ValueError("No shared secrets, volumes or extra services in native trial")
+        self._driver_policy = kwargs.pop("driver_policy", "strict")
+        if self._driver_policy not in ("strict", "observed"):
+            raise ValueError("Unknown driver policy")
         super().__init__(*args, **kwargs)
         self._isaac_role = "agent" if (self.environment_dir / "sim-service").is_dir() else "verifier"
         manifest = json.loads((self.environment_dir / "bundle/manifest.json").read_text())
@@ -68,10 +71,11 @@ class IsaacEnvironment(ModalEnvironment):
             proc = await sb.exec.aio("nvidia-smi", "--query-gpu=name,driver_version", "--format=csv,noheader", timeout=30)
             self._native_receipt["hardware"] = (await proc.stdout.read.aio()).strip()
             self._save_native()
-            self._native_receipt.update(await verify_hardware(sb))
+            self._native_receipt.update(await verify_hardware(sb, driver_policy=self._driver_policy))
             self._save_native()
             return sb
-        except BaseException:
+        except BaseException as exc:
+            self._native_receipt.update(status="hardware_error", error_type=type(exc).__name__)
             await sb.terminate.aio()
             self._native_receipt["cleanup_requested"] = True; self._save_native()
             raise
@@ -80,9 +84,13 @@ class IsaacEnvironment(ModalEnvironment):
         try:
             await super().start(force_build)
             if self._isaac_role == "agent":
+                self._native_receipt["status"] = "native_starting"
+                self._save_native()
                 result = await self.exec("/opt/venv/bin/python -I /opt/pen-runtime/environment/start_service.py",
                                          cwd="/", user="root", timeout_sec=660)
                 if result.return_code:
+                    self._native_receipt.update(status="native_startup_failed", startup_exit_code=result.return_code)
+                    self._save_native()
                     raise RuntimeError("Protected Isaac startup failed before model execution")
                 self._native_receipt["status"] = "native_ready"
                 self._save_native()

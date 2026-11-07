@@ -26,6 +26,7 @@ def main():
     parser.add_argument("--source-sha", required=True)
     parser.add_argument("--extensions", type=Path)
     parser.add_argument("--stage", choices=["preflight", "all"], default="all")
+    parser.add_argument("--driver-policy", choices=["strict", "observed"], default="strict")
     args = parser.parse_args()
     output = args.output.resolve(); output.mkdir(parents=True, exist_ok=False)
     spec = PROFILES[args.profile]
@@ -39,6 +40,10 @@ def main():
                "agent_timeout_sec": 5400, "started_at": now(), "run_url": os.environ.get("COMPARISON_RUN_URL"),
                "harbor_version": version("harbor"), "gpu": "A10", "cpus": 4, "memory_mib": 16384, "isaac_version": "5.1.0.0"}
     summary["calibration"] = calibration(args.task_root, sha, TASK, HERE / "evidence/calibration.json", runtime_spec(ROOT))
+    summary["driver_policy"] = args.driver_policy
+    if args.driver_policy == "observed":
+        summary["calibration"] = {"status": "exploratory_current_driver", "reference_driver": "580.95.05",
+                                  "historical_acceptance_transferred": False}
     code = 1
     try:
         if version("harbor") != "0.23.0":
@@ -85,7 +90,7 @@ def main():
                 source.extractall(task, filter="data")
             cfg = job_config(route, task, output / "trial", "comparison", secret, 5400)
             cfg["environment"] = {"import_path": "isaac_environment:IsaacEnvironment", "delete": True,
-                "kwargs": {"app_name": "ziwu-isaac-models", "sandbox_timeout_secs": 18000}}
+                "kwargs": {"app_name": "ziwu-isaac-models", "sandbox_timeout_secs": 18000, "driver_policy": args.driver_policy}}
             summary.update(status="trial_running", trial_count=1); write_json(output / "summary.json", summary)
             status = execute(cfg, private, output, "trial", env)
             summary.update(collect(output / "trial/comparison"))

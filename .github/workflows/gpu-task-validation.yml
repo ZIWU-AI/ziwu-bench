@@ -24,9 +24,9 @@ on:
         options: [all, codex, claude-code, kimi-code, deepseek-harness]
         default: all
       model_stage:
-        description: "Real CLI preflight only, or preflight plus native task"
+        description: "preflight; all requires driver 580; all-current-driver tests allocated driver"
         type: choice
-        options: [preflight, all]
+        options: [preflight, all, all-current-driver]
         default: preflight
       task_path:
         description: "Protected MuJoCo or Isaac task path"
@@ -194,7 +194,7 @@ jobs:
         with: {python-version: "3.12"}
       - run: python -m pip install -r tools/isaac-model-comparison/requirements-host.txt
       - name: Prepare pinned Isaac 5.1 extensions
-        if: inputs.model_stage == 'all'
+        if: inputs.model_stage == 'all' || inputs.model_stage == 'all-current-driver'
         run: python tools/isaac-reference-modal/prepare_extensions.py --output work/extensions --accept-nvidia-license
       - name: One real harness preflight and optional native trial
         env:
@@ -213,9 +213,14 @@ jobs:
           COMPARISON_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
           umask 077
+          driver_policy=strict
+          if [ "$MODEL_STAGE" = all-current-driver ]; then
+            MODEL_STAGE=all
+            driver_policy=observed
+          fi
           python tools/isaac-model-comparison/run.py --profile "$MODEL_PROFILE" --harness "$HARNESS" \
             --task-root candidate --source-sha "$SOURCE_SHA" --stage "$MODEL_STAGE" \
-            --output comparison-output/run --extensions work/extensions
+            --output comparison-output/run --extensions work/extensions --driver-policy "$driver_policy"
       - name: Stop remaining native containers
         if: always()
         timeout-minutes: 3

@@ -30,11 +30,14 @@ def image_for(directory, extensions=None):
     return image
 
 
-async def verify_hardware(sb):
+async def verify_hardware(sb, *, driver_policy="strict"):
+    if driver_policy not in ("strict", "observed"):
+        raise ValueError("Unknown driver policy")
     name, driver = await inspect_gpu(sb)
     result = {"hardware": name + ", " + driver,
-              "required_driver_version": DRIVER_VERSION}
-    if name != GPU_NAME or driver != DRIVER_VERSION:
+              "reference_driver_version": DRIVER_VERSION, "driver_policy": driver_policy,
+              "driver_matches_reference": driver == DRIVER_VERSION}
+    if name != GPU_NAME or (driver_policy == "strict" and driver != DRIVER_VERSION):
         raise RuntimeError("PR #2195 hardware mismatch: expected " + GPU_NAME +
             " / " + DRIVER_VERSION + "; allocated " + result["hardware"])
     placement = await inspect_placement(sb)
