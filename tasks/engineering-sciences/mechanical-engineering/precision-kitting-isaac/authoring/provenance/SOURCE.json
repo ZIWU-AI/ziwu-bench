@@ -1,0 +1,27 @@
+{
+  "source_pr": "https://github.com/RoboIndustrial-Benchmark/terminal-bench-science/pull/6",
+  "source_sha": "430bfa3610a2a52f3742cf945f65a2bd781b35bc",
+  "source_task": "tasks/engineering-sciences/mechanical-engineering/precision-kitting-mujoco",
+  "source_sha256": {
+    "instruction.md": "095b0b8ae5e3133f1f99e2033cabdc1e0328609a2444e0db762ed6f3359cd756",
+    "task.toml": "640d5e9b761c944061e0952f506d83ef4e34da658aae47e96592a80622b365f2",
+    "solution/reference_solution.py": "375cbb3b7eed159ffe9045982117e26c3b3fa7b3bfdc64578794f0d3b01e5fc1",
+    "tests/precision_kitting_verifier.py": "ab669be6cabd044487cb617d46c70eef9cdd6994f0199532959f1f651b82b642",
+    "tests/test_outputs.py": "d094c4df985e06570e87e9bf4995a446bbe17a491b9f50e9a9d3d12bd170c6d9",
+    "environment/models/scene.xml": "2fe4903925ed9778dbb83acde05c28f841a0d8d518f55a4f480aa94a0b6a0cfc",
+    "environment/models/franka_emika_panda/panda.xml": "8a5ab91f30537f059b5a3ca3d03e38789167e3623f02448f3b36a424e40ccd24",
+    "environment/models/franka_emika_panda/assets/finger_0.obj": "215098c0fcdf7192f6c503a37cf49e3efecf8a9e1320f02b17c5584d89cc5b2c",
+    "environment/models/franka_emika_panda/assets/hand.stl": "94493e94f30fe940f2c8ca2f155c3bbe67bbff406d3edf5e261670d2f0f6e2ed",
+    "environment/models/franka_emika_panda/assets/link0.stl": "dfc6d94330de8ddb005b311bfdba9f3b8e1aa7c256b71592ee7ff32cb9a9a5aa",
+    "environment/models/franka_emika_panda/assets/link1.stl": "e41a39a94108fcf56aacff603fc91ec80541f4c1af17b51a0de5617f5566e6d2",
+    "environment/models/franka_emika_panda/assets/link2.stl": "370f7605a0fae3529db169ded50f52f171024aa792d4d773bc84197301f6a039",
+    "environment/models/franka_emika_panda/assets/link3.stl": "0a8d638b9349c6c0eefc4e888636ac4838c4b27170f18a51699321118af709c1",
+    "environment/models/franka_emika_panda/assets/link4.stl": "0180ebb5772ec9840cb049750cffb29a9ddc90311752a16ea34757782ef9e48d",
+    "environment/models/franka_emika_panda/assets/link5_collision_0.obj": "3e5aa75fb13f193555c3dfb999df91d81df25006a5c3af5338297d78137c129b",
+    "environment/models/franka_emika_panda/assets/link5_collision_1.obj": "87cd8f621071df010f774cbde789282b8463840dfe704f8bdfa2e29be0142e15",
+    "environment/models/franka_emika_panda/assets/link5_collision_2.obj": "823ab6c8f7b1d79e0844fa071d82a03499ff68e34fddb1ba3451032c22736040",
+    "environment/models/franka_emika_panda/assets/link6.stl": "20b768e99a0e0440b5754dcca108016434e57937cc356acd9c352ccd3cb27f77",
+    "environment/models/franka_emika_panda/assets/link7.stl": "92ac6afcf7574c034d3170d8a68e95ac9048ab9d0dd5bbd8311b86e551b9ab1c"
+  },
+  "native_validation": "NOT RUN: explicit user request; conversion only"
+}

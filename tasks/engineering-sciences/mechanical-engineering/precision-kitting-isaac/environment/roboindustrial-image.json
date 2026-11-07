@@ -1,0 +1,25 @@
+{
+  "destination": "/app",
+  "files": {
+    "implementation/assets/LICENSE": "a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9",
+    "implementation/assets/finger_0.obj": "215098c0fcdf7192f6c503a37cf49e3efecf8a9e1320f02b17c5584d89cc5b2c",
+    "implementation/assets/hand.stl": "94493e94f30fe940f2c8ca2f155c3bbe67bbff406d3edf5e261670d2f0f6e2ed",
+    "implementation/assets/link0.stl": "dfc6d94330de8ddb005b311bfdba9f3b8e1aa7c256b71592ee7ff32cb9a9a5aa",
+    "implementation/assets/link1.stl": "e41a39a94108fcf56aacff603fc91ec80541f4c1af17b51a0de5617f5566e6d2",
+    "implementation/assets/link2.stl": "370f7605a0fae3529db169ded50f52f171024aa792d4d773bc84197301f6a039",
+    "implementation/assets/link3.stl": "0a8d638b9349c6c0eefc4e888636ac4838c4b27170f18a51699321118af709c1",
+    "implementation/assets/link4.stl": "0180ebb5772ec9840cb049750cffb29a9ddc90311752a16ea34757782ef9e48d",
+    "implementation/assets/link5_collision_0.obj": "3e5aa75fb13f193555c3dfb999df91d81df25006a5c3af5338297d78137c129b",
+    "implementation/assets/link5_collision_1.obj": "87cd8f621071df010f774cbde789282b8463840dfe704f8bdfa2e29be0142e15",
+    "implementation/assets/link5_collision_2.obj": "823ab6c8f7b1d79e0844fa071d82a03499ff68e34fddb1ba3451032c22736040",
+    "implementation/assets/link6.stl": "20b768e99a0e0440b5754dcca108016434e57937cc356acd9c352ccd3cb27f77",
+    "implementation/assets/link7.stl": "92ac6afcf7574c034d3170d8a68e95ac9048ab9d0dd5bbd8311b86e551b9ab1c",
+    "implementation/evaluate.py": "a1789e67a9d6281ece75c0e1d1fc75c36f5e192848791612157995d1b26d2c02",
+    "implementation/runtime.py": "424ee70505e8d16954b578538f7c577bb274a860a7b112e8f5dc89530543ede4",
+    "implementation/scene.json": "75b7b23273207ab631a57c52e3377be5a7782e65b67c4fe679f99eda8f90807e",
+    "protocol.py": "4b77d1c42dece31b69074caca5056a4b50df14828fc3fde7585a33c37ccce858",
+    "registration.json": "d2647d6823fba693e3da5e783484d47c749ec3c90f446a7ce3253db20a8c92a4",
+    "replay.py": "929f1119cb8d15e24504b8642832567ded622f46865e47ffcf3b6cf30779b342",
+    "worker.py": "8980d4459f8eaf2edbc4d50d85f198d3280590184e29605185edb08325e29819"
+  }
+}

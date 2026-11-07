@@ -1,0 +1,16 @@
+{
+  "destination_base": "35527a9107a46686fcd424d91f29bdf7e70ac46d",
+  "host_dependencies": {
+    "harbor": "0.21.0",
+    "modal": "1.5.4"
+  },
+  "image_id": "im-Nm8iLJCxhB14rzlvQjzhLD",
+  "isaac_version": "6.0.1",
+  "modification": "Only a task canary preamble was added to each infrastructure snapshot.",
+  "validation": "NOT RUN: explicit user request",
+  "vendored_files_sha256": {
+    "protocol.py": "2bd28a0b31e6fb24b580e94dd72067d126f568d7855babd64c73158469087906",
+    "worker.py": "702eddaa6f001d57c50c7caf93425342f8daa2c334b902273403a47eb6b8feae"
+  },
+  "verifier_wrapper": "Task-local tests/harbor_verify.py adapts the base wrapper with explicit binary reward writes and stale-result cleanup."
+}
