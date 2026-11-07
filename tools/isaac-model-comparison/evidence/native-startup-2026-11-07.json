@@ -1,0 +1,34 @@
+{
+  "status": "full_native_validation_pending",
+  "not_model_scores": true,
+  "engine_5_1_probes": [
+    {
+      "gpu": "L40S",
+      "driver": "610.57.04",
+      "result": "SIGSEGV in librtx.scenedb.plugin.so before policy actions"
+    },
+    {
+      "gpu": "A10",
+      "cloud": "oci",
+      "region": "eu-west",
+      "driver": "610.57.04",
+      "result": "same RTX startup SIGSEGV"
+    }
+  ],
+  "engine_6_0_1_minimal_probe": {
+    "gpu": "L40S",
+    "driver": "610.57.04",
+    "native_exit_code": 0,
+    "scope": "SimulationApp startup and five updates only"
+  },
+  "engine_6_0_1_task_probe": {
+    "run_url": "https://github.com/ZIWU-AI/ziwu-bench/actions/runs/42337951839",
+    "source_sha": "24a1c36f01be0d7f799831516825858af3da8580",
+    "status": "setup_error",
+    "reward": null,
+    "cause": "Relocated Kit experience could not resolve Isaac Lab extension path",
+    "fix_commit": "f6c9d948",
+    "validation": "pending scene probe"
+  },
+  "notes": "Historical engine scores are not transferred. All completed probes requested sandbox termination."
+}

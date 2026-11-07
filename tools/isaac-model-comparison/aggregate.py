@@ -21,10 +21,15 @@ def aggregate(source, output, profile, harness):
     (output / "comparison.json").write_text(json.dumps(result, indent=2) + "\n")
     lines = ["# Isaac / Modal model and harness comparison", "",
              "One exploratory trial per pair. Preflight is not a task score; errors and missing results have no reward.", "",
-             "| Model | Harness | Status | Reward |", "|---|---|---|---:|"]
+             "| Model | Harness | Status | Reward | Native score | Input / output tokens |", "|---|---|---|---:|---:|---:|"]
     for row in result:
         reward = row.get("reward")
-        lines.append(f"| {row.get('model', row['profile'])} | {row['harness']} | {row['status']} | {reward if reward is not None else '—'} |")
+        metrics = row.get("physical_metrics") or {}
+        score = metrics.get("native_score_0_1") if reward is not None else None
+        usage = row.get("usage") or {}
+        tokens = " / ".join(str(usage[k]) if usage.get(k) is not None else "—"
+                            for k in ("n_input_tokens", "n_output_tokens"))
+        lines.append(f"| {row.get('model', row['profile'])} | {row['harness']} | {row['status']} | {reward if reward is not None else '—'} | {score if score is not None else '—'} | {tokens} |")
     lines += ["", "See comparison.json for task/host SHAs, timings, usage, native metrics and route differences.",
               "Provider billing is unknown unless independently measured; CLI cost estimates are separate."]
     text = "\n".join(lines) + "\n"; (output / "COMPARISON.md").write_text(text)
