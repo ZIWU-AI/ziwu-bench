@@ -1,0 +1,30 @@
+gravity-shuttle-isaac
+SPDX-License-Identifier: Apache-2.0
+
+Derived from RoboIndustrial-Benchmark/terminal-bench-science, PR34:
+https://github.com/RoboIndustrial-Benchmark/terminal-bench-science/pull/34
+Fixed commit: 6a5f992804f0f9b63da5eb57aeacdc7371a2e385
+Original task: tasks/engineering-sciences/mechanical-engineering/gravity-shuttle-docking
+Original author: lwhere1314 (60391261+lwhere1314@users.noreply.github.com).
+Source task, solution, synthetic data generators, data, controller sandbox and scoring
+are distributed under Apache License 2.0. Their original canary notices are retained.
+
+Native API patterns in native_scene.py are adapted from PR42 runtime.py:
+https://github.com/RoboIndustrial-Benchmark/terminal-bench-science/pull/42
+Fixed commit: af7e8d560278d97469dfa334693358c40b6cfbec
+Path: tools/isaac-modal/native/dual-load-balance/runtime.py
+Author: lwhere1314. Apache License 2.0.
+
+Modifications by ci010, 2026, with AI assistance:
+- Replaced MuJoCo slide-joint integration with native Isaac Sim USD/PhysX rigid-body
+  stepping, D6 rail, contact sensing and native time/constraint guards.
+- Mapped scalar force-limited Coulomb resistance and static hold to native forces.
+- Added subprocess lifecycle/shutdown gating, GPU runtime images, protected compose
+  requests, static regression tests and an opt-in GPU acceptance runner.
+- Updated attribution, migration documentation and explicit unvalidated status.
+
+This task's Python/data content is Apache-2.0; the NVIDIA Isaac Sim container and
+runtime retain their own NVIDIA license terms. No NVIDIA runtime is redistributed
+inside this source contribution. Review and accept those terms before execution.
+
+This benchmark builds upon Terminal-Bench-Science and the Harbor framework.

@@ -1,0 +1,138 @@
+{
+  "scope": "Static checks only; no Isaac install, image build, simulation, GPU or model execution per user instruction.",
+  "python": "3.14",
+  "unit_tests": {
+    "tests": 8,
+    "passed": 8,
+    "kind": "Dependency-free AST, preserved-source-hash and pure-function checks; not native simulation"
+  },
+  "repository_checks": [
+    {
+      "check": "allow-internet",
+      "exit_code": 0,
+      "output": "Checking tasks/engineering-sciences/mechanical-engineering/gravity-shuttle-isaac/task.toml...\nAll task.toml files declare a valid network policy\n"
+    },
+    {
+      "check": "binary-reward",
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "check": "canary",
+      "exit_code": 0,
+      "output": "All files contain the required canary string\n"
+    },
+    {
+      "check": "compose-host-binds",
+      "exit_code": 0,
+      "output": "PASS tasks/engineering-sciences/mechanical-engineering/gravity-shuttle-isaac\n"
+    },
+    {
+      "check": "dockerfile-platform",
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "check": "dockerfile-references",
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "check": "dockerfile-sanity",
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "check": "gpu-types",
+      "exit_code": 0,
+      "output": "All task.toml GPU declarations are valid\n"
+    },
+    {
+      "check": "instruction-suffix",
+      "exit_code": 0,
+      "output": "Checking tasks/engineering-sciences/mechanical-engineering/gravity-shuttle-isaac...\nAll instruction.md files end with the canonical timeout/anti-cheat line\n"
+    },
+    {
+      "check": "nproc",
+      "exit_code": 0,
+      "output": "Checking tasks/engineering-sciences/mechanical-engineering/gravity-shuttle-isaac...\nAll scripts avoid bare nproc\n"
+    },
+    {
+      "check": "pip-pinning",
+      "exit_code": 0,
+      "output": "Checking tasks/engineering-sciences/mechanical-engineering/gravity-shuttle-isaac...\nAll pip / uv pip / uvx --with installs are pinned\n"
+    },
+    {
+      "check": "pytest-version",
+      "exit_code": 0,
+      "output": "Checking tasks/engineering-sciences/mechanical-engineering/gravity-shuttle-isaac...\nPASS\n"
+    },
+    {
+      "check": "separate-verifier",
+      "exit_code": 0,
+      "output": "Checking tasks/engineering-sciences/mechanical-engineering/gravity-shuttle-isaac...\nAll tasks are configured for separate verifier mode\n"
+    },
+    {
+      "check": "task-absolute-path",
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "check": "task-fields",
+      "exit_code": 0,
+      "output": "Checking tasks/engineering-sciences/mechanical-engineering/gravity-shuttle-isaac/task.toml...\nAll task.toml files contain the required fields with valid values\n"
+    },
+    {
+      "check": "task-path",
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "check": "task-readme",
+      "exit_code": 0,
+      "output": "checked 1 tasks: 0 stale, 0 hand-written (ignored)\n"
+    },
+    {
+      "check": "task-slug",
+      "exit_code": 0,
+      "output": "PASS tasks/engineering-sciences/mechanical-engineering/gravity-shuttle-isaac (3 tokens)\n"
+    },
+    {
+      "check": "task-structure",
+      "exit_code": 0,
+      "output": "Checking tasks/engineering-sciences/mechanical-engineering/gravity-shuttle-isaac...\nAll task directories have a recognized structure\n"
+    },
+    {
+      "check": "task-timeout",
+      "exit_code": 0,
+      "output": "Checking tasks/engineering-sciences/mechanical-engineering/gravity-shuttle-isaac/task.toml...\nAll task.toml timeouts are within the 8h cap (and the 5h authoring cap)\n"
+    },
+    {
+      "check": "test-file-references",
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "check": "test-sh-sanity",
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "check": "trial-network-fetch",
+      "exit_code": 0,
+      "output": "Checking tasks/engineering-sciences/mechanical-engineering/gravity-shuttle-isaac...\nNo external trial-time fetches in tests/test.sh\n"
+    },
+    {
+      "check": "verifier-tooling-baked",
+      "exit_code": 0,
+      "output": "Checking tasks/engineering-sciences/mechanical-engineering/gravity-shuttle-isaac/tests/test.sh...\nAll separate-verifier tasks bake their verifier tooling into the image\n"
+    }
+  ],
+  "shell_syntax": "bash -n passed for authoring/gpu_acceptance.sh and tests/test.sh",
+  "review_corrections": [
+    "Native step/clock/contact exceptions propagate rather than being counted as one permitted failed case.",
+    "Acceptance requires sandbox tests, full native completion and actual physical no-op failures, not reward zero alone.",
+    "Native logs retained and exported, including timeout paths.",
+    "Canonical Independent Researcher affiliation and regenerated README header."
+  ]
+}
