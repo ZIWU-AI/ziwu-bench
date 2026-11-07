@@ -120,9 +120,6 @@ jobs:
       - uses: actions/setup-python@v5
         with: {python-version: "3.12"}
       - run: python -m pip install -r tools/mujoco-modal/requirements-host.txt
-      - name: Prepare hash-pinned Isaac engine extensions
-        if: inputs.backend == 'isaac'
-        run: python tools/isaac-reference-modal/prepare_extensions.py --output work/extensions --accept-nvidia-license
       - name: Run GPU reference and fresh data-only verifier
         env:
           MODAL_TOKEN_ID: ${{ secrets.MODAL_TOKEN_ID }}
@@ -136,7 +133,7 @@ jobs:
           test -n "$MODAL_TOKEN_ID" && test -n "$MODAL_TOKEN_SECRET"
           case "$BACKEND" in
             mujoco) runner=tools/mujoco-modal/run.py; extra=() ;;
-            isaac) runner=tools/isaac-reference-modal/run.py; extra=(--extensions work/extensions) ;;
+            isaac) runner=tools/isaac-reference-modal/run.py; extra=() ;;
             *) echo 'Unsupported simulator'; exit 1 ;;
           esac
           python "$runner" --task-root candidate --task-path "$TASK_PATH" \
@@ -186,9 +183,6 @@ jobs:
       - uses: actions/setup-python@v5
         with: {python-version: "3.12"}
       - run: python -m pip install -r tools/isaac-model-comparison/requirements-host.txt
-      - name: Prepare public Isaac extensions
-        if: inputs.model_stage == 'all'
-        run: python tools/isaac-reference-modal/prepare_extensions.py --output work/extensions --accept-nvidia-license
       - name: One real harness preflight and optional native trial
         env:
           MODAL_TOKEN_ID: ${{ secrets.MODAL_TOKEN_ID }}
@@ -208,7 +202,7 @@ jobs:
           umask 077
           python tools/isaac-model-comparison/run.py --profile "$MODEL_PROFILE" --harness "$HARNESS" \
             --task-root candidate --source-sha "$SOURCE_SHA" --stage "$MODEL_STAGE" \
-            --extensions work/extensions --output comparison-output/run
+            --output comparison-output/run
       - name: Stop remaining native containers
         if: always()
         timeout-minutes: 3

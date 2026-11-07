@@ -1,4 +1,4 @@
-"""Explicit Isaac 5.1 reference/Nop execution with fresh native GPU verification.
+"""Explicit Isaac 6.0.1 reference/Nop execution with fresh native GPU verification.
 
 Runtime dependencies and public extensions originate from upstream PR #2195 at
  da218ea01206441256e7e9da6e76ef41e12cef65. Task code runs only in Modal.
@@ -20,25 +20,10 @@ ROOT = HERE.parents[1]
 sys.path.insert(0, str(HERE.parent / "mujoco-modal"))
 from config import safe_task
 from run import command, download, preflight
-from prepare_extensions import MANIFEST, MANIFEST_SHA256, RELEASES
+from image import image_for as native_image, BASE_IMAGE
 
 IGNORE = ["**/__pycache__/**", "**/*.pyc"]
 PYTHON = "/opt/venv/bin/python"
-
-
-def extension_cache(root):
-    raw = MANIFEST.read_bytes()
-    if hashlib.sha256(raw).hexdigest() != MANIFEST_SHA256:
-        raise ValueError("Extension manifest changed")
-    expected = json.loads(raw)
-    actual = {p.relative_to(root).as_posix() for p in root.rglob("*") if p.is_file()}
-    if actual != set(expected) | {"EXTENSIONS.json"} or any(p.is_symlink() for p in root.rglob("*")):
-        raise ValueError("Extension cache file set changed")
-    for name, digest in expected.items():
-        if hashlib.sha256((root / name).read_bytes()).hexdigest() != digest:
-            raise ValueError("Extension cache digest differs: " + name)
-    if (root / "EXTENSIONS.json").read_bytes() != raw:
-        raise ValueError("Extension cache manifest differs")
 
 
 def main():
@@ -47,7 +32,7 @@ def main():
     parser.add_argument("--task-root", type=Path, default=ROOT)
     parser.add_argument("--task-path", required=True)
     parser.add_argument("--source-sha", required=True)
-    parser.add_argument("--extensions", type=Path, required=True)
+    parser.add_argument("--extensions", type=Path, help="Deprecated; Isaac 6 ships its extensions")
     parser.add_argument("--gpu", choices=["L40S", "A10"], default="L40S")
     parser.add_argument("--mode", choices=["all", "oracle", "nop"], default="all")
     args = parser.parse_args()
@@ -55,8 +40,8 @@ def main():
     task = safe_task(args.task_root, args.task_path)
     for role in ("environment", "tests"):
         manifest = json.loads((task / role / "bundle/manifest.json").read_text())
-        if manifest["isaac_version"] != "5.1.0.0":
-            raise ValueError("This runner requires Isaac Sim 5.1")
+        if manifest["isaac_version"] != "6.0.1.0":
+            raise ValueError("This runner requires Isaac Sim 6.0.1")
     # Task bytes stay data on the credential-bearing host; only reviewed host
     # modules are imported. Fail if the selected task differs from its receipt.
     tracked = subprocess.check_output(["git", "ls-tree", "-r", "--name-only", args.source_sha, "--", args.task_path], cwd=args.task_root, text=True).splitlines()
@@ -69,7 +54,6 @@ def main():
         if data != original:
             raise ValueError("Working task differs from source-sha: " + name)
         files[str(Path(name).relative_to(args.task_path))] = hashlib.sha256(data).hexdigest()
-    extension_cache(args.extensions)
     args.output.mkdir(parents=True, exist_ok=False)
     def write(path, data):
         path.write_text(json.dumps(data, indent=2) + "\n")
@@ -78,8 +62,8 @@ def main():
         "runner_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
         "infra_pr": "https://github.com/harbor-framework/terminal-bench-science/pull/2195",
         "infra_commit": "da218ea01206441256e7e9da6e76ef41e12cef65",
-        "engine": "Isaac Sim 5.1.0.0", "physics": "PhysX CPU", "rendering": "NVIDIA RTX GPU",
-        "extensions_manifest_sha256": MANIFEST_SHA256, "gpu": args.gpu,
+        "engine": "Isaac Sim 6.0.1.0.0", "physics": "PhysX CPU", "rendering": "NVIDIA RTX GPU",
+        "base_image_id": BASE_IMAGE, "gpu": args.gpu,
         "modal_version": modal.__version__, "model_calls": 0, "files": files,
     })
     app = modal.App.lookup("ziwu-isaac-reference", create_if_missing=True)
@@ -87,12 +71,7 @@ def main():
     def save():
         write(args.output / "lifecycle.json", records)
     def image_for(role):
-        image = modal.Image.from_dockerfile(task / role / "Dockerfile", context_dir=task / role, ignore=IGNORE)
-        for release in RELEASES:
-            name = release["root"]
-            image = image.add_local_dir(args.extensions / name,
-                "/opt/venv/lib/python3.11/site-packages/isaacsim/extscache/" + name, copy=True)
-        return image
+        return native_image(task / role)
     def allocate(image, role):
         print("Allocating " + role, flush=True)
         with modal.enable_output():
@@ -115,8 +94,11 @@ def main():
         if code is None:
             raise RuntimeError("Sandbox termination not confirmed")
     def diagnostics(sb, out):
-        command(sb, out, "native-diagnostics", "sh", "-c",
-            "tail -100 /var/lib/pen-render/startup.log /logs/verifier/native.log 2>/dev/null", timeout=30, check=False)
+        for name, path in {"startup": "/var/lib/pen-render/startup.log", "verifier": "/logs/verifier/native.log"}.items():
+            try:
+                (out / (name + ".log")).write_bytes(sb.filesystem.read_bytes(path)[-131072:])
+            except Exception:
+                pass
     outcomes = {}
     for mode in (("oracle", "nop") if args.mode == "all" else (args.mode,)):
         out = args.output / mode; out.mkdir()
@@ -170,7 +152,7 @@ def main():
             raise
         finally:
             stop(sb, record)
-    summary = {"passed": True, "engine": "Isaac Sim 5.1.0.0", "outcomes": outcomes, "model_calls": 0}
+    summary = {"passed": True, "engine": "Isaac Sim 6.0.1.0.0", "outcomes": outcomes, "model_calls": 0}
     write(args.output / "summary.json", summary)
     print(json.dumps(summary), flush=True)
 

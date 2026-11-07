@@ -1,0 +1,548 @@
+{
+  "kind": "CPU tool-use preflight, not an Isaac score",
+  "rows": [
+    {
+      "profile": "kimi",
+      "model": "k3.1-pro",
+      "harness": "claude-code",
+      "status": "preflight_passed",
+      "source_sha": "81a886b352d1ce623ef8a121f8a3f0900742ca70",
+      "host_sha": "81a886b352d1ce623ef8a121f8a3f0900742ca70",
+      "run_url": "https://github.com/ZIWU-AI/ziwu-bench/actions/runs/42336905217",
+      "trial_count": 0,
+      "reward": null,
+      "route": {
+        "harness": "claude-code",
+        "harness_version": "2.1.318",
+        "harbor_version": "0.23.0",
+        "provider": "kimi-code-official",
+        "model": "k3.1-pro",
+        "reasoning_effort": "high",
+        "context_limit_tokens": 262144,
+        "credential_source_env": "KIMI_CODE_API_KEY",
+        "agent_timeout_sec": 5400,
+        "client_identity": "native; no client impersonation",
+        "sources": [
+          "https://www.kimi.com/code/docs/third-party-tools/claude-code.html",
+          "https://github.com/harbor-framework/harbor/blob/1e5c5c6db929a10a140d05e606882c671ae20729/src/harbor/agents/installed/claude_code.py"
+        ],
+        "limitations": [],
+        "protocol": "anthropic-messages",
+        "api_base": "https://api.kimi.com/coding"
+      },
+      "preflight": {
+        "status": "passed",
+        "reward": 1.0,
+        "task_checksum": "330fa9644f5868748dda6ce744134d7a6f961ce6d38aecccf95b228c7894df3f",
+        "exception_info": null,
+        "agent_info": {
+          "name": "claude-code",
+          "version": "2.1.318",
+          "model_info": {
+            "name": "k3.1-pro",
+            "provider": "anthropic"
+          }
+        },
+        "started_at": "2026-11-07T04:06:42.805937Z",
+        "finished_at": "2026-11-07T04:08:08.692952Z",
+        "agent_execution": {
+          "started_at": "2026-11-07T04:07:42.692899Z",
+          "finished_at": "2026-11-07T04:08:03.096218Z"
+        },
+        "usage": {
+          "n_input_tokens": 20593,
+          "n_cache_tokens": 17408,
+          "n_output_tokens": 294
+        },
+        "cost_usd": null,
+        "cli_reported_cost_usd": 0.031979,
+        "cost_status": "unknown: CLI estimates are not verified provider billing",
+        "physical_metrics": null,
+        "result_path": "preflight/check/preflight__6rtoPTL/result.json"
+      }
+    },
+    {
+      "profile": "kimi",
+      "model": "k3.1-pro",
+      "harness": "codex",
+      "status": "preflight_passed",
+      "source_sha": "81a886b352d1ce623ef8a121f8a3f0900742ca70",
+      "host_sha": "81a886b352d1ce623ef8a121f8a3f0900742ca70",
+      "run_url": "https://github.com/ZIWU-AI/ziwu-bench/actions/runs/42336905217",
+      "trial_count": 0,
+      "reward": null,
+      "route": {
+        "harness": "codex",
+        "harness_version": "0.155.1",
+        "harbor_version": "0.23.0",
+        "provider": "kimi-code-official",
+        "model": "k3.1-pro",
+        "reasoning_effort": "high",
+        "context_limit_tokens": 262144,
+        "credential_source_env": "KIMI_CODE_API_KEY",
+        "agent_timeout_sec": 5400,
+        "client_identity": "native; no client impersonation",
+        "sources": [
+          "https://www.kimi.com/code/docs/third-party-tools/codex.html",
+          "https://github.com/harbor-framework/harbor/blob/1e5c5c6db929a10a140d05e606882c671ae20729/src/harbor/agents/installed/codex.py"
+        ],
+        "limitations": [],
+        "protocol": "responses",
+        "api_base": "https://api.kimi.com/coding/v1",
+        "context_compact_at_tokens": 220000
+      },
+      "preflight": {
+        "status": "passed",
+        "reward": 1.0,
+        "task_checksum": "330fa9644f5868748dda6ce744134d7a6f961ce6d38aecccf95b228c7894df3f",
+        "exception_info": null,
+        "agent_info": {
+          "name": "codex",
+          "version": "0.155.1",
+          "model_info": {
+            "name": "k3.1-pro",
+            "provider": "openai"
+          }
+        },
+        "started_at": "2026-11-07T04:07:06.912108Z",
+        "finished_at": "2026-11-07T04:08:44.804711Z",
+        "agent_execution": {
+          "started_at": "2026-11-07T04:08:11.571400Z",
+          "finished_at": "2026-11-07T04:08:30.944167Z"
+        },
+        "usage": {
+          "n_input_tokens": 16157,
+          "n_cache_tokens": 9216,
+          "n_output_tokens": 175
+        },
+        "cost_usd": null,
+        "cli_reported_cost_usd": null,
+        "cost_status": "unknown: CLI estimates are not verified provider billing",
+        "physical_metrics": null,
+        "result_path": "preflight/check/preflight__2FvUpMt/result.json"
+      }
+    },
+    {
+      "profile": "kimi",
+      "model": "k3.1-pro",
+      "harness": "deepseek-harness",
+      "status": "preflight_passed",
+      "source_sha": "81a886b352d1ce623ef8a121f8a3f0900742ca70",
+      "host_sha": "81a886b352d1ce623ef8a121f8a3f0900742ca70",
+      "run_url": "https://github.com/ZIWU-AI/ziwu-bench/actions/runs/42336905217",
+      "trial_count": 0,
+      "reward": null,
+      "route": {
+        "harness": "deepseek-harness",
+        "harness_version": "0.2.2-rc.1",
+        "harbor_version": "0.23.0",
+        "provider": "kimi-code-official",
+        "model": "k3.1-pro",
+        "reasoning_effort": "high",
+        "context_limit_tokens": 262144,
+        "credential_source_env": "KIMI_CODE_API_KEY",
+        "agent_timeout_sec": 5400,
+        "client_identity": "native; no client impersonation",
+        "sources": [
+          "https://github.com/deepseek-ai/deepseek-harness/blob/fcc0ad462172522aaf5c93a7b2e01f6b9f0b0159/packages/bundle/headless/README.md",
+          "https://www.kimi.com/code/docs/en/"
+        ],
+        "limitations": [
+          "Kimi documents the protocol, but this dsh client route needs a real-identity preflight; rejection is a provider/adapter failure, not a model score.",
+          "dsh JSON progress fields can be truncated; retain its private durable session log for usage and diagnostics."
+        ],
+        "protocol": "anthropic-messages",
+        "api_base": "https://api.kimi.com/coding"
+      },
+      "preflight": {
+        "status": "passed",
+        "reward": 1.0,
+        "task_checksum": "330fa9644f5868748dda6ce744134d7a6f961ce6d38aecccf95b228c7894df3f",
+        "exception_info": null,
+        "agent_info": {
+          "name": "deepseek-harness",
+          "version": "0.2.2-rc.1",
+          "model_info": {
+            "name": "k3.1-pro",
+            "provider": null
+          }
+        },
+        "started_at": "2026-11-07T04:09:32.555615Z",
+        "finished_at": "2026-11-07T04:10:37.687808Z",
+        "agent_execution": {
+          "started_at": "2026-11-07T04:10:20.317312Z",
+          "finished_at": "2026-11-07T04:10:33.000476Z"
+        },
+        "usage": {
+          "n_input_tokens": null,
+          "n_cache_tokens": null,
+          "n_output_tokens": null
+        },
+        "cost_usd": null,
+        "cli_reported_cost_usd": null,
+        "cost_status": "unknown: CLI estimates are not verified provider billing",
+        "physical_metrics": null,
+        "result_path": "preflight/check/preflight__pwazfis/result.json"
+      }
+    },
+    {
+      "profile": "kimi",
+      "model": "k3.1-pro",
+      "harness": "kimi-code",
+      "status": "preflight_passed",
+      "source_sha": "81a886b352d1ce623ef8a121f8a3f0900742ca70",
+      "host_sha": "81a886b352d1ce623ef8a121f8a3f0900742ca70",
+      "run_url": "https://github.com/ZIWU-AI/ziwu-bench/actions/runs/42336905217",
+      "trial_count": 0,
+      "reward": null,
+      "route": {
+        "harness": "kimi-code",
+        "harness_version": "2.5.1",
+        "harbor_version": "0.23.0",
+        "provider": "kimi-code-official",
+        "model": "k3.1-pro",
+        "reasoning_effort": "high",
+        "context_limit_tokens": 262144,
+        "credential_source_env": "KIMI_CODE_API_KEY",
+        "agent_timeout_sec": 5400,
+        "client_identity": "native; no client impersonation",
+        "sources": [
+          "https://github.com/harbor-framework/harbor/blob/1e5c5c6db929a10a140d05e606882c671ae20729/src/harbor/agents/installed/kimi_code.py",
+          "https://github.com/MoonshotAI/kimi-code/blob/131c21a35a0440309f3b0e965961eccd4a7f417f/docs/en/configuration/env-vars.md",
+          "https://github.com/MoonshotAI/kimi-code/blob/131c21a35a0440309f3b0e965961eccd4a7f417f/docs/en/reference/kimi-command.md"
+        ],
+        "limitations": [
+          "Harbor 0.23.0 has no KimiCode ATIF/usage converter; missing usage and cost must remain unknown.",
+          "Kimi Code 2.5.1 stream-json does not include token usage; its meta events are not terminal-success receipts."
+        ],
+        "protocol": "chat-completions",
+        "api_base": "https://api.kimi.com/coding/v1"
+      },
+      "preflight": {
+        "status": "passed",
+        "reward": 1.0,
+        "task_checksum": "330fa9644f5868748dda6ce744134d7a6f961ce6d38aecccf95b228c7894df3f",
+        "exception_info": null,
+        "agent_info": {
+          "name": "kimi-code",
+          "version": "2.5.1",
+          "model_info": {
+            "name": "k3.1-pro",
+            "provider": null
+          }
+        },
+        "started_at": "2026-11-07T04:09:00.371046Z",
+        "finished_at": "2026-11-07T04:09:26.269666Z",
+        "agent_execution": {
+          "started_at": "2026-11-07T04:09:11.977024Z",
+          "finished_at": "2026-11-07T04:09:22.282383Z"
+        },
+        "usage": {
+          "n_input_tokens": null,
+          "n_cache_tokens": null,
+          "n_output_tokens": null
+        },
+        "cost_usd": null,
+        "cli_reported_cost_usd": null,
+        "cost_status": "unknown: CLI estimates are not verified provider billing",
+        "physical_metrics": null,
+        "result_path": "preflight/check/preflight__BHgKV7K/result.json"
+      }
+    },
+    {
+      "profile": "deepseek",
+      "model": "deepseek-flash",
+      "harness": "claude-code",
+      "status": "preflight_passed",
+      "source_sha": "81a886b352d1ce623ef8a121f8a3f0900742ca70",
+      "host_sha": "81a886b352d1ce623ef8a121f8a3f0900742ca70",
+      "run_url": "https://github.com/ZIWU-AI/ziwu-bench/actions/runs/42336907271",
+      "trial_count": 0,
+      "reward": null,
+      "route": {
+        "harness": "claude-code",
+        "harness_version": "2.1.318",
+        "harbor_version": "0.23.0",
+        "provider": "deepseek-official",
+        "model": "deepseek-flash",
+        "model_alias_target_documented": "DeepSeek-V4.1-Flash-1017",
+        "reasoning_effort": "high",
+        "context_limit_tokens": 1048576,
+        "credential_source_env": "DEEPSEEK_API_KEY",
+        "agent_timeout_sec": 5400,
+        "client_identity": "native; no client impersonation",
+        "sources": [
+          "https://api-docs.deepseek.com/zh-cn/quick_start/agent_integrations/claude_code/",
+          "https://api-docs.deepseek.com/zh-cn/guides/anthropic_api/"
+        ],
+        "limitations": [
+          "The model slug is a server-managed alias, not an immutable model pin.",
+          "Native harness prompts, compression policies and tool behavior differ.",
+          "Account access and live compatibility must pass the separate preflight.",
+          "All background aliases use the Flash selector. The requested high effort differs from the official guide's max example."
+        ],
+        "protocol": "anthropic-messages",
+        "api_base": "https://api.deepseek.com/anthropic",
+        "native_model_selector": "deepseek-flash[1m]",
+        "context_compact_window_tokens": 786432,
+        "credential_env_names": [
+          "ANTHROPIC_API_KEY"
+        ]
+      },
+      "preflight": {
+        "status": "passed",
+        "reward": 1.0,
+        "task_checksum": "330fa9644f5868748dda6ce744134d7a6f961ce6d38aecccf95b228c7894df3f",
+        "exception_info": null,
+        "agent_info": {
+          "name": "claude-code",
+          "version": "2.1.318",
+          "model_info": {
+            "name": "deepseek-flash[1m]",
+            "provider": "anthropic"
+          }
+        },
+        "started_at": "2026-11-07T04:06:54.372999Z",
+        "finished_at": "2026-11-07T04:07:52.547686Z",
+        "agent_execution": {
+          "started_at": "2026-11-07T04:07:41.012410Z",
+          "finished_at": "2026-11-07T04:07:46.448199Z"
+        },
+        "usage": {
+          "n_input_tokens": 33461,
+          "n_cache_tokens": 22144,
+          "n_output_tokens": 191
+        },
+        "cost_usd": null,
+        "cli_reported_cost_usd": 0.072432,
+        "cost_status": "unknown: CLI estimates are not verified provider billing",
+        "physical_metrics": null,
+        "result_path": "preflight/check/preflight__GLDW8RQ/result.json"
+      }
+    },
+    {
+      "profile": "deepseek",
+      "model": "deepseek-flash",
+      "harness": "codex",
+      "status": "preflight_passed",
+      "source_sha": "81a886b352d1ce623ef8a121f8a3f0900742ca70",
+      "host_sha": "81a886b352d1ce623ef8a121f8a3f0900742ca70",
+      "run_url": "https://github.com/ZIWU-AI/ziwu-bench/actions/runs/42336907271",
+      "trial_count": 0,
+      "reward": null,
+      "route": {
+        "harness": "codex",
+        "harness_version": "0.155.1",
+        "harbor_version": "0.23.0",
+        "provider": "deepseek-official",
+        "model": "deepseek-flash",
+        "model_alias_target_documented": "DeepSeek-V4.1-Flash-1017",
+        "protocol": "responses",
+        "api_base": "https://api.deepseek.com/",
+        "reasoning_effort": "high",
+        "context_limit_tokens": 1048576,
+        "effective_context_window_percent": 95,
+        "context_compact_at_tokens": 943718,
+        "credential_source_env": "DEEPSEEK_API_KEY",
+        "credential_env_names": [
+          "OPENAI_API_KEY"
+        ],
+        "agent_timeout_sec": 5400,
+        "client_identity": "native Codex; no client impersonation",
+        "catalog_source": "https://api-docs.deepseek.com/quick_start/agent_integrations/codex/",
+        "catalog_retrieved_at": "2026-11-05",
+        "catalog_sha256": "4240127a851f7582bb4f92b9fe3b258f18393d560446e84430e5f90f473db9a1",
+        "catalog_selection": "Official Flash entry unchanged; Pro entry omitted",
+        "sources": [
+          "https://api-docs.deepseek.com/quick_start/agent_integrations/codex/",
+          "https://api-docs.deepseek.com/guides/responses_api/"
+        ],
+        "limitations": [
+          "Uses the official 1M catalog and its model instructions; the Kimi run uses a 256K context. This is not an equal-context model comparison.",
+          "DeepSeek's model slug is an alias; the documented target is not an immutable server-side model pin.",
+          "Account access and live compatibility must pass the separate preflight."
+        ]
+      },
+      "preflight": {
+        "status": "passed",
+        "reward": 1.0,
+        "task_checksum": "330fa9644f5868748dda6ce744134d7a6f961ce6d38aecccf95b228c7894df3f",
+        "exception_info": null,
+        "agent_info": {
+          "name": "codex",
+          "version": "0.155.1",
+          "model_info": {
+            "name": "deepseek-flash",
+            "provider": "openai"
+          }
+        },
+        "started_at": "2026-11-07T04:06:44.565090Z",
+        "finished_at": "2026-11-07T04:07:54.245897Z",
+        "agent_execution": {
+          "started_at": "2026-11-07T04:07:43.477287Z",
+          "finished_at": "2026-11-07T04:07:49.005981Z"
+        },
+        "usage": {
+          "n_input_tokens": 18428,
+          "n_cache_tokens": 17920,
+          "n_output_tokens": 210
+        },
+        "cost_usd": null,
+        "cli_reported_cost_usd": null,
+        "cost_status": "unknown: CLI estimates are not verified provider billing",
+        "physical_metrics": null,
+        "result_path": "preflight/check/preflight__XBLhTXq/result.json"
+      }
+    },
+    {
+      "profile": "deepseek",
+      "model": "deepseek-flash",
+      "harness": "deepseek-harness",
+      "status": "preflight_passed",
+      "source_sha": "81a886b352d1ce623ef8a121f8a3f0900742ca70",
+      "host_sha": "81a886b352d1ce623ef8a121f8a3f0900742ca70",
+      "run_url": "https://github.com/ZIWU-AI/ziwu-bench/actions/runs/42336907271",
+      "trial_count": 0,
+      "reward": null,
+      "route": {
+        "harness": "deepseek-harness",
+        "harness_version": "0.2.2-rc.1",
+        "harbor_version": "0.23.0",
+        "provider": "deepseek-official",
+        "model": "deepseek-flash",
+        "model_alias_target_documented": "DeepSeek-V4.1-Flash-1017",
+        "reasoning_effort": "high",
+        "context_limit_tokens": 1048576,
+        "credential_source_env": "DEEPSEEK_API_KEY",
+        "agent_timeout_sec": 5400,
+        "client_identity": "native; no client impersonation",
+        "sources": [
+          "https://github.com/deepseek-ai/deepseek-harness/tree/fcc0ad462172522aaf5c93a7b2e01f6b9f0b0159",
+          "https://api-docs.deepseek.com/zh-cn/guides/anthropic_api/"
+        ],
+        "limitations": [
+          "The model slug is a server-managed alias, not an immutable model pin.",
+          "Native harness prompts, compression policies and tool behavior differ.",
+          "Account access and live compatibility must pass the separate preflight.",
+          "32768 is this adapter's requested output cap, not the model's maximum."
+        ],
+        "protocol": "anthropic-messages",
+        "api_base": "https://api.deepseek.com/anthropic",
+        "native_provider": "deepseek-official",
+        "requested_max_output_tokens": 32768,
+        "credential_env_names": [
+          "DEEPSEEK_API_KEY"
+        ]
+      },
+      "preflight": {
+        "status": "passed",
+        "reward": 1.0,
+        "task_checksum": "330fa9644f5868748dda6ce744134d7a6f961ce6d38aecccf95b228c7894df3f",
+        "exception_info": null,
+        "agent_info": {
+          "name": "deepseek-harness",
+          "version": "0.2.2-rc.1",
+          "model_info": {
+            "name": "deepseek-flash",
+            "provider": null
+          }
+        },
+        "started_at": "2026-11-07T04:08:54.402367Z",
+        "finished_at": "2026-11-07T04:10:05.660413Z",
+        "agent_execution": {
+          "started_at": "2026-11-07T04:09:55.533811Z",
+          "finished_at": "2026-11-07T04:10:01.881757Z"
+        },
+        "usage": {
+          "n_input_tokens": null,
+          "n_cache_tokens": null,
+          "n_output_tokens": null
+        },
+        "cost_usd": null,
+        "cli_reported_cost_usd": null,
+        "cost_status": "unknown: CLI estimates are not verified provider billing",
+        "physical_metrics": null,
+        "result_path": "preflight/check/preflight__eBRwECB/result.json"
+      }
+    },
+    {
+      "profile": "deepseek",
+      "model": "deepseek-flash",
+      "harness": "kimi-code",
+      "status": "preflight_passed",
+      "source_sha": "81a886b352d1ce623ef8a121f8a3f0900742ca70",
+      "host_sha": "81a886b352d1ce623ef8a121f8a3f0900742ca70",
+      "run_url": "https://github.com/ZIWU-AI/ziwu-bench/actions/runs/42336907271",
+      "trial_count": 0,
+      "reward": null,
+      "route": {
+        "harness": "kimi-code",
+        "harness_version": "2.5.1",
+        "harbor_version": "0.23.0",
+        "provider": "deepseek-official",
+        "model": "deepseek-flash",
+        "model_alias_target_documented": "DeepSeek-V4.1-Flash-1017",
+        "reasoning_effort": "high",
+        "context_limit_tokens": 1048576,
+        "credential_source_env": "DEEPSEEK_API_KEY",
+        "agent_timeout_sec": 5400,
+        "client_identity": "native; no client impersonation",
+        "sources": [
+          "https://api-docs.deepseek.com/api/create-chat-completion/",
+          "https://github.com/MoonshotAI/kimi-code/blob/@moonshot-ai/kimi-code@2.5.1/docs/en/configuration/config-files.md",
+          "https://github.com/MoonshotAI/kimi-code/blob/@moonshot-ai/kimi-code@2.5.1/packages/agent-core-v2/src/human/llm/builtin/protocol/openai/lower.ts"
+        ],
+        "limitations": [
+          "The model slug is a server-managed alias, not an immutable model pin.",
+          "Native harness prompts, compression policies and tool behavior differ.",
+          "Account access and live compatibility must pass the separate preflight.",
+          "Kimi Code 2.5.1 has no deepseek provider. Its native openai serializer sends top-level reasoning_effort, not Kimi thinking.effort.",
+          "KIMI_MODEL_THINKING_EFFORT is Kimi-provider-only; high is set in the native config uploaded by the adapter.",
+          "Harbor has no KimiCode ATIF/usage converter; missing token usage and costs remain unknown."
+        ],
+        "protocol": "chat-completions",
+        "api_base": "https://api.deepseek.com",
+        "native_config": {
+          "thinking": {
+            "enabled": true,
+            "effort": "high"
+          }
+        },
+        "thinking_request": "reasoning_effort=high enables DeepSeek thinking",
+        "credential_env_names": [
+          "KIMI_MODEL_API_KEY"
+        ]
+      },
+      "preflight": {
+        "status": "passed",
+        "reward": 1.0,
+        "task_checksum": "330fa9644f5868748dda6ce744134d7a6f961ce6d38aecccf95b228c7894df3f",
+        "exception_info": null,
+        "agent_info": {
+          "name": "kimi-code",
+          "version": "2.5.1",
+          "model_info": {
+            "name": "deepseek-flash",
+            "provider": null
+          }
+        },
+        "started_at": "2026-11-07T04:09:06.721154Z",
+        "finished_at": "2026-11-07T04:09:29.246986Z",
+        "agent_execution": {
+          "started_at": "2026-11-07T04:09:19.756508Z",
+          "finished_at": "2026-11-07T04:09:27.122567Z"
+        },
+        "usage": {
+          "n_input_tokens": null,
+          "n_cache_tokens": null,
+          "n_output_tokens": null
+        },
+        "cost_usd": null,
+        "cli_reported_cost_usd": null,
+        "cost_status": "unknown: CLI estimates are not verified provider billing",
+        "physical_metrics": null,
+        "result_path": "preflight/check/preflight__7nRqiZY/result.json"
+      }
+    }
+  ]
+}

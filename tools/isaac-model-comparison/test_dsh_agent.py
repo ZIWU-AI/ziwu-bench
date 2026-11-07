@@ -103,7 +103,7 @@ class ProfileTests(unittest.TestCase):
         self.assertEqual(config["maxTokens"], 32768)
         self.assertEqual(config["models"], [{
             "id": "deepseek-flash", "contextWindow": 1048576,
-            "maxTokens": 32768, "inputModalities": ["text"],
+            "maxTokens": 32768, "inputModalities": ["text", "image"],
             "systemPromptUpdate": "in-history", "toolUpdate": "addition-only"}])
         self.assertEqual(config["retryPolicy"]["maxRetries"], 0)
         for unsupported in ("protocol", "api", "headers", "apiKey"):

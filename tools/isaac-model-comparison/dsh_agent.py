@@ -96,7 +96,7 @@ def build_profile(options: DshOptions, logs_dir: str) -> list[dict[str, Any]]:
                 # Keep dsh's mandatory native attribution unmodified.
                 "reasoning": "high",
                 "models": [{"id": route.model, "contextWindow": route.context_window,
-                            "maxTokens": options.max_tokens, "input": ["text"],
+                            "maxTokens": options.max_tokens, "input": ["text", "image"],
                             "reasoningEfforts": {"high": "high"}}],
                 "retryPolicy": {"mode": "normal", "maxRetries": 0},
             },
@@ -112,7 +112,7 @@ def build_profile(options: DshOptions, logs_dir: str) -> list[dict[str, Any]]:
             "defaultContextWindow": route.context_window,
             "maxTokens": options.max_tokens,
             "models": [{"id": route.model, "contextWindow": route.context_window,
-                        "maxTokens": options.max_tokens, "inputModalities": ["text"],
+                        "maxTokens": options.max_tokens, "inputModalities": ["text", "image"],
                         "systemPromptUpdate": "in-history", "toolUpdate": "addition-only"}],
             "retryPolicy": {"mode": "normal", "maxRetries": 0},
         }}

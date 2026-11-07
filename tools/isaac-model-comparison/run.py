@@ -44,8 +44,6 @@ def main():
         if not secret:
             summary["status"] = "credential_missing"
             raise ValueError(spec["secret"] + " is not configured")
-        if args.stage == "all" and not args.extensions:
-            raise ValueError("Native trials need the verified extension cache")
         with tempfile.TemporaryDirectory(prefix="ziwu-isaac-model-private-") as temp:
             private = Path(temp)
             route = route_for(args.profile, args.harness, private)
@@ -83,7 +81,6 @@ def main():
             cfg = job_config(route, task, output / "trial", "comparison", secret, 5400)
             cfg["environment"] = {"import_path": "isaac_environment:IsaacEnvironment", "delete": True,
                 "kwargs": {"app_name": "ziwu-isaac-models", "sandbox_timeout_secs": 18000}}
-            env["ZIWU_ISAAC_EXTENSIONS"] = str(args.extensions.resolve())
             summary.update(status="trial_running", trial_count=1); write_json(output / "summary.json", summary)
             status = execute(cfg, private, output, "trial", env)
             summary.update(collect(output / "trial/comparison"))

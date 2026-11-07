@@ -1,4 +1,4 @@
-"""Trusted Harbor adapter for the reviewed protected Isaac 5.1 service.
+"""Trusted Harbor adapter for the reviewed protected Isaac 6.0.1 service.
 
 No policy or scoring patches. Agent runs as uid agent; root starts and collects
 its simulator. The independent GPU verifier receives data, not agent secrets.
@@ -17,7 +17,7 @@ from harbor.environments.modal import ModalEnvironment
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent / "isaac-reference-modal"))
-from prepare_extensions import MANIFEST, MANIFEST_SHA256, RELEASES
+from image import image_for, BASE_IMAGE
 
 
 class IsaacEnvironment(ModalEnvironment):
@@ -29,8 +29,8 @@ class IsaacEnvironment(ModalEnvironment):
         super().__init__(*args, **kwargs)
         self._isaac_role = "agent" if (self.environment_dir / "sim-service").is_dir() else "verifier"
         manifest = json.loads((self.environment_dir / "bundle/manifest.json").read_text())
-        if manifest["isaac_version"] != "5.1.0.0":
-            raise ValueError("This adapter requires the Isaac 5.1 bundle")
+        if manifest["isaac_version"] != "6.0.1.0":
+            raise ValueError("This adapter requires the Isaac 6.0.1 bundle")
         if self._compose_mode or self._vm_runtime_enabled:
             raise ValueError("Only direct Modal containers are supported")
         if self._isaac_role == "verifier" and not self._network_disabled:
@@ -45,23 +45,7 @@ class IsaacEnvironment(ModalEnvironment):
     async def _create_sandbox(self, *, entrypoint=None, block_network=None, experimental_options=None):
         if experimental_options:
             raise ValueError("Experimental runtimes are not registered")
-        root = Path(os.environ["ZIWU_ISAAC_EXTENSIONS"])
-        raw = MANIFEST.read_bytes()
-        if hashlib.sha256(raw).hexdigest() != MANIFEST_SHA256:
-            raise ValueError("Public extension manifest changed")
-        expected = json.loads(raw)
-        if any(p.is_symlink() for p in root.rglob("*")):
-            raise ValueError("Symlink in engine cache")
-        actual = {p.relative_to(root).as_posix() for p in root.rglob("*") if p.is_file()}
-        if actual != set(expected) | {"EXTENSIONS.json"}:
-            raise ValueError("Unexpected engine cache files")
-        for name, checksum in expected.items():
-            if hashlib.sha256((root / name).read_bytes()).hexdigest() != checksum:
-                raise ValueError("Engine extension checksum differs")
-        for release in RELEASES:
-            name = release["root"]
-            self._image = self._image.add_local_dir(root / name,
-                "/opt/venv/lib/python3.11/site-packages/isaacsim/extscache/" + name, copy=True)
+        self._image = image_for(self.environment_dir)
         if block_network is None: block_network = self._network_disabled
         options = {}
         if self._dynamic_network:
@@ -78,7 +62,7 @@ class IsaacEnvironment(ModalEnvironment):
         self._sandbox_termination_requested = False
         self._native_receipt.update(sandbox_id=sb.object_id, image_id=self._image.object_id,
             started_at=time.time(), status="allocated", network=self.network_policy.network_mode.value,
-            extensions_manifest_sha256=MANIFEST_SHA256)
+            base_image_id=BASE_IMAGE)
         self._save_native()
         try:
             proc = await sb.exec.aio("nvidia-smi", "--query-gpu=name,driver_version", "--format=csv,noheader", timeout=30)

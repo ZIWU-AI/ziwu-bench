@@ -52,7 +52,19 @@ API/authentication errors, native infrastructure failures, budget exhaustion and
 missing results retain distinct statuses and no model score. Usage absent from
 native clients remains unknown. CLI cost estimates are not provider invoices.
 
-Initial native L40S/610.57.04 startup currently crashes inside Isaac 5.1 RTX;
-no task or model score is claimed for that configuration. The PR records probes
-and will pin a working placement before launching scored trials. The original
-A10/580.95.05 evidence in PR #2195 is historical, not acceptance of this PR.
+Both L40S and OCI A10 with driver 610.57.04 crashed inside Isaac 5.1 RTX before
+any policy actions. The current cohort uses Isaac 6.0.1, following PR #2195's
+migration. Its minimal L40S application startup exits zero; full Oracle/Nop and
+model scores are tracked separately. Historical Isaac 5.1 results are not mixed
+into this cohort.
+
+Real CPU tool-use preflights passed all four Kimi and all four DeepSeek harnesses
+in Actions [42336905217](https://github.com/ZIWU-AI/ziwu-bench/actions/runs/42336905217)
+and [42336907271](https://github.com/ZIWU-AI/ziwu-bench/actions/runs/42336907271).
+These are connectivity/tool checks, not Isaac task scores.
+
+The Isaac adaptation enables image input in both DeepSeek Harness provider
+profiles (`input` / `inputModalities`); the source friction comparison declared
+text only. This follows the [pinned harness configuration](https://github.com/deepseek-ai/deepseek-harness/blob/fcc0ad462172522aaf5c93a7b2e01f6b9f0b0159/docs/user/guide/providers.md)
+and [DeepSeek vision API](https://api-docs.deepseek.com/guides/vision/). Image
+capability declarations do not prove an individual trial inspected its cameras.
