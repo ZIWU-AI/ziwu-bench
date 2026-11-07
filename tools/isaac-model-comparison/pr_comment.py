@@ -84,7 +84,7 @@ def post(body_file, run_id, pr, branch, repo):
         raise ValueError('Comment target must be this ziwu workflow branch')
     marker=f'<!-- ziwu-isaac-agent-trial:{run_id} -->'
     pages=gh('api',f'repos/{repo}/issues/{pr}/comments','--paginate','--slurp')
-    matches=[c for page in pages for c in page if c['body'].startswith(marker) and c['user']['login'] in ('lwhere1314','github-actions[bot]')]
+    matches=[c for page in pages for c in page if marker in c['body'].splitlines() and c['user']['login'] in ('lwhere1314','github-actions[bot]')]
     if len(matches)>1: raise ValueError('Duplicate result comments')
     path=f'repos/{repo}/issues/comments/{matches[0]["id"]}' if matches else f'repos/{repo}/issues/{pr}/comments'
     result=gh('api',path,'--method','PATCH' if matches else 'POST','--field','body=@'+str(body_file))

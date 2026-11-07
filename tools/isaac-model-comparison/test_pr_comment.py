@@ -19,3 +19,19 @@ def test_cost_estimate_is_not_billing():
 def test_official_repo_comments_are_refused(tmp_path):
     with pytest.raises(ValueError,match='only in ziwu-bench'):
         post(tmp_path/'body', '123', 1, 'branch', 'harbor-framework/terminal-bench-science')
+
+
+def test_update_existing_comment_with_canary_prefix(monkeypatch,tmp_path):
+    import pr_comment
+    calls=[]
+    def api(*args):
+        calls.append(args)
+        if args[0]=='pr':
+            return {'headRefName':'branch','headRepository':{'name':'ziwu-bench'},'headRepositoryOwner':{'login':'ZIWU-AI'}}
+        if '--slurp' in args:
+            return [[{'id':42,'body':'<!-- canary -->\n\n<!-- ziwu-isaac-agent-trial:123 -->\nresults','user':{'login':'lwhere1314'}}]]
+        return {'html_url':'https://github.com/ZIWU-AI/ziwu-bench/pull/8#issuecomment-42'}
+    monkeypatch.setattr(pr_comment,'gh',api)
+    post(tmp_path/'body', '123', 8, 'branch', 'ZIWU-AI/ziwu-bench')
+    assert calls[-1][1]=='repos/ZIWU-AI/ziwu-bench/issues/comments/42'
+    assert calls[-1][calls[-1].index('--method')+1]=='PATCH'
