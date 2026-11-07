@@ -1,0 +1,2 @@
+modal==1.5.5
+harbor[modal]==0.23.0
