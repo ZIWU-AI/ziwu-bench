@@ -1,0 +1,52 @@
+name: Export Official Task PR
+run-name: Export official task PR from PR ${{ inputs.pr_number }}
+on:
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: "PR in this repository (0 = selected workflow revision)"
+        type: string
+        default: "0"
+      task_path:
+        description: "Task to export without repository-specific history or CI"
+        required: true
+        type: string
+        default: tasks/engineering-sciences/mechanical-engineering/physicalrsi-bimanual-control
+permissions:
+  contents: read
+  pull-requests: read
+jobs:
+  export:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with: {persist-credentials: false}
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - name: Resolve task source
+        id: source
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ inputs.pr_number }}
+          TASK_PATH: ${{ inputs.task_path }}
+        run: python tools/mujoco-modal/resolve.py
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ steps.source.outputs.source_sha }}
+          path: candidate
+          persist-credentials: false
+      - name: Generate task-only patch against official main
+        env:
+          SOURCE_SHA: ${{ steps.source.outputs.source_sha }}
+          TASK_PATH: ${{ inputs.task_path }}
+        run: |
+          python tools/mujoco-modal/export_task.py --task-root candidate --task-path "$TASK_PATH" \
+            --source-sha "$SOURCE_SHA" --output work/submission
+          cat work/submission/README.md >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: official-task-pr-${{ github.run_id }}
+          path: work/submission/
+          retention-days: 30
+          if-no-files-found: error

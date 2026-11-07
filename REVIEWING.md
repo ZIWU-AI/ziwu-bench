@@ -243,3 +243,7 @@ _Further additions pending — additional agent harnesses, higher trial counts._
 - [What Makes a Good Terminal Bench Task](https://github.com/harbor-framework/terminal-bench-3/discussions/224)
 - [Task Dashboard](https://stevendillmann.github.io/tb-science-task-dashboard/) — live view of open proposals, PRs, DRIs, and domain coverage
 - [Reviewer Pool](.github/reviewer-pool.yml) — field-matched `reviewers_by_field` (domain) + `reviewers_technical` (technical) reviewed in parallel, plus `reviewers_final`
+
+## Manual MuJoCo GPU evidence
+
+[GPU Task Validation](tools/mujoco-modal/README.md) pins candidate source SHA and records native tests, separate replay, binary rewards and hardware identity. Check the selected mode: a successful Nop-only run verifies reward zero, not task completion. This SDK validation is not a Harbor CLI job or a frontier-model solve.

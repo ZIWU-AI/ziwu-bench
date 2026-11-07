@@ -151,3 +151,7 @@ ZIWU Bench stands on [Terminal-Bench-Science](https://github.com/harbor-framewor
 <p align="center">
   <b>Built by <a href="https://ziwu.dev">ZIWU · 子午智能</a></b>
 </p>
+
+## GPU task validation and official submission
+
+Use the manual [GPU workflow and submission exporter](tools/mujoco-modal/README.md) to validate compatible protected MuJoCo tasks on Modal and prepare task-only patches for official review.
