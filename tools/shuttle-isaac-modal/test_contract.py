@@ -14,7 +14,7 @@ class ContractTests(unittest.TestCase):
         source=json.loads((TASK/'authoring/source.json').read_text())
         self.assertEqual(source['source_sha'],'6a5f992804f0f9b63da5eb57aeacdc7371a2e385')
         files=source['unchanged_source_data_sha256']
-        self.assertEqual(len(files),28) # 5 bench records, 20 public cases, 3 hidden-set files
+        self.assertEqual(len(files),31) # bench/cases plus public and private station parameters
         for name,digest in files.items():
             with self.subTest(file=name):
                 self.assertEqual(hashlib.sha256((TASK/name).read_bytes()).hexdigest(),digest)

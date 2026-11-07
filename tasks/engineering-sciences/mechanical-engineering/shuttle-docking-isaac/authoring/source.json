@@ -34,6 +34,9 @@
     "environment/data/instances/pub_020.json": "e36c61590a9aa9eb463d7bda411a927f2c5de4bbcc25252feca559c9124e1267",
     "tests/verification/hidden_instances.json": "49f00ce243a4d71e3f533660d1fa48f10fb89a14ec2b80d50d859fe3aa268649",
     "tests/verification/hidden_private.json": "f84d585bed531f9dfeda6b31593983a98b70cb655ff6ef37f6c23de30b346d6d",
-    "tests/verification/split.json": "006f15b3c61c6e90cd31426268c6f18acee594b78d05c128077852a19d745cd9"
+    "tests/verification/split.json": "006f15b3c61c6e90cd31426268c6f18acee594b78d05c128077852a19d745cd9",
+    "environment/sim/station.json": "12a1c92606efef9575841231b94c53370f5a1df43454346b136f0fd643bba738",
+    "environment/sim/public_private.json": "4fe7c957ebdd7c96fcdec675e2af6f62931f00c5f3357a4aebda65807a131988",
+    "environment/data/api/station.json": "f7475d971fed77a7d1b08082e3764241800efbb4557470b2b9d91ec78d0345cc"
   }
 }

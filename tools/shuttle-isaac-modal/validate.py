@@ -69,6 +69,10 @@ def main():
             candidate=sb.filesystem.read_bytes('/app/controller.py')
             (out/'controller.py').write_bytes(candidate) # private local evidence, not publication
             (out/'probe-usage.json').write_bytes(sb.filesystem.read_bytes('/var/shuttle/probe_usage.json'))
+            (out/'probe-records.json').write_bytes(sb.filesystem.read_bytes('/tmp/probe_records.json'))
+            # Private author diagnostics; never included in PR artifacts.
+            for name in ['01-pub_012.json', '02-pub_017.json']:
+                (out/name).write_bytes(sb.filesystem.read_bytes('/var/shuttle/episodes/'+name))
         finally:
             try: (out/'service.log').write_bytes(sb.filesystem.read_bytes('/var/shuttle/startup.log'))
             except Exception:pass

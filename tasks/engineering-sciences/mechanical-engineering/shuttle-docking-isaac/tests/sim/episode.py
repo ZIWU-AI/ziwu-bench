@@ -101,5 +101,6 @@ def run_episode(instance, private, source, station=None, uid=65534, process=Cont
         "physics": plant.scene.physics_metadata,
         "physics_steps": plant.scene.steps,
         "physics_dt": plant.dt,
+        "velocity_integral_minus_travel_m": plant.velocity_distance - s_end,
     }
     return record, truth
