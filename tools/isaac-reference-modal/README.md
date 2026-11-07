@@ -18,7 +18,8 @@ Use the reviewed workflow branch until this PR is merged, then use `--ref main`.
 PR's current head before allocation. The candidate task is data on the host;
 its Python is never imported alongside Modal credentials. A different task
 must implement the same protected-service/collection paths and Isaac 6.0.1
-bundle contract. MuJoCo remains the default backend.
+bundle contract. The manual dispatch defaults to Isaac for this restored task;
+reusable workflow calls retain their MuJoCo default for existing callers.
 
 Required repository secrets: `MODAL_TOKEN_ID`, `MODAL_TOKEN_SECRET`. Execution
 is explicitly requested, never triggered by PR/push events. NVIDIA runtime and

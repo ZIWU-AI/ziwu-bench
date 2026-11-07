@@ -11,8 +11,8 @@ on:
       backend:
         description: "Simulator (Isaac uses GPU in runner and verifier)"
         type: choice
-        options: [mujoco, isaac, isaac-model]
-        default: mujoco
+        options: [isaac, isaac-model, mujoco]
+        default: isaac
       model_profile:
         description: "Isaac model comparison profile"
         type: choice
