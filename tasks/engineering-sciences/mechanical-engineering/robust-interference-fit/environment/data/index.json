@@ -1,0 +1,318 @@
+{
+  "fit": {
+    "public": [
+      {
+        "id": 0,
+        "trace": "public/trial_000.csv",
+        "request": {
+          "pin_diameter_mm": 8.0,
+          "hole_nominal_diameter_mm": 7.98,
+          "length_mm": 18.74656966494704,
+          "chamfer_mm": 1.1244470152215147,
+          "max_axial_force_N": 838.3850374933718,
+          "max_lateral_force_N": 110.6389910334216,
+          "retention_force_N": 6.2187996733978,
+          "alignment_measurement_mm": 0.25207504707845446,
+          "max_speed_mm_s": 2.0
+        },
+        "summary": {
+          "seated": false,
+          "jammed": false,
+          "damaged": false,
+          "final_depth_mm": 12.599999999999824,
+          "final_misalignment_mm": 0.25845266010797796,
+          "peak_axial_force_N": 78.3986956258054,
+          "peak_lateral_force_N": 90.63720536189925,
+          "retention_force_N": 180.03562712663387,
+          "elapsed_s": 17.999999999999705
+        }
+      },
+      {
+        "id": 1,
+        "trace": "public/trial_001.csv",
+        "request": {
+          "pin_diameter_mm": 8.0,
+          "hole_nominal_diameter_mm": 7.98,
+          "length_mm": 19.083544643683062,
+          "chamfer_mm": 0.9465136960564109,
+          "max_axial_force_N": 785.5508789087685,
+          "max_lateral_force_N": 139.58026663430226,
+          "retention_force_N": 10.483618216352983,
+          "alignment_measurement_mm": -0.12291590260295479,
+          "max_speed_mm_s": 2.0
+        },
+        "summary": {
+          "seated": false,
+          "jammed": false,
+          "damaged": false,
+          "final_depth_mm": 12.599999999999824,
+          "final_misalignment_mm": -0.11318660535399849,
+          "peak_axial_force_N": 32.434880822593705,
+          "peak_lateral_force_N": 46.7441402124837,
+          "retention_force_N": 65.95096018095721,
+          "elapsed_s": 17.999999999999705
+        }
+      },
+      {
+        "id": 2,
+        "trace": "public/trial_002.csv",
+        "request": {
+          "pin_diameter_mm": 8.0,
+          "hole_nominal_diameter_mm": 7.98,
+          "length_mm": 22.237730475212956,
+          "chamfer_mm": 0.6632238659002659,
+          "max_axial_force_N": 990.0115906253529,
+          "max_lateral_force_N": 79.79610847723934,
+          "retention_force_N": 11.699761741226421,
+          "alignment_measurement_mm": -0.21331940303005043,
+          "max_speed_mm_s": 2.0
+        },
+        "summary": {
+          "seated": false,
+          "jammed": false,
+          "damaged": false,
+          "final_depth_mm": 12.599999999999824,
+          "final_misalignment_mm": -0.23066504433269386,
+          "peak_axial_force_N": 58.296564937199975,
+          "peak_lateral_force_N": 66.78327735096954,
+          "retention_force_N": 156.7021429078719,
+          "elapsed_s": 17.999999999999705
+        }
+      },
+      {
+        "id": 3,
+        "trace": "public/trial_003.csv",
+        "request": {
+          "pin_diameter_mm": 8.0,
+          "hole_nominal_diameter_mm": 7.98,
+          "length_mm": 18.11130204657095,
+          "chamfer_mm": 1.1564055717063977,
+          "max_axial_force_N": 1023.8413897686285,
+          "max_lateral_force_N": 91.96432997540212,
+          "retention_force_N": 9.747970277234552,
+          "alignment_measurement_mm": 0.014804059312410366,
+          "max_speed_mm_s": 2.0
+        },
+        "summary": {
+          "seated": false,
+          "jammed": false,
+          "damaged": false,
+          "final_depth_mm": 12.599999999999824,
+          "final_misalignment_mm": 0.016433870472020995,
+          "peak_axial_force_N": 19.20577740498943,
+          "peak_lateral_force_N": 15.307174319976076,
+          "retention_force_N": 35.43975827182429,
+          "elapsed_s": 17.999999999999705
+        }
+      },
+      {
+        "id": 4,
+        "trace": "public/trial_004.csv",
+        "request": {
+          "pin_diameter_mm": 8.0,
+          "hole_nominal_diameter_mm": 7.98,
+          "length_mm": 19.402696832788486,
+          "chamfer_mm": 1.005927484444914,
+          "max_axial_force_N": 726.8047424009278,
+          "max_lateral_force_N": 82.99515637185401,
+          "retention_force_N": 11.712050354385932,
+          "alignment_measurement_mm": -0.32827155452024737,
+          "max_speed_mm_s": 2.0
+        },
+        "summary": {
+          "seated": false,
+          "jammed": false,
+          "damaged": false,
+          "final_depth_mm": 12.599999999999824,
+          "final_misalignment_mm": -0.3196375685586386,
+          "peak_axial_force_N": 61.53514971903653,
+          "peak_lateral_force_N": 79.81322345815542,
+          "retention_force_N": 129.7433880157393,
+          "elapsed_s": 17.999999999999705
+        }
+      },
+      {
+        "id": 5,
+        "trace": "public/trial_005.csv",
+        "request": {
+          "pin_diameter_mm": 8.0,
+          "hole_nominal_diameter_mm": 7.98,
+          "length_mm": 17.061808999567987,
+          "chamfer_mm": 0.9117265945620544,
+          "max_axial_force_N": 975.5231758643421,
+          "max_lateral_force_N": 75.62983108710291,
+          "retention_force_N": 6.355357480441002,
+          "alignment_measurement_mm": -0.18003742821621796,
+          "max_speed_mm_s": 2.0
+        },
+        "summary": {
+          "seated": false,
+          "jammed": false,
+          "damaged": false,
+          "final_depth_mm": 12.599999999999824,
+          "final_misalignment_mm": -0.17946299455879977,
+          "peak_axial_force_N": 46.890841108834174,
+          "peak_lateral_force_N": 40.87717775482488,
+          "retention_force_N": 90.60258008068067,
+          "elapsed_s": 17.999999999999705
+        }
+      },
+      {
+        "id": 6,
+        "trace": "public/trial_006.csv",
+        "request": {
+          "pin_diameter_mm": 8.0,
+          "hole_nominal_diameter_mm": 7.98,
+          "length_mm": 21.21587108037388,
+          "chamfer_mm": 1.1269652628540867,
+          "max_axial_force_N": 884.5304897562789,
+          "max_lateral_force_N": 102.50031320143107,
+          "retention_force_N": 8.01464881190437,
+          "alignment_measurement_mm": -0.16153617241298296,
+          "max_speed_mm_s": 2.0
+        },
+        "summary": {
+          "seated": false,
+          "jammed": false,
+          "damaged": false,
+          "final_depth_mm": 12.599999999999824,
+          "final_misalignment_mm": -0.14009762413317053,
+          "peak_axial_force_N": 26.701824381343954,
+          "peak_lateral_force_N": 30.55986016401375,
+          "retention_force_N": 57.55201932319722,
+          "elapsed_s": 17.999999999999705
+        }
+      },
+      {
+        "id": 7,
+        "trace": "public/trial_007.csv",
+        "request": {
+          "pin_diameter_mm": 8.0,
+          "hole_nominal_diameter_mm": 7.98,
+          "length_mm": 18.411015889429088,
+          "chamfer_mm": 0.9696500573277551,
+          "max_axial_force_N": 728.6240722223633,
+          "max_lateral_force_N": 79.82775876206703,
+          "retention_force_N": 4.51512687509108,
+          "alignment_measurement_mm": 0.0940508248585043,
+          "max_speed_mm_s": 2.0
+        },
+        "summary": {
+          "seated": false,
+          "jammed": false,
+          "damaged": false,
+          "final_depth_mm": 12.599999999999824,
+          "final_misalignment_mm": 0.09945347107985422,
+          "peak_axial_force_N": 31.825710810645244,
+          "peak_lateral_force_N": 37.75513944102786,
+          "retention_force_N": 62.87960525028307,
+          "elapsed_s": 17.999999999999705
+        }
+      },
+      {
+        "id": 8,
+        "trace": "public/trial_008.csv",
+        "request": {
+          "pin_diameter_mm": 8.0,
+          "hole_nominal_diameter_mm": 7.98,
+          "length_mm": 20.999611010238006,
+          "chamfer_mm": 1.1425905558601634,
+          "max_axial_force_N": 908.1540884763987,
+          "max_lateral_force_N": 127.35916298625479,
+          "retention_force_N": 6.491407451395284,
+          "alignment_measurement_mm": 0.1269004381416952,
+          "max_speed_mm_s": 2.0
+        },
+        "summary": {
+          "seated": false,
+          "jammed": false,
+          "damaged": false,
+          "final_depth_mm": 12.599999999999824,
+          "final_misalignment_mm": 0.1274801796557585,
+          "peak_axial_force_N": 45.85398929535201,
+          "peak_lateral_force_N": 42.23175992047787,
+          "retention_force_N": 118.74094126622248,
+          "elapsed_s": 17.999999999999705
+        }
+      },
+      {
+        "id": 9,
+        "trace": "public/trial_009.csv",
+        "request": {
+          "pin_diameter_mm": 8.0,
+          "hole_nominal_diameter_mm": 7.98,
+          "length_mm": 23.10472839913794,
+          "chamfer_mm": 0.6287552838622507,
+          "max_axial_force_N": 1012.3290731216609,
+          "max_lateral_force_N": 84.27061359673479,
+          "retention_force_N": 10.921733266279887,
+          "alignment_measurement_mm": -0.09208966071935687,
+          "max_speed_mm_s": 2.0
+        },
+        "summary": {
+          "seated": false,
+          "jammed": false,
+          "damaged": false,
+          "final_depth_mm": 12.599999999999824,
+          "final_misalignment_mm": -0.11209221542429958,
+          "peak_axial_force_N": 23.83840730357604,
+          "peak_lateral_force_N": 31.535940357405373,
+          "retention_force_N": 57.29937387920115,
+          "elapsed_s": 17.999999999999705
+        }
+      },
+      {
+        "id": 10,
+        "trace": "public/trial_010.csv",
+        "request": {
+          "pin_diameter_mm": 8.0,
+          "hole_nominal_diameter_mm": 7.98,
+          "length_mm": 23.879553069158927,
+          "chamfer_mm": 1.257276709627761,
+          "max_axial_force_N": 724.9300300912731,
+          "max_lateral_force_N": 104.76997981143762,
+          "retention_force_N": 8.086688171204804,
+          "alignment_measurement_mm": -0.0865271895730059,
+          "max_speed_mm_s": 2.0
+        },
+        "summary": {
+          "seated": false,
+          "jammed": false,
+          "damaged": false,
+          "final_depth_mm": 12.599999999999824,
+          "final_misalignment_mm": -0.08220332621718851,
+          "peak_axial_force_N": 19.987355859546994,
+          "peak_lateral_force_N": 21.933402055328408,
+          "retention_force_N": 52.46416114850298,
+          "elapsed_s": 17.999999999999705
+        }
+      },
+      {
+        "id": 11,
+        "trace": "public/trial_011.csv",
+        "request": {
+          "pin_diameter_mm": 8.0,
+          "hole_nominal_diameter_mm": 7.98,
+          "length_mm": 21.424684556007197,
+          "chamfer_mm": 0.8399563292457458,
+          "max_axial_force_N": 685.1928743745241,
+          "max_lateral_force_N": 126.98953560006227,
+          "retention_force_N": 10.92966761755346,
+          "alignment_measurement_mm": -0.19469256578052094,
+          "max_speed_mm_s": 2.0
+        },
+        "summary": {
+          "seated": false,
+          "jammed": false,
+          "damaged": false,
+          "final_depth_mm": 12.599999999999824,
+          "final_misalignment_mm": -0.19920026775981664,
+          "peak_axial_force_N": 55.36993651397128,
+          "peak_lateral_force_N": 66.92412896950671,
+          "retention_force_N": 143.351595838146,
+          "elapsed_s": 17.999999999999705
+        }
+      }
+    ]
+  }
+}
